@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/rs/rest-layer/schema"
+	"github.com/searis/rest-layer/schema"
 )
 
 var testTimeFormats = []string{

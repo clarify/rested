@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/rs/rest-layer/schema/query"
+	"github.com/searis/rest-layer/schema/query"
 )
 
 // itemDelete handles DELETE resquests on an item URL.

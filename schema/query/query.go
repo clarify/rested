@@ -23,7 +23,7 @@ full REST Layer documentation.
 */
 package query
 
-import "github.com/rs/rest-layer/schema"
+import "github.com/searis/rest-layer/schema"
 
 // Query defines the criteria of a query to be applied on a resource validated
 // by a schema.Schema.

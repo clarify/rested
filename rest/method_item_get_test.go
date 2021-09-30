@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rs/rest-layer/resource"
-	"github.com/rs/rest-layer/resource/testing/mem"
-	"github.com/rs/rest-layer/schema"
+	"github.com/searis/rest-layer/resource"
+	"github.com/searis/rest-layer/resource/testing/mem"
+	"github.com/searis/rest-layer/schema"
 )
 
 func TestGetItem(t *testing.T) {

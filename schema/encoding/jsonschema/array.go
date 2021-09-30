@@ -1,6 +1,6 @@
 package jsonschema
 
-import "github.com/rs/rest-layer/schema"
+import "github.com/searis/rest-layer/schema"
 
 type arrayBuilder schema.Array
 

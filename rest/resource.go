@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/rs/rest-layer/resource"
-	"github.com/rs/rest-layer/schema/query"
+	"github.com/searis/rest-layer/resource"
+	"github.com/searis/rest-layer/schema/query"
 )
 
 type restResource struct {

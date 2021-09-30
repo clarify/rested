@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/rs/rest-layer/schema"
+	"github.com/searis/rest-layer/schema"
 )
 
 // Projection defines the list of fields that should be included into the

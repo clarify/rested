@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rs/rest-layer/resource"
+	"github.com/searis/rest-layer/resource"
 )
 
 // getMethodHandler returns the method handler for a given HTTP method in item

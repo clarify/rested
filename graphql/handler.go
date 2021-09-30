@@ -8,7 +8,7 @@ import (
 	"net/http"
 
 	"github.com/graphql-go/graphql"
-	"github.com/rs/rest-layer/resource"
+	"github.com/searis/rest-layer/resource"
 )
 
 // Handler is a net/http compatible handler used to serve the configured GraphQL

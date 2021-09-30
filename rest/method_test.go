@@ -6,9 +6,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/rs/rest-layer/internal/testutil"
-	"github.com/rs/rest-layer/resource"
-	"github.com/rs/rest-layer/rest"
+	"github.com/searis/rest-layer/internal/testutil"
+	"github.com/searis/rest-layer/resource"
+	"github.com/searis/rest-layer/rest"
 )
 
 // requestTest is a reusable type for testing POST, PUT, PATCH or GET requests. Best used in a map, E.g.:

@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/rs/rest-layer/schema"
+	"github.com/searis/rest-layer/schema"
 )
 
 // Index is an interface defining a type able to bind and retrieve resources

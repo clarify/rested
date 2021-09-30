@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/rs/rest-layer/schema/query"
+	"github.com/searis/rest-layer/schema/query"
 )
 
 // FindEventHandler is an interface to be implemented by an event handler that

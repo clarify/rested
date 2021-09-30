@@ -3,7 +3,7 @@ package query
 import (
 	"fmt"
 
-	"github.com/rs/rest-layer/schema"
+	"github.com/searis/rest-layer/schema"
 )
 
 func prepareExpressions(exps []Expression, validator schema.Validator) error {

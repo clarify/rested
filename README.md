@@ -1,8 +1,12 @@
 # REST Layer
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/searis/rest-layer.svg)](https://pkg.go.dev/github.com/searis/rest-layer)
+
 REST APIs made easy.
 
-[![godoc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/rs/rest-layer) [![license](https://img.shields.io/badge/license-MIT-red.svg?style=flat)](https://raw.githubusercontent.com/rs/rest-layer/master/LICENSE) [![build](https://img.shields.io/travis/rs/rest-layer.svg?style=flat)](https://travis-ci.org/rs/rest-layer) [![Go Report Card](https://goreportcard.com/badge/github.com/rs/rest-layer)](https://goreportcard.com/report/github.com/rs/rest-layer)
+**This API is a _maintenance-only_ fork of [rs/rest-layer](https://github.com/searis/rest-layer). We are not planning or accepting any major features at this time, but will accept and conduct minor improvements and bugfixes as needed. Features that are not used by us may be deprecated or dropped in upcoming releases. Breaking changes might be introduced when suitable.**
+
+Requires Go 1.17 or newer and use of go modules.
 
 REST Layer is an API framework heavily inspired by the excellent [Python Eve](http://python-eve.org). It helps you create a comprehensive, customizable, and secure REST (graph) API on top of pluggable [backend storages](#main-storage-handlers) with no boiler plate code so you can focus on your business logic.
 
@@ -10,7 +14,7 @@ Implemented as a `net/http` handler, it plays well with standard middleware like
 
 REST Layer is an opinionated framework. Unlike many API frameworks, you don't directly control the routing and you don't have to write handlers. You just define resources and sub-resources with a [schema](#resource-configuration), the framework automatically figures out what routes need to be generated behind the scene. You don't have to take care of the HTTP headers and response, JSON encoding, etc. either. REST layer handles HTTP [conditional requests](#conditional-requests), caching, [integrity checking](#data-integrity-and-concurrency-control) for you.
 
-A powerful and extensible [validation engine](#resource-configuration) make sure that data comes pre-validated to your [custom storage handlers](#data-storage-handler). Generic resource handlers for [MongoDB](http://github.com/rs/rest-layer-mongo), [ElasticSearch](http://github.com/rs/rest-layer-es) and other databases are also available so you have few to no code to write to get up and running.
+A powerful and extensible [validation engine](#resource-configuration) make sure that data comes pre-validated to your [custom storage handlers](#data-storage-handler). Generic resource handlers for [MongoDB](http://github.com/searis/rest-layer/storers/mongo) is the only currently maintained service.
 
 Moreover, REST Layer let you create a graph API by linking resources between them. Thanks to its advanced [field selection](#field-selection) syntax or [GraphQL](#graphql) support, you can gather resources and their dependencies in a single request, saving you from costly network round-trips.
 
@@ -18,12 +22,12 @@ The REST Layer framework is composed of several sub-packages:
 
 ![package layout](doc/schema.png)
 
-| Package                                                         | Coverage                                                                                                                                       | Description
-| --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------------
-| [rest](https://godoc.org/github.com/rs/rest-layer/rest)         | [![Coverage](https://gocover.io/_badge/github.com/rs/rest-layer/rest)](https://gocover.io/github.com/rs/rest-layer/rest) | A `net/http` handler to expose a REST-ful API.
-| [graphql](https://godoc.org/github.com/rs/rest-layer/graphql)   | [![Coverage](https://gocover.io/_badge/github.com/rs/rest-layer/graphql)](https://gocover.io/github.com/rs/rest-layer/graphql)              | A `net/http` handler to expose your API using the GraphQL protocol.
-| [schema](https://godoc.org/github.com/rs/rest-layer/schema)     | [![Coverage](https://gocover.io/_badge/github.com/rs/rest-layer/schema)](https://gocover.io/github.com/rs/rest-layer/schema)               | A validation framework for the API resources.
-| [resource](https://godoc.org/github.com/rs/rest-layer/resource) | [![Coverage](https://gocover.io/_badge/github.com/rs/rest-layer/resource)](https://gocover.io/github.com/rs/rest-layer/resource)             | Defines resources, manages the resource graph and manages the interface with resource storage handler.
+| Package                                                              | Description                                                                                            |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| [rest](https://pkg.go.dev/github.com/searis/rest-layer/rest)         | A `net/http` handler to expose a REST-ful API.                                                         |
+| [graphql](https://pkg.go.dev/github.com/searis/rest-layer/graphql)   | A `net/http` handler to expose your API using the GraphQL protocol.                                    |
+| [schema](https://pkg.go.dev/github.com/searis/rest-layer/schema)     | A validation framework for the API resources.                                                          |
+| [resource](https://pkg.go.dev/github.com/searis/rest-layer/resource) | Defines resources, manages the resource graph and manages the interface with resource storage handler. |
 
 ## Documentation
 
@@ -76,37 +80,13 @@ The REST Layer framework is composed of several sub-packages:
 - [Hystrix](#hystrix)
 - [JSONSchema](#jsonschema)
 
-## Breaking Changes
-
-Until we reach a stable v1, there will be occasional breaking changes to the rest-layer APIs. Breaking changes will however not arrive at patch releases.
-
-### Breaking changes since v0.2.0
-
-No breaking changes since v0.2.0.
-
-### Breaking changes prior to v0.2.0
-
-Below is an incomplete list of breaking changes included in v0.2.0:
-
-- PR #151: `ValuesValidator FieldValidator` attribute in `schema.Dict` struct replaced by `Values Field`.
-- PR #179: `ValuesValidator FieldValidator` attribute in `schema.Array` struct replaced by `Values Field`.
-- PR #204:
-  - Storage drivers need to accept pointer to `Expression` implementer in `query.Predicate`.
-  - `filter` parameters in sub-query will be validated for type match.
-  - `filter` parameters will be validated for type match only, instead of type & constrains.
-- PR #228: `Reference` projection fields will be validated against referenced resource schema.
-- PR #230: `Connection` projection fields will be validated against connected resource schema.
-- PR #241: Always call `OnUpdate` field hook on HTTP PUT for existing documents. Deleting a field with `Default` value set, will always be reset to its default value.
-
 ## Features
 
 - [x] Automatic handling of REST resource operations
-- [ ] Full test coverage
 - [x] Plays well with other `net/http` middleware
 - [x] Pluggable resources storage
 - [x] Pluggable response sender
-- [x] GraphQL query support
-- [ ] GraphQL mutation support
+- [x] GraphQL query support **DEPRECATED**
 - [ ] Swagger Documentation
 - [x] JSONSchema Output (partial)
 - [ ] Testing framework
@@ -148,12 +128,12 @@ As REST Layer is a simple `net/http` handler. You can use standard middleware to
 - [x] [X-Forwarded-For](https://github.com/sebest/xff)
 - [x] [Rate Limiting](https://github.com/didip/tollbooth)
 - [ ] Operations Log
-- [x] [Hystrix storage handler wrapper](https://github.com/rs/rest-layer-hystrix)
+- [x] [Hystrix storage handler wrapper](https://github.com/searis/rest-layer-hystrix)
 
 ### Main Storage Handlers
 
-- [x] [Memory](http://github.com/rs/rest-layer/tree/master/resource/testing/mem) (test only)
-- [x] [MongoDB](http://github.com/rs/rest-layer-mongo)
+- [x] [Memory](http://github.com/searis/rest-layer/tree/master/resource/testing/mem) (test only)
+- [x] [MongoDB](http://github.com/searis/rest-layer/storers/mongo)
 
 ### Alternate Storage Handlers
 
@@ -168,149 +148,149 @@ As REST Layer is a simple `net/http` handler. You can use standard middleware to
 package main
 
 import (
-	"log"
-	"net/http"
+    "log"
+    "net/http"
 
-	"github.com/rs/rest-layer/resource/testing/mem"
-	"github.com/rs/rest-layer/resource"
-	"github.com/rs/rest-layer/rest"
-	"github.com/rs/rest-layer/schema/query"
-	"github.com/rs/rest-layer/schema"
+    "github.com/searis/rest-layer/resource/testing/mem"
+    "github.com/searis/rest-layer/resource"
+    "github.com/searis/rest-layer/rest"
+    "github.com/searis/rest-layer/schema/query"
+    "github.com/searis/rest-layer/schema"
 )
 
 var (
-	// Define a user resource schema
-	user = schema.Schema{
-		Description: `The user object`,
-		Fields: schema.Fields{
-			"id": {
-				Required: true,
-				// When a field is read-only, only default values or hooks can
-				// set their value. The client can't change it.
-				ReadOnly: true,
-				// This is a field hook called when a new user is created.
-				// The schema.NewID hook is a provided hook to generate a
-				// unique id when no value is provided.
-				OnInit: schema.NewID,
-				// The Filterable and Sortable allows usage of filter and sort
-				// on this field in requests.
-				Filterable: true,
-				Sortable:   true,
-				Validator: &schema.String{
-					Regexp: "^[0-9a-v]{20}$",
-				},
-			},
-			"created": {
-				Required:   true,
-				ReadOnly:   true,
-				Filterable: true,
-				Sortable:   true,
-				OnInit:     schema.Now,
-				Validator:  &schema.Time{},
-			},
-			"updated": {
-				Required:   true,
-				ReadOnly:   true,
-				Filterable: true,
-				Sortable:   true,
-				OnInit:     schema.Now,
-				// The OnUpdate hook is called when the item is edited. Here we use
-				// provided Now hook which returns the current time.
-				OnUpdate:  schema.Now,
-				Validator: &schema.Time{},
-			},
-			// Define a name field as required with a string validator
-			"name": {
-				Required:   true,
-				Filterable: true,
-				Validator: &schema.String{
-					MaxLen: 150,
-				},
-			},
-		},
-	}
+    // Define a user resource schema
+    user = schema.Schema{
+        Description: `The user object`,
+        Fields: schema.Fields{
+            "id": {
+                Required: true,
+                // When a field is read-only, only default values or hooks can
+                // set their value. The client can't change it.
+                ReadOnly: true,
+                // This is a field hook called when a new user is created.
+                // The schema.NewID hook is a provided hook to generate a
+                // unique id when no value is provided.
+                OnInit: schema.NewID,
+                // The Filterable and Sortable allows usage of filter and sort
+                // on this field in requests.
+                Filterable: true,
+                Sortable:   true,
+                Validator: &schema.String{
+                    Regexp: "^[0-9a-v]{20}$",
+                },
+            },
+            "created": {
+                Required:   true,
+                ReadOnly:   true,
+                Filterable: true,
+                Sortable:   true,
+                OnInit:     schema.Now,
+                Validator:  &schema.Time{},
+            },
+            "updated": {
+                Required:   true,
+                ReadOnly:   true,
+                Filterable: true,
+                Sortable:   true,
+                OnInit:     schema.Now,
+                // The OnUpdate hook is called when the item is edited. Here we use
+                // provided Now hook which returns the current time.
+                OnUpdate:  schema.Now,
+                Validator: &schema.Time{},
+            },
+            // Define a name field as required with a string validator
+            "name": {
+                Required:   true,
+                Filterable: true,
+                Validator: &schema.String{
+                    MaxLen: 150,
+                },
+            },
+        },
+    }
 
-	// Define a post resource schema
-	post = schema.Schema{
-		Description: `Represents a blog post`,
-		Fields: schema.Fields{
-			// schema.*Field are shortcuts for common fields
-			// (identical to users' same fields)
-			"id":      schema.IDField,
-			"created": schema.CreatedField,
-			"updated": schema.UpdatedField,
-			// Define a user field which references the user owning the post.
-			// See bellow, the content of this field is enforced by the fact
-			// that posts is a sub-resource of users.
-			"user": {
-				Required:   true,
-				Filterable: true,
-				Validator: &schema.Reference{
-					Path: "users",
-				},
-			},
-			"published": {
-				Required: true,
-				Filterable: true,
-				Default: false,
-				Validator: &schema.Bool{},
-			},
-			"title": {
-				Required: true,
-				Validator: &schema.String{
-					MaxLen: 150,
-				},
-			},
-			"body": {
-				// Dependency defines that body field can't be changed if
-				// the published field is not "false".
-				Dependency: query.MustParsePredicate(`{"published": false}`),
-				Validator: &schema.String{
-					MaxLen: 100000,
-				},
-			},
-		},
-	}
+    // Define a post resource schema
+    post = schema.Schema{
+        Description: `Represents a blog post`,
+        Fields: schema.Fields{
+            // schema.*Field are shortcuts for common fields
+            // (identical to users' same fields)
+            "id":      schema.IDField,
+            "created": schema.CreatedField,
+            "updated": schema.UpdatedField,
+            // Define a user field which references the user owning the post.
+            // See bellow, the content of this field is enforced by the fact
+            // that posts is a sub-resource of users.
+            "user": {
+                Required:   true,
+                Filterable: true,
+                Validator: &schema.Reference{
+                    Path: "users",
+                },
+            },
+            "published": {
+                Required: true,
+                Filterable: true,
+                Default: false,
+                Validator: &schema.Bool{},
+            },
+            "title": {
+                Required: true,
+                Validator: &schema.String{
+                    MaxLen: 150,
+                },
+            },
+            "body": {
+                // Dependency defines that body field can't be changed if
+                // the published field is not "false".
+                Dependency: query.MustParsePredicate(`{"published": false}`),
+                Validator: &schema.String{
+                    MaxLen: 100000,
+                },
+            },
+        },
+    }
 )
 
 func main() {
-	// Create a REST API resource index
-	index := resource.NewIndex()
+    // Create a REST API resource index
+    index := resource.NewIndex()
 
-	// Add a resource on /users[/:user_id]
-	users := index.Bind("users", user, mem.NewHandler(), resource.Conf{
-		// We allow all REST methods
-		// (rest.ReadWrite is a shortcut for []resource.Mode{resource.Create,
-	    //  resource.Read, resource.Update, resource.Delete, resource,List})
-		AllowedModes: resource.ReadWrite,
-	})
+    // Add a resource on /users[/:user_id]
+    users := index.Bind("users", user, mem.NewHandler(), resource.Conf{
+        // We allow all REST methods
+        // (rest.ReadWrite is a shortcut for []resource.Mode{resource.Create,
+        //  resource.Read, resource.Update, resource.Delete, resource,List})
+        AllowedModes: resource.ReadWrite,
+    })
 
-	// Bind a sub resource on /users/:user_id/posts[/:post_id]
-	// and reference the user on each post using the "user" field of the posts resource.
-	users.Bind("posts", "user", post, mem.NewHandler(), resource.Conf{
-		// Posts can only be read, created and deleted, not updated
-		AllowedModes: []resource.Mode{resource.Read, resource.List,
-			 resource.Create, resource.Delete},
-	})
+    // Bind a sub resource on /users/:user_id/posts[/:post_id]
+    // and reference the user on each post using the "user" field of the posts resource.
+    users.Bind("posts", "user", post, mem.NewHandler(), resource.Conf{
+        // Posts can only be read, created and deleted, not updated
+        AllowedModes: []resource.Mode{resource.Read, resource.List,
+             resource.Create, resource.Delete},
+    })
 
-	// Create API HTTP handler for the resource graph
-	api, err := rest.NewHandler(index)
-	if err != nil {
-		log.Fatalf("Invalid API configuration: %s", err)
-	}
+    // Create API HTTP handler for the resource graph
+    api, err := rest.NewHandler(index)
+    if err != nil {
+        log.Fatalf("Invalid API configuration: %s", err)
+    }
 
-	// Bind the API under /api/ path
-	http.Handle("/api/", http.StripPrefix("/api/", api))
+    // Bind the API under /api/ path
+    http.Handle("/api/", http.StripPrefix("/api/", api))
 
-	// Serve it
-	log.Print("Serving API on http://localhost:8080")
-	if err := http.ListenAndServe(":8080", nil); err != nil {
-		log.Fatal(err)
-	}
+    // Serve it
+    log.Print("Serving API on http://localhost:8080")
+    if err := http.ListenAndServe(":8080", nil); err != nil {
+        log.Fatal(err)
+    }
 }
 ```
 
-Just run this code (or use the provided [examples/demo](https://github.com/rs/rest-layer/blob/master/examples/demo/main.go)):
+Just run this code (or use the provided [examples/demo](https://github.com/searis/rest-layer/blob/master/examples/demo/main.go)):
 
 ```sh
 $ go run examples/demo/main.go
@@ -342,7 +322,7 @@ Vary: Origin
 
 As you can see, the `id`, `created` and `updated` fields have been automatically generated by our `OnInit` field hooks.
 
-Also notice the `Etag` and `Last-Modified` headers. Those guys allow data integrity and concurrency control *down to the storage layer* through the use of the `If-Match` and `If-Unmodified-Since` headers. They can also serve for conditional requests using `If-None-Match` and `If-Modified-Since` headers.
+Also notice the `Etag` and `Last-Modified` headers. Those guys allow data integrity and concurrency control _down to the storage layer_ through the use of the `If-Match` and `If-Unmodified-Since` headers. They can also serve for conditional requests using `If-None-Match` and `If-Modified-Since` headers.
 
 Here is an example of conditional request:
 
@@ -532,147 +512,147 @@ For REST Layer to be able to expose resources, you have to first define what fie
 
 ### Schema
 
-Resource field configuration is performed through the [schema](https://godoc.org/github.com/rs/rest-layer/schema) package. A schema is a struct describing a resource. A schema is composed of metadata about the resource and a description of the allowed fields through a map of field name pointing to field definition.
+Resource field configuration is performed through the [schema](https://pkg.go.dev/github.com/searis/rest-layer/schema) package. A schema is a struct describing a resource. A schema is composed of metadata about the resource and a description of the allowed fields through a map of field name pointing to field definition.
 
 Sample resource schema:
 
 ```go
 foo = schema.Schema{
-	Description: "A foo object",
-	Fields: schema.Fields{
-		"field_name": {
-			Required: true,
-			Filterable: true,
-			Validator: &schema.String{
-				MaxLen: 150,
-			},
-		},
-	},
+    Description: "A foo object",
+    Fields: schema.Fields{
+        "field_name": {
+            Required: true,
+            Filterable: true,
+            Validator: &schema.String{
+                MaxLen: 150,
+            },
+        },
+    },
 }
 ```
 
 Schema fields:
 
-| Field         | Description
-| ------------- | -------------
-| `Description` | The description of the resource. This is used for API documentation.
-| `Fields`      | A map of field name to field definition.
+| Field         | Description                                                          |
+| ------------- | -------------------------------------------------------------------- |
+| `Description` | The description of the resource. This is used for API documentation. |
+| `Fields`      | A map of field name to field definition.                             |
 
 ### Field Definition
 
 The field definitions contains the following properties:
 
-| Field        | Description
-| ------------ | -------------
-| `Required`   | If `true`, the field must be provided when the resource is created and can't be set to `null`. The client may be able to omit a required field if a `Default` or a hook sets its content.
-| `ReadOnly`   | If `true`, the field can not be set by the client, only a `Default` or a hook can alter its value. You may specify a value for a read-only field in your mutation request if the value is equal to the old value, REST Layer won't complain about it. This lets your client `PUT` the same document it got with `GET` without having to take care of removing the read-only fields.
-| `Hidden`     | Hidden allows writes but hides the field's content from the client. When this field is enabled, PUTing the document without the field would not remove the field but use the previous document's value if any.
-| `Default`    | The value to be set when resource is created and the client didn't provide a value for the field. The content of this variable must still pass validation.
-| `OnInit`     | A function to be executed when the resource is created. The function gets the current value of the field (after `Default` has been set if any) and returns the new value to be set.
-| `OnUpdate`   | A function to be executed when the resource is updated. The function gets the current (updated) value of the field and returns the new value to be set.
-| `Params`     | Params defines the list of parameters allowed for this field. See [Field Parameters](#field-parameters) section for some examples.
-| `Handler`    | Handler defines a function able to change the field's value depending on the passed parameters. See [Field Parameters](#field-parameters) section for some examples.
-| `Validator`  | A `schema.FieldValidator` to validate the content of the field.
-| `Dependency` | A query using `filter` format created with ``query.MustParsePredicate(`{"field": "value"}`)``. If the query doesn't match the document, the field generates a dependency error.
-| `Filterable` | If `true`, the field can be used with the `filter` parameter. You may want to ensure the backend database has this field indexed when enabled. Some storage handlers may not support all the operators of the filter parameter, see their documentation for more information.
-| `Sortable`   | If `true`, the field can be used with the `sort` parameter. You may want to ensure the backend database has this field indexed when enabled.
-| `Schema`     | An optional sub schema to validate hierarchical documents.
+| Field        | Description                                                                                                                                                                                                                                                                                                                                                                         |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Required`   | If `true`, the field must be provided when the resource is created and can't be set to `null`. The client may be able to omit a required field if a `Default` or a hook sets its content.                                                                                                                                                                                           |
+| `ReadOnly`   | If `true`, the field can not be set by the client, only a `Default` or a hook can alter its value. You may specify a value for a read-only field in your mutation request if the value is equal to the old value, REST Layer won't complain about it. This lets your client `PUT` the same document it got with `GET` without having to take care of removing the read-only fields. |
+| `Hidden`     | Hidden allows writes but hides the field's content from the client. When this field is enabled, PUTing the document without the field would not remove the field but use the previous document's value if any.                                                                                                                                                                      |
+| `Default`    | The value to be set when resource is created and the client didn't provide a value for the field. The content of this variable must still pass validation.                                                                                                                                                                                                                          |
+| `OnInit`     | A function to be executed when the resource is created. The function gets the current value of the field (after `Default` has been set if any) and returns the new value to be set.                                                                                                                                                                                                 |
+| `OnUpdate`   | A function to be executed when the resource is updated. The function gets the current (updated) value of the field and returns the new value to be set.                                                                                                                                                                                                                             |
+| `Params`     | Params defines the list of parameters allowed for this field. See [Field Parameters](#field-parameters) section for some examples.                                                                                                                                                                                                                                                  |
+| `Handler`    | Handler defines a function able to change the field's value depending on the passed parameters. See [Field Parameters](#field-parameters) section for some examples.                                                                                                                                                                                                                |
+| `Validator`  | A `schema.FieldValidator` to validate the content of the field.                                                                                                                                                                                                                                                                                                                     |
+| `Dependency` | A query using `filter` format created with `` query.MustParsePredicate(`{"field": "value"}`) ``. If the query doesn't match the document, the field generates a dependency error.                                                                                                                                                                                                   |
+| `Filterable` | If `true`, the field can be used with the `filter` parameter. You may want to ensure the backend database has this field indexed when enabled. Some storage handlers may not support all the operators of the filter parameter, see their documentation for more information.                                                                                                       |
+| `Sortable`   | If `true`, the field can be used with the `sort` parameter. You may want to ensure the backend database has this field indexed when enabled.                                                                                                                                                                                                                                        |
+| `Schema`     | An optional sub schema to validate hierarchical documents.                                                                                                                                                                                                                                                                                                                          |
 
 REST Layer comes with a set of validators. You can add your own by implementing the `schema.FieldValidator` interface. Here is the list of provided validators:
 
-| Validator               | Description
-| ----------------------- | -------------
-| [schema.String][str]    | Ensures the field is a string
-| [schema.Integer][int]   | Ensures the field is an integer
-| [schema.Float][float]   | Ensures the field is a float
-| [schema.Bool][bool]     | Ensures the field is a Boolean
-| [schema.Array][array]   | Ensures the field is an array
-| [schema.Dict][dict]     | Ensures the field is a dict
-| [schema.Object][object] | Ensures the field is an object validating against a sub-schema
-| [schema.Time][time]     | Ensures the field is a datetime
-| [schema.URL][url]       | Ensures the field is a valid URL
-| [schema.IP][url]        | Ensures the field is a valid IPv4 or IPv6
-| [schema.Password][pswd] | Ensures the field is a valid password and bcrypt it
-| [schema.Reference][ref] | Ensures the field contains a reference to another _existing_ API item
-| [schema.AnyOf][any]     | Ensures that at least one sub-validator is valid
-| [schema.AllOf][all]     | Ensures that at least all sub-validators are valid
+| Validator               | Description                                                           |
+| ----------------------- | --------------------------------------------------------------------- |
+| [schema.String][str]    | Ensures the field is a string                                         |
+| [schema.Integer][int]   | Ensures the field is an integer                                       |
+| [schema.Float][float]   | Ensures the field is a float                                          |
+| [schema.Bool][bool]     | Ensures the field is a Boolean                                        |
+| [schema.Array][array]   | Ensures the field is an array                                         |
+| [schema.Dict][dict]     | Ensures the field is a dict                                           |
+| [schema.Object][object] | Ensures the field is an object validating against a sub-schema        |
+| [schema.Time][time]     | Ensures the field is a datetime                                       |
+| [schema.URL][url]       | Ensures the field is a valid URL                                      |
+| [schema.IP][url]        | Ensures the field is a valid IPv4 or IPv6                             |
+| [schema.Password][pswd] | Ensures the field is a valid password and bcrypt it                   |
+| [schema.Reference][ref] | Ensures the field contains a reference to another _existing_ API item |
+| [schema.AnyOf][any]     | Ensures that at least one sub-validator is valid                      |
+| [schema.AllOf][all]     | Ensures that at least all sub-validators are valid                    |
 
-[str]:    https://godoc.org/github.com/rs/rest-layer/schema#String
-[int]:    https://godoc.org/github.com/rs/rest-layer/schema#Integer
-[float]:  https://godoc.org/github.com/rs/rest-layer/schema#Float
-[bool]:   https://godoc.org/github.com/rs/rest-layer/schema#Bool
-[array]:  https://godoc.org/github.com/rs/rest-layer/schema#Array
-[dict]:   https://godoc.org/github.com/rs/rest-layer/schema#Dict
-[object]: https://godoc.org/github.com/rs/rest-layer/schema#Object
-[time]:   https://godoc.org/github.com/rs/rest-layer/schema#Time
-[url]:    https://godoc.org/github.com/rs/rest-layer/schema#URL
-[ip]:     https://godoc.org/github.com/rs/rest-layer/schema#IP
-[pswd]:   https://godoc.org/github.com/rs/rest-layer/schema#Password
-[ref]:    https://godoc.org/github.com/rs/rest-layer/schema#Reference
-[any]:    https://godoc.org/github.com/rs/rest-layer/schema#AnyOf
-[all]:    https://godoc.org/github.com/rs/rest-layer/schema#AllOf
+[str]: https://pkg.go.dev/github.com/searis/rest-layer/schema#String
+[int]: https://pkg.go.dev/github.com/searis/rest-layer/schema#Integer
+[float]: https://pkg.go.dev/github.com/searis/rest-layer/schema#Float
+[bool]: https://pkg.go.dev/github.com/searis/rest-layer/schema#Bool
+[array]: https://pkg.go.dev/github.com/searis/rest-layer/schema#Array
+[dict]: https://pkg.go.dev/github.com/searis/rest-layer/schema#Dict
+[object]: https://pkg.go.dev/github.com/searis/rest-layer/schema#Object
+[time]: https://pkg.go.dev/github.com/searis/rest-layer/schema#Time
+[url]: https://pkg.go.dev/github.com/searis/rest-layer/schema#URL
+[ip]: https://pkg.go.dev/github.com/searis/rest-layer/schema#IP
+[pswd]: https://pkg.go.dev/github.com/searis/rest-layer/schema#Password
+[ref]: https://pkg.go.dev/github.com/searis/rest-layer/schema#Reference
+[any]: https://pkg.go.dev/github.com/searis/rest-layer/schema#AnyOf
+[all]: https://pkg.go.dev/github.com/searis/rest-layer/schema#AllOf
 
 Some common hook handler to be used with `OnInit` and `OnUpdate` are also provided:
 
-| Hook           | Description
-| -------------- | -------------
-| `schema.Now`   | Returns the current time ignoring the input (current) value.
-| `schema.NewID` | Returns a unique identifier using [xid](https://github.com/rs/xid) if input value is `nil`.
+| Hook           | Description                                                                                 |
+| -------------- | ------------------------------------------------------------------------------------------- |
+| `schema.Now`   | Returns the current time ignoring the input (current) value.                                |
+| `schema.NewID` | Returns a unique identifier using [xid](https://github.com/rs/xid) if input value is `nil`. |
 
 Some common field configuration are also provided as variables:
 
-| Field Config           | Description
-| ---------------------- | -------------
-| `schema.IDField`       | A required, read-only field with `schema.NewID` set as `OnInit` hook and a `schema.String` validator matching [xid](https://github.com/rs/xid) format.
-| `schema.CreatedField`  | A required, read-only field with `schema.Now` set on `OnInit` hook with a `schema.Time` validator.
-| `schema.UpdatedField`  | A required, read-only field with `schema.Now` set on `OnInit` and `OnUpdate` hooks with a `schema.Time` validator.
-| `schema.PasswordField` | A hidden, required field with a `schema.Password` validator.
+| Field Config           | Description                                                                                                                                            |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `schema.IDField`       | A required, read-only field with `schema.NewID` set as `OnInit` hook and a `schema.String` validator matching [xid](https://github.com/rs/xid) format. |
+| `schema.CreatedField`  | A required, read-only field with `schema.Now` set on `OnInit` hook with a `schema.Time` validator.                                                     |
+| `schema.UpdatedField`  | A required, read-only field with `schema.Now` set on `OnInit` and `OnUpdate` hooks with a `schema.Time` validator.                                     |
+| `schema.PasswordField` | A hidden, required field with a `schema.Password` validator.                                                                                           |
 
 Here is an example of schema declaration:
 
 ```go
 // Define a post resource schema
 post = schema.Schema{
-	Fields: schema.Fields{
-		// schema.*Field are shortcuts for common fields (identical to users' same fields)
-		"id":      schema.IDField,
-		"created": schema.CreatedField,
-		"updated": schema.UpdatedField,
-		// Define a user field which references the user owning the post.
-		// See bellow, the content of this field is enforced by the fact
-		// that posts is a sub-resource of users.
-		"user": {
-			Required: true,
-			Filterable: true,
-			Validator: &schema.Reference{
-				Path: "users",
-			},
-		},
-		// Sub-documents are handled via a sub-schema
-		"meta": {
-			Schema: &schema.Schema{
-				Fields: schema.Fields{
-					"title": {
-						Required: true,
-						Validator: &schema.String{
-							MaxLen: 150,
-						},
-					},
-					"body": {
-						Validator: &schema.String{
-							MaxLen: 100000,
-						},
-					},
-				},
-			},
-		},
-	},
+    Fields: schema.Fields{
+        // schema.*Field are shortcuts for common fields (identical to users' same fields)
+        "id":      schema.IDField,
+        "created": schema.CreatedField,
+        "updated": schema.UpdatedField,
+        // Define a user field which references the user owning the post.
+        // See bellow, the content of this field is enforced by the fact
+        // that posts is a sub-resource of users.
+        "user": {
+            Required: true,
+            Filterable: true,
+            Validator: &schema.Reference{
+                Path: "users",
+            },
+        },
+        // Sub-documents are handled via a sub-schema
+        "meta": {
+            Schema: &schema.Schema{
+                Fields: schema.Fields{
+                    "title": {
+                        Required: true,
+                        Validator: &schema.String{
+                            MaxLen: 150,
+                        },
+                    },
+                    "body": {
+                        Validator: &schema.String{
+                            MaxLen: 100000,
+                        },
+                    },
+                },
+            },
+        },
+    },
 }
 ```
 
 ### Binding
 
-Now you just need to bind this schema at a specific endpoint on the [resource.Index](https://godoc.org/github.com/rs/rest-layer/resource#Index) object:
+Now you just need to bind this schema at a specific endpoint on the [resource.Index](https://pkg.go.dev/github.com/searis/rest-layer/resource#Index) object:
 
 ```go
 index := resource.NewIndex()
@@ -681,15 +661,15 @@ posts := index.Bind("posts", post, mem.NewHandler(), resource.DefaultConf)
 
 This tells the `resource.Index` to bind the `post` schema at the `posts` endpoint. The resource collection URL is then `/posts` and item URLs are `/posts/<post_id>`.
 
-The [resource.DefaultConf](https://godoc.org/github.com/rs/rest-layer/resource#pkg-variables) variable is a pre-defined [resource.Conf](https://godoc.org/github.com/rs/rest-layer/resource#Conf) type with sensible defaults. You can customize the resource behavior using a custom configuration.
+The [resource.DefaultConf](https://pkg.go.dev/github.com/searis/rest-layer/resource#pkg-variables) variable is a pre-defined [resource.Conf](https://pkg.go.dev/github.com/searis/rest-layer/resource#Conf) type with sensible defaults. You can customize the resource behavior using a custom configuration.
 
 The `resource.Conf` type has the following customizable properties:
 
-| Property                 | Description
-| ------------------------ | -------------
-| `AllowedModes`           | A list of `resource.Mode` allowed for the resource.
-| `PaginationDefaultLimit` | If set, pagination is enabled for list requests by default with the number of item per page as defined here. Note that the default ony applies to list (GET) requests, i.e. it does _not_ apply for clear (DELETE) requests.
-| `ForceTotal`             | Control the behavior of the computation of `X-Total` header and the `total` query-string parameter. See `resource.ForceTotalMode` for available options.
+| Property                 | Description                                                                                                                                                                                                                  |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AllowedModes`           | A list of `resource.Mode` allowed for the resource.                                                                                                                                                                          |
+| `PaginationDefaultLimit` | If set, pagination is enabled for list requests by default with the number of item per page as defined here. Note that the default ony applies to list (GET) requests, i.e. it does _not_ apply for clear (DELETE) requests. |
+| `ForceTotal`             | Control the behavior of the computation of `X-Total` header and the `total` query-string parameter. See `resource.ForceTotalMode` for available options.                                                                     |
 
 ### Modes
 
@@ -701,82 +681,81 @@ Modes are passed as configuration to resources as follow:
 
 ```go
 users := index.Bind("users", user, mem.NewHandler(), resource.Conf{
-	AllowedModes: []resource.Mode{resource.Read, resource.List, resource.Create, resource.Delete},
+    AllowedModes: []resource.Mode{resource.Read, resource.List, resource.Create, resource.Delete},
 })
 ```
 
 The following table shows how REST layer maps CRUDL operations to HTTP methods and `modes`:
 
-
-| Mode      | HTTP Method | Context    | Description
-| --------- | ----------- | ---------- | -------------
-| `Read`    | GET         | Item       | Get an individual item by its ID.
-| `List`    | GET         | Collection | List/find items using filters and sorts.
-| `Create`  | POST        | Collection | Create an item letting the system generate its ID.
-| `Create`  | PUT         | Item       | Create an item by choosing its ID.
-| `Update`  | PATCH       | Item       | Partially modify the item following [RFC-5789](http://tools.ietf.org/html/rfc5789), [RFC-6902](https://tools.ietf.org/html/rfc6902).
-| `Replace` | PUT         | Item       | Replace the item by a new on.
-| `Delete`  | DELETE      | Item       | Delete the item by its ID.
-| `Clear`   | DELETE      | Collection | Delete all items from the collection matching the context and/or filters.
+| Mode      | HTTP Method | Context    | Description                                                                                                                          |
+| --------- | ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `Read`    | GET         | Item       | Get an individual item by its ID.                                                                                                    |
+| `List`    | GET         | Collection | List/find items using filters and sorts.                                                                                             |
+| `Create`  | POST        | Collection | Create an item letting the system generate its ID.                                                                                   |
+| `Create`  | PUT         | Item       | Create an item by choosing its ID.                                                                                                   |
+| `Update`  | PATCH       | Item       | Partially modify the item following [RFC-5789](http://tools.ietf.org/html/rfc5789), [RFC-6902](https://tools.ietf.org/html/rfc6902). |
+| `Replace` | PUT         | Item       | Replace the item by a new on.                                                                                                        |
+| `Delete`  | DELETE      | Item       | Delete the item by its ID.                                                                                                           |
+| `Clear`   | DELETE      | Collection | Delete all items from the collection matching the context and/or filters.                                                            |
 
 Note on GraphQL support and modes: current implementation of GraphQL doesn't support mutation. Thus only resources with `Read` and `List` modes will be exposed with GraphQL. Support for other modes will be added in the future.
 
 ### Hooks
 
-Hooks are piece of code you can attach before or after an operation is performed on a resource. A hook is a Go type implementing one of the event handler interface below, and attached to a resource via the [Resource.Use](https://godoc.org/github.com/rs/rest-layer/resource#Resource.Use) method.
+Hooks are piece of code you can attach before or after an operation is performed on a resource. A hook is a Go type implementing one of the event handler interface below, and attached to a resource via the [Resource.Use](https://pkg.go.dev/github.com/searis/rest-layer/resource#Resource.Use) method.
 
-| Hook Interface         | Description
-| ---------------------- | -------------
-| [FindEventHandler]     | Defines a function called when the resource is listed with or without a query. Note that hook is called for both resource and item fetch as well a prior to updates and deletes.
-| [FoundEventHandler]    | Defines a function called with the result of a find on resource.
-| [GetEventHandler]      | Defines a function called when a get is performed on an item of the resource. Note: when multi-get is performed this hook is called for each items id individually.
-| [GotEventHandler]      | Defines a function called with the result of a get on a resource.
-| [InsertEventHandler]   | Defines a function called before an item is inserted.
-| [InsertedEventHandler] | Defines a function called after an item has been inserted.
-| [UpdateEventHandler]   | Defines a function called before an item is updated.
-| [UpdatedEventHandler]  | Defines a function called after an item has been updated.
-| [DeleteEventHandler]   | Defines a function called before an item is deleted.
-| [DeletedEventHandler]  | Defines a function called after an item has been deleted.
-| [ClearEventHandler]    | Defines a function called before a resource is cleared.
-| [ClearedEventHandler]  | Defines a function called after a resource has been cleared.
+| Hook Interface         | Description                                                                                                                                                                      |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [FindEventHandler]     | Defines a function called when the resource is listed with or without a query. Note that hook is called for both resource and item fetch as well a prior to updates and deletes. |
+| [FoundEventHandler]    | Defines a function called with the result of a find on resource.                                                                                                                 |
+| [GetEventHandler]      | Defines a function called when a get is performed on an item of the resource. Note: when multi-get is performed this hook is called for each items id individually.              |
+| [GotEventHandler]      | Defines a function called with the result of a get on a resource.                                                                                                                |
+| [InsertEventHandler]   | Defines a function called before an item is inserted.                                                                                                                            |
+| [InsertedEventHandler] | Defines a function called after an item has been inserted.                                                                                                                       |
+| [UpdateEventHandler]   | Defines a function called before an item is updated.                                                                                                                             |
+| [UpdatedEventHandler]  | Defines a function called after an item has been updated.                                                                                                                        |
+| [DeleteEventHandler]   | Defines a function called before an item is deleted.                                                                                                                             |
+| [DeletedEventHandler]  | Defines a function called after an item has been deleted.                                                                                                                        |
+| [ClearEventHandler]    | Defines a function called before a resource is cleared.                                                                                                                          |
+| [ClearedEventHandler]  | Defines a function called after a resource has been cleared.                                                                                                                     |
 
-[FindEventHandler]:     https://godoc.org/github.com/rs/rest-layer/resource#FindEventHandler
-[FoundEventHandler]:    https://godoc.org/github.com/rs/rest-layer/resource#FoundEventHandler
-[GetEventHandler]:      https://godoc.org/github.com/rs/rest-layer/resource#GetEventHandler
-[GotEventHandler]:      https://godoc.org/github.com/rs/rest-layer/resource#GotEventHandler
-[InsertEventHandler]:   https://godoc.org/github.com/rs/rest-layer/resource#InsertEventHandler
-[InsertedEventHandler]: https://godoc.org/github.com/rs/rest-layer/resource#InsertedEventHandler
-[UpdateEventHandler]:   https://godoc.org/github.com/rs/rest-layer/resource#UpdateEventHandler
-[UpdatedEventHandler]:  https://godoc.org/github.com/rs/rest-layer/resource#UpdatedEventHandler
-[DeleteEventHandler]:   https://godoc.org/github.com/rs/rest-layer/resource#DeleteEventHandler
-[DeletedEventHandler]:  https://godoc.org/github.com/rs/rest-layer/resource#DeletedEventHandler
-[ClearEventHandler]:    https://godoc.org/github.com/rs/rest-layer/resource#ClearEventHandler
-[ClearedEventHandler]:  https://godoc.org/github.com/rs/rest-layer/resource#ClearedEventHandler
+[findeventhandler]: https://pkg.go.dev/github.com/searis/rest-layer/resource#FindEventHandler
+[foundeventhandler]: https://pkg.go.dev/github.com/searis/rest-layer/resource#FoundEventHandler
+[geteventhandler]: https://pkg.go.dev/github.com/searis/rest-layer/resource#GetEventHandler
+[goteventhandler]: https://pkg.go.dev/github.com/searis/rest-layer/resource#GotEventHandler
+[inserteventhandler]: https://pkg.go.dev/github.com/searis/rest-layer/resource#InsertEventHandler
+[insertedeventhandler]: https://pkg.go.dev/github.com/searis/rest-layer/resource#InsertedEventHandler
+[updateeventhandler]: https://pkg.go.dev/github.com/searis/rest-layer/resource#UpdateEventHandler
+[updatedeventhandler]: https://pkg.go.dev/github.com/searis/rest-layer/resource#UpdatedEventHandler
+[deleteeventhandler]: https://pkg.go.dev/github.com/searis/rest-layer/resource#DeleteEventHandler
+[deletedeventhandler]: https://pkg.go.dev/github.com/searis/rest-layer/resource#DeletedEventHandler
+[cleareventhandler]: https://pkg.go.dev/github.com/searis/rest-layer/resource#ClearEventHandler
+[clearedeventhandler]: https://pkg.go.dev/github.com/searis/rest-layer/resource#ClearedEventHandler
 
-Note that these are resource level hooks, and do not correspond one-to-one to `rest` or `graphql` operation. For the `rest` package in particular, note that a HTTP request to `GET` an item by ID, will result in a `Find` and not a `Get` call which will triggering the `OnFind` and `OnFound` hooks to be called, not `OnGet` and `OnGot`. Similarly, a `PATCH` or `PUT` request will call `Find` before it calls `Update`, which will trigger the same hooks. If your hooks logic require knowing which rest-level operation is performed see [rest.RouteFromContext](https://godoc.org/github.com/rs/rest-layer/rest#RouteFromContext)
+Note that these are resource level hooks, and do not correspond one-to-one to `rest` or `graphql` operation. For the `rest` package in particular, note that a HTTP request to `GET` an item by ID, will result in a `Find` and not a `Get` call which will triggering the `OnFind` and `OnFound` hooks to be called, not `OnGet` and `OnGot`. Similarly, a `PATCH` or `PUT` request will call `Find` before it calls `Update`, which will trigger the same hooks. If your hooks logic require knowing which rest-level operation is performed see [rest.RouteFromContext](https://pkg.go.dev/github.com/searis/rest-layer/rest#RouteFromContext)
 
-All hooks functions get a `context.Context` as first argument. If a network call must be performed from the hook, the context's deadline must be respected. If a hook returns an error, the whole request is aborted with that error. You can also use the context to pass data to your hooks from a middleware executed before REST Layer. This can be used to manage authentication for instance. See [examples/auth](https://github.com/rs/rest-layer/blob/master/examples/auth/main.go) to see an example.
+All hooks functions get a `context.Context` as first argument. If a network call must be performed from the hook, the context's deadline must be respected. If a hook returns an error, the whole request is aborted with that error. You can also use the context to pass data to your hooks from a middleware executed before REST Layer. This can be used to manage authentication for instance. See [examples/auth](https://github.com/searis/rest-layer/blob/master/examples/auth/main.go) to see an example.
 
 Hooks that get passed both an an error and/or an item, such as [GotEventHandler], [UpdatedEventHandler], [DeletedEventHandler] should insert guards to handle the error being set and/or the item not being set; both can be true in some cases. It's also allowed to set items or errors to nil, which is why double pointers are often used.
 
 ```go
 func (hook Hook) OnGot(ctx context.Context, item **resource.Item, err *error) {
-	// Guard.
-	if *err != nil || *item == nil {
-		return
-	}
-	// ...
+    // Guard.
+    if *err != nil || *item == nil {
+        return
+    }
+    // ...
 }
 ```
 
 ```go
 func (hook Hook) OnGot(ctx context.Context, item **resource.Item, err *error) {
-	// Overriding an error response.
-	if *err != nil || *item == nil {
-		(*err) = nil
-		(*item) = fallbackItem()
-	}
-	// ...
+    // Overriding an error response.
+    if *err != nil || *item == nil {
+        (*err) = nil
+        (*item) = fallbackItem()
+    }
+    // ...
 }
 ```
 
@@ -806,19 +785,19 @@ Here we would get all post with their respective 5 last comments embedded in the
 
 ```json
 [
-    {
-        "id": "abc",
-        "comments": [
-            {
-                "id": "def",
-                "user": {
-                    "id": "ghi",
-                    "name": "John Doe",
-                },
-                "message": "Last comment"
-            },
-        ]
-    },
+  {
+    "id": "abc",
+    "comments": [
+      {
+        "id": "def",
+        "user": {
+          "id": "ghi",
+          "name": "John Doe"
+        },
+        "message": "Last comment"
+      }
+    ]
+  }
 ]
 ```
 
@@ -826,21 +805,21 @@ See [embedding](#embedding) for more information.
 
 ### Dependency
 
-Fields can depend on other fields in order to be changed. To configure a dependency, set a filter on the `Dependency` property of the field using the [query.MustParsePredicate()](https://godoc.org/github.com/rs/rest-layer/schema/queru#MustParsePredicate) method.
+Fields can depend on other fields in order to be changed. To configure a dependency, set a filter on the `Dependency` property of the field using the [query.MustParsePredicate()](https://pkg.go.dev/github.com/searis/rest-layer/schema/queru#MustParsePredicate) method.
 
 In this example, the `body` field can't be changed if the `published` field is not set to `true`:
 
 ```go
 post = schema.Schema{
-	Fields: schema.Fields{
-		"published": schema.Field{
-			Validator:  &schema.Bool{},
-		},
-		"body": {
-			Dependency: query.MustParsePredicate(`{"published": true}`),
-			Validator:  &schema.String{},
-		},
-	},
+    Fields: schema.Fields{
+        "published": schema.Field{
+            Validator:  &schema.Bool{},
+        },
+        "body": {
+            Dependency: query.MustParsePredicate(`{"published": true}`),
+            Validator:  &schema.String{},
+        },
+    },
 }
 ```
 
@@ -943,7 +922,9 @@ Using the the `$or` operator, you can specify a compound query that joins each c
 In the following example, the query document selects all items in the collection where the field `quantity` has a value greater than (`$gt`) `100` or the value of the `price` field is less than (`$lt`) `9.95`:
 
 ```js
-{$or: [{quantity: {$gt: 100}}, {price: {$lt: 9.95}}]}
+{
+  $or: [{ quantity: { $gt: 100 } }, { price: { $lt: 9.95 } }];
+}
 ```
 
 Match on sub-fields is performed through field path separated by dots. This example shows an exact match on the sub-fields `country` and `city` of the `address` sub-document:
@@ -955,7 +936,11 @@ Match on sub-fields is performed through field path separated by dots. This exam
 Some operators can change the type of match. For instance `$in` can be used to match a field against several values. For instance, to select all items with the `type` field equal either `food` or `snacks`, use the following query:
 
 ```js
-{type: {$in: ["food", "snacks"]}}
+{
+  type: {
+    $in: ["food", "snacks"];
+  }
+}
 ```
 
 The opposite `$nin` is also available.
@@ -965,7 +950,11 @@ The following numeric comparisons operators are supported: `$lt`, `$lte`, `$gt`,
 The `$exists` operator matches documents containing the field, even if this field is `null`.
 
 ```js
-{type: {$exists: true}}
+{
+  type: {
+    $exists: true;
+  }
+}
 ```
 
 You can invert the operator by passing `false`.
@@ -976,38 +965,47 @@ More precisely, it is the syntax accepted by RE2 and described at [https://golan
 Flags are supported for more control over regular expressions. Flag syntax is xyz (set) or -xyz (clear) or xy-z (set xy, clear z).
 The flags are:
 
-|Flag  |Mode                                                                       | Default
-| ---- | ------------------------------------------------------------------------- | -----
-|`i`   |case-insensitive                                                           | false
-|`m`   |multi-line mode: ^ and $ match begin/end line in addition to begin/end text| false
-|`s`   |let . match \n                                                             | false
-|`U`   |non-greedy: swap meaning of x\* and x\*?, x+ and x+?, etc                  | false
+| Flag | Mode                                                                        | Default |
+| ---- | --------------------------------------------------------------------------- | ------- |
+| `i`  | case-insensitive                                                            | false   |
+| `m`  | multi-line mode: ^ and $ match begin/end line in addition to begin/end text | false   |
+| `s`  | let . match \n                                                              | false   |
+| `U`  | non-greedy: swap meaning of x\* and x\*?, x+ and x+?, etc                   | false   |
 
 For example the following regular expression would match any document with a field `type` and its value `rest-layer`.
 
 ```js
-{type: {$regex: "re[s]{1}t-la.+r"}}
+{
+  type: {
+    $regex: "re[s]{1}t-la.+r";
+  }
+}
 ```
 
 The same example with flags:
 
 ```js
-{type: {$regex: "(?i)re[s]{1}t-LAYER"}}
+{
+  type: {
+    $regex: "(?i)re[s]{1}t-LAYER";
+  }
+}
 ```
 
 However, keep in mind that Storers have to support regular expression and depending on the implementation of the storage handler the accepted syntax may vary.
 An error of `ErrNotImplemented` will be returned for those storage back-ends which do not support the `$regex` operator.
 
 The `$elemMatch` operator matches documents that contain an array field with at least one element that matches all the specified query criteria.
+
 ```go
-			"telephones": schema.Field{
-				Filterable: true,
-				Validator: &schema.Array{
-					Values: schema.Field{
-						Validator:  &schema.Object{Schema: &Telephone},
-					},
-				},
-			},
+            "telephones": schema.Field{
+                Filterable: true,
+                Validator: &schema.Array{
+                    Values: schema.Field{
+                        Validator:  &schema.Object{Schema: &Telephone},
+                    },
+                },
+            },
 ```
 
 Matching documents that contain specific values within array objects can be done with `$elemMatch`:
@@ -1017,33 +1015,40 @@ Matching documents that contain specific values within array objects can be done
 ```
 
 The snippet above will return all documents, which `telephones` array field contains objects that have `name` **_AND_** `active` fields matching queried values.
+
 > Note that documents returned may contain other objects in `telephones` that don't match the query above, but at least one object will do. Further filtering could be needed on the API client side.
 
-#### *$elemMatch* Limitation
+#### _$elemMatch_ Limitation
 
 `$elemMatch` will work only for arrays of objects for now. Later it could be extended to work on plain arrays e.g:
 
 ```js
-{numbers: {$elemMatch: {$gt: 20}}}
+{
+  numbers: {
+    $elemMatch: {
+      $gt: 20;
+    }
+  }
+}
 ```
 
 #### Filter operators
 
-| Operator     | Usage                           | Description
-| -------------| --------------------------------| ------------
-| `$or`        | `{$or: [{a: "b"}, {a: "c"}]}`   | Join two clauses with a logical `OR` conjunction.
-| `$and`       | `{$and: [{a: "b"}, {b: "c"}]}`  | Join two clauses with a logical `AND` conjunction.
-| `$in`        | `{a: {$in: ["b", "c"]}}`        | Match a field against several values.
-| `$nin`       | `{a: {$nin: ["b", "c"]}}`       | Opposite of `$in`.
-| `$lt`        | `{a: {$lt: 10}}`                | Fields value is lower than specified number.
-| `$lte`       | `{a: {$lte: 10}}`               | Fields value is lower than or equal to the specified number.
-| `$gt`        | `{a: {$gt: 10}}`                | Fields value is greater than specified number.
-| `$gte`       | `{a: {$gte: 10}}`               | Fields value is greater than or equal to the specified number.
-| `$exists`    | `{a: {$exists: true}}`          | Match if the field is present (or not if set to `false`) in the item, event if `nil`.
-| `$regex`     | `{a: {$regex: "fo[o]{1}"}}`     | Match regular expression on a field's value.
-| `$elemMatch` | `{a: {$elemMatch: {b: "foo"}}}` | Match array items against multiple query criteria.
+| Operator     | Usage                           | Description                                                                           |
+| ------------ | ------------------------------- | ------------------------------------------------------------------------------------- |
+| `$or`        | `{$or: [{a: "b"}, {a: "c"}]}`   | Join two clauses with a logical `OR` conjunction.                                     |
+| `$and`       | `{$and: [{a: "b"}, {b: "c"}]}`  | Join two clauses with a logical `AND` conjunction.                                    |
+| `$in`        | `{a: {$in: ["b", "c"]}}`        | Match a field against several values.                                                 |
+| `$nin`       | `{a: {$nin: ["b", "c"]}}`       | Opposite of `$in`.                                                                    |
+| `$lt`        | `{a: {$lt: 10}}`                | Fields value is lower than specified number.                                          |
+| `$lte`       | `{a: {$lte: 10}}`               | Fields value is lower than or equal to the specified number.                          |
+| `$gt`        | `{a: {$gt: 10}}`                | Fields value is greater than specified number.                                        |
+| `$gte`       | `{a: {$gte: 10}}`               | Fields value is greater than or equal to the specified number.                        |
+| `$exists`    | `{a: {$exists: true}}`          | Match if the field is present (or not if set to `false`) in the item, event if `nil`. |
+| `$regex`     | `{a: {$regex: "fo[o]{1}"}}`     | Match regular expression on a field's value.                                          |
+| `$elemMatch` | `{a: {$elemMatch: {b: "foo"}}}` | Match array items against multiple query criteria.                                    |
 
-*Some storage handlers may not support all operators. Refer to the storage handler's documentation for more info.*
+_Some storage handlers may not support all operators. Refer to the storage handler's documentation for more info._
 
 ### Sorting
 
@@ -1053,11 +1058,13 @@ To use a resource field with the `sort` parameter, the field must be defined on 
 
 Here we sort the result by ascending quantity and descending create time:
 
-    /posts?sort=quantity,-created
+```txt
+/posts?sort=quantity,-created
+```
 
 ### Field Selection
 
-REST APIs tend to grow over time. Resources get more and more fields to fulfill the needs for new features. But each time fields are added, all existing API clients automatically get the additional cost. This tend to lead to huge waste of bandwidth and added latency due to the transfer of unnecessary data. As a workaround, the `field` parameter can be used to minimize and customize the response body from requests with a `GET`, `POST`, `PUT`  or `PATCH` method on resource URLs.
+REST APIs tend to grow over time. Resources get more and more fields to fulfill the needs for new features. But each time fields are added, all existing API clients automatically get the additional cost. This tend to lead to huge waste of bandwidth and added latency due to the transfer of unnecessary data. As a workaround, the `field` parameter can be used to minimize and customize the response body from requests with a `GET`, `POST`, `PUT` or `PATCH` method on resource URLs.
 
 REST Layer provides a powerful fields selection (also named projection) system. If you provide the `fields` parameter with a list of fields for the resource you are interested in separated by commas, only those fields will be returned in the document:
 
@@ -1165,24 +1172,24 @@ To add parameters on a field, use the `Params` property of the `schema.Field` ty
 
 ```go
 schema.Schema{
-	Fields: schema.Fields{
-		"field": {
-			Params: schema.Params{
-				"width": {
-					Description: "Change the width of the thumbnail to the value in pixels",
-					Validator: schema.Integer{}
-				},
-				"height": {
-					Description: "Change the width of the thumbnail to the value in pixels",
-					Validator: schema.Integer{},
-				},
-			},
-			Handler: func(ctx context.Context, value interface{}, params map[string]interface{}) (interface{}, error) {
-				// your transformation logic here
-				return value, nil
-			},
-		},
-	},
+    Fields: schema.Fields{
+        "field": {
+            Params: schema.Params{
+                "width": {
+                    Description: "Change the width of the thumbnail to the value in pixels",
+                    Validator: schema.Integer{}
+                },
+                "height": {
+                    Description: "Change the width of the thumbnail to the value in pixels",
+                    Validator: schema.Integer{},
+                },
+            },
+            Handler: func(ctx context.Context, value interface{}, params map[string]interface{}) (interface{}, error) {
+                // your transformation logic here
+                return value, nil
+            },
+        },
+    },
 }
 ```
 
@@ -1260,7 +1267,7 @@ REST Layer doesn't provide any kind of support for authentication. Identifying t
 
 In this schema, the authentication service identifies the user and stores data relevant to the user's identification in a JWT token. This token is sent to the API client as a [bearer token](https://tools.ietf.org/html/rfc6750), through the `access-token` query-string parameter or the `Authorization` HTTP header. A http middleware then decodes and verifies this token, extracts user's info from it and stores it into the context. In REST layer, user info is now accessible from your [resource hooks](#hooks) so you can change the query lookup or ensure mutated objects are owned by the user in order to handle the authorization part.
 
-See the [JWT auth example](https://github.com/rs/rest-layer/blob/master/examples/auth-jwt/main.go) for more info.
+See the [JWT auth example](https://github.com/searis/rest-layer/blob/master/examples/auth-jwt/main.go) for more info.
 
 ## Conditional Requests
 
@@ -1336,50 +1343,50 @@ In the example above, the document did not validate so the request was rejected 
 
 ### Nullable Values
 
-To allow `null` value in addition the field type, you can use [schema.AnyOf](https://godoc.org/github.com/rs/rest-layer/schema#AnyOf) validator:
+To allow `null` value in addition the field type, you can use [schema.AnyOf](https://pkg.go.dev/github.com/searis/rest-layer/schema#AnyOf) validator:
 
 ```go
 "nullable_field": {
-	Validator: schema.AnyOf{
-		schema.String{},
-		schema.Null{},
-	},
+    Validator: schema.AnyOf{
+        schema.String{},
+        schema.Null{},
+    },
 }
 ```
 
 ### Extensible Data Validation
 
-It is very easy to add new validators. You just need to implement the [schema.FieldValidator](https://godoc.org/github.com/rs/rest-layer/schema#FieldValidator):
+It is very easy to add new validators. You just need to implement the [schema.FieldValidator](https://pkg.go.dev/github.com/searis/rest-layer/schema#FieldValidator):
 
 ```go
 type FieldValidator interface {
-	Validate(value interface{}) (interface{}, error)
+    Validate(value interface{}) (interface{}, error)
 }
 ```
 
 The `Validate` method takes the value as argument and must either return the value back with some eventual transformation or an `error` if the validation failed.
 
-Your validator may also implement the optional [schema.Compiler](https://godoc.org/github.com/rs/rest-layer/schema#Compiler) interface:
+Your validator may also implement the optional [schema.Compiler](https://pkg.go.dev/github.com/searis/rest-layer/schema#Compiler) interface:
 
 ```go
 type Compiler interface {
-	Compile() error
+    Compile() error
 }
 ```
 
 When a field validator implements this interface, the `Compile` method is called at the server initialization. It's a good place to pre-compute some data (i.e.: compile regexp) and verify validator configuration. If validator configuration contains issues, the `Compile` method must return an error, so the initialization of the resource will generate a fatal error.
 
-A validator may implement some advanced serialization or transformation of the data to optimize its storage. In order to read this data back and put it in a format suitable for JSON representation, a validator can implement the [schema.FieldSerializer](https://godoc.org/github.com/rs/rest-layer/schema#FieldSerializer) interface:
+A validator may implement some advanced serialization or transformation of the data to optimize its storage. In order to read this data back and put it in a format suitable for JSON representation, a validator can implement the [schema.FieldSerializer](https://pkg.go.dev/github.com/searis/rest-layer/schema#FieldSerializer) interface:
 
 ```go
 type FieldSerializer interface {
-	Serialize(value interface{}) (interface{}, error)
+    Serialize(value interface{}) (interface{}, error)
 }
 ```
 
 When a validator implements this interface, the method is called with the field's value just before JSON marshaling. You should return an error if the format stored in the db is invalid and can't be converted back into a suitable representation.
 
-See [schema.IP](https://godoc.org/github.com/rs/rest-layer/schema#IP) validator for an implementation example.
+See [schema.IP](https://pkg.go.dev/github.com/searis/rest-layer/schema#IP) validator for an implementation example.
 
 ## Timeout and Request Cancellation
 
@@ -1402,13 +1409,13 @@ c = c.Append(hlog.NewHandler(log.With().Logger()))
 
 // Log API accesses
 c = c.Append(hlog.AccessHandler(func(r *http.Request, status, size int, duration time.Duration) {
-	hlog.FromRequest(r).Info().
-		Str("method", r.Method).
-		Str("url", r.URL.String()).
-		Int("status", status).
-		Int("size", size).
-		Dur("duration", duration).
-		Msg("")
+    hlog.FromRequest(r).Info().
+        Str("method", r.Method).
+        Str("url", r.URL.String()).
+        Int("status", status).
+        Int("size", size).
+        Dur("duration", duration).
+        Msg("")
 }))
 
 // Add some fields to per-request logger context
@@ -1421,7 +1428,7 @@ c = c.Append(hlog.RequestIDHandler("req_id", "Request-Id"))
 // Install zerolog/rest-layer adapter
 resource.LoggerLevel = resource.LogLevelDebug
 resource.Logger = func(ctx context.Context, level resource.LogLevel, msg string, fields map[string]interface{}) {
-	zerolog.Ctx(ctx).WithLevel(zerolog.Level(level)).Fields(fields).Msg(msg)
+    zerolog.Ctx(ctx).WithLevel(zerolog.Level(level)).Fields(fields).Msg(msg)
 }
 
 ```
@@ -1436,26 +1443,26 @@ REST Layer doesn't support CORS internally but relies on an external middleware 
 package main
 
 import (
-	"log"
-	"net/http"
+    "log"
+    "net/http"
 
-	"github.com/rs/cors"
-	"github.com/rs/rest-layer/resource"
-	"github.com/rs/rest-layer/rest"
+    "github.com/rs/cors"
+    "github.com/searis/rest-layer/resource"
+    "github.com/searis/rest-layer/rest"
 )
 
 func main() {
-	index := resource.NewIndex()
+    index := resource.NewIndex()
 
-	// configure your resources
+    // configure your resources
 
-	api, err := rest.NewHandler(index)
-	if err != nil {
-		log.Fatalf("Invalid API configuration: %s", err)
-	}
+    api, err := rest.NewHandler(index)
+    if err != nil {
+        log.Fatalf("Invalid API configuration: %s", err)
+    }
 
-	handler := cors.Default().Handler(api)
-	log.Fatal(http.ListenAndServe(":8080", handler))
+    handler := cors.Default().Handler(api)
+    log.Fatal(http.ListenAndServe(":8080", handler))
 }
 ```
 
@@ -1472,75 +1479,75 @@ As for CORS, REST Layer doesn't support JSONP directly but rely on an external m
 package main
 
 import (
-	"log"
-	"net/http"
+    "log"
+    "net/http"
 
-	"github.com/rs/rest-layer/resource"
-	"github.com/rs/rest-layer/rest"
+    "github.com/searis/rest-layer/resource"
+    "github.com/searis/rest-layer/rest"
 )
 
 func main() {
-	index := resource.NewIndex()
+    index := resource.NewIndex()
 
-	// configure your resources
+    // configure your resources
 
-	api, err := rest.NewHandler(index)
-	if err != nil {
-		log.Fatalf("Invalid API configuration: %s", err)
-	}
+    api, err := rest.NewHandler(index)
+    if err != nil {
+        log.Fatalf("Invalid API configuration: %s", err)
+    }
 
-	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fn := r.URL.Query().Get("callback")
-		if fn != "" {
-			w.Header().Set("Content-Type", "application/javascript")
-			w.Write([]byte(";fn("))
-		}
-		api.ServeHTTP(w, r)
-		if fn != "" {
-			w.Write([]byte(");"))
-		}
-	})
-	log.Fatal(http.ListenAndServe(":8080", handler))
+    handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        fn := r.URL.Query().Get("callback")
+        if fn != "" {
+            w.Header().Set("Content-Type", "application/javascript")
+            w.Write([]byte(";fn("))
+        }
+        api.ServeHTTP(w, r)
+        if fn != "" {
+            w.Write([]byte(");"))
+        }
+    })
+    log.Fatal(http.ListenAndServe(":8080", handler))
 }
 ```
 
 ## Data Storage Handler
 
-REST Layer doesn't handle storage of resources directly. A [mem.MemoryHandler](https://godoc.org/github.com/rs/rest-layer/resource/testing/mem#MemoryHandler) is provided as an example but should be used for testing only.
+REST Layer doesn't handle storage of resources directly. A [mem.MemoryHandler](https://pkg.go.dev/github.com/searis/rest-layer/resource/testing/mem#MemoryHandler) is provided as an example but should be used for testing only.
 
-A resource storage handler is easy to write though. Some handlers for [popular databases are available](#main-storage-handlers), but you may want to write your own to put an API in front of anything you want. It is very easy to write a data storage handler, you just need to implement the [resource.Storer](https://godoc.org/github.com/rs/rest-layer/resource#Storer) interface:
+A resource storage handler is easy to write though. Some handlers for [popular databases are available](#main-storage-handlers), but you may want to write your own to put an API in front of anything you want. It is very easy to write a data storage handler, you just need to implement the [resource.Storer](https://pkg.go.dev/github.com/searis/rest-layer/resource#Storer) interface:
 
 ```go
 type Storer interface {
-	Find(ctx context.Context, q *query.Query) (*ItemList, error)
-	Insert(ctx context.Context, items []*Item) error
-	Update(ctx context.Context, item *Item, original *Item) error
-	Delete(ctx context.Context, item *Item) error
-	Clear(ctx context.Context, q *query.Query) (int, error)
+    Find(ctx context.Context, q *query.Query) (*ItemList, error)
+    Insert(ctx context.Context, items []*Item) error
+    Update(ctx context.Context, item *Item, original *Item) error
+    Delete(ctx context.Context, item *Item) error
+    Clear(ctx context.Context, q *query.Query) (int, error)
 }
 ```
 
-Mutation methods like `Update` and `Delete` must ensure they are atomically mutating the same item as specified in argument by checking their `ETag` (the stored `ETag` must match the `ETag` of the provided item). In case the handler can't guarantee that, the storage must be left untouched and a [resource.ErrConflict](https://godoc.org/github.com/rs/rest-layer/resource#pkg-variables) must be returned.
+Mutation methods like `Update` and `Delete` must ensure they are atomically mutating the same item as specified in argument by checking their `ETag` (the stored `ETag` must match the `ETag` of the provided item). In case the handler can't guarantee that, the storage must be left untouched and a [resource.ErrConflict](https://pkg.go.dev/github.com/searis/rest-layer/resource#pkg-variables) must be returned.
 
 If the operation is not immediate, the method must listen for cancellation on the passed `ctx`. If the operation is stopped due to context cancellation, the function must return the result of the [ctx.Err()](https://godoc.org/golang.org/x/net/context#Context) method. See [this blog post](https://blog.golang.org/context) for more information about how `context` works.
 
-If the backend storage is able to efficiently fetch multiple document by their id, it can implement the optional [resource.MultiGetter](https://godoc.org/github.com/rs/rest-layer/resource#MultiGetter) interface. REST Layer will automatically use it whenever possible.
+If the backend storage is able to efficiently fetch multiple document by their id, it can implement the optional [resource.MultiGetter](https://pkg.go.dev/github.com/searis/rest-layer/resource#MultiGetter) interface. REST Layer will automatically use it whenever possible.
 
-See [resource.Storer](https://godoc.org/github.com/rs/rest-layer/resource#Storer) documentation for more information on resource storage handler implementation details.
+See [resource.Storer](https://pkg.go.dev/github.com/searis/rest-layer/resource#Storer) documentation for more information on resource storage handler implementation details.
 
 ## Custom Response Formatter / Sender
 
-REST Layer lets you extend or replace the default response formatter and sender. To write a new response format, you need to implement the [rest.ResponseFormatter](https://godoc.org/github.com/rs/rest-layer/rest#ResponseFormatter) interface:
+REST Layer lets you extend or replace the default response formatter and sender. To write a new response format, you need to implement the [rest.ResponseFormatter](https://pkg.go.dev/github.com/searis/rest-layer/rest#ResponseFormatter) interface:
 
 ```go
 // ResponseFormatter defines an interface responsible for formatting a the different types of response objects
 type ResponseFormatter interface {
-	// FormatItem formats a single item in a format ready to be serialized by the ResponseSender
-	FormatItem(ctx context.Context, headers http.Header, i *resource.Item, skipBody bool) (context.Context, interface{})
-	// FormatList formats a list of items in a format ready to be serialized by the ResponseSender
-	FormatList(ctx context.Context, headers http.Header, l *resource.ItemList, skipBody bool) (context.Context, interface{})
-	// FormatError formats a REST formated error or a simple error in a format ready to be serialized by the ResponseSender
-	FormatError(ctx context.Context, headers http.Header, err error, skipBody bool) (context.Context, interface{})
+    // FormatItem formats a single item in a format ready to be serialized by the ResponseSender
+    FormatItem(ctx context.Context, headers http.Header, i *resource.Item, skipBody bool) (context.Context, interface{})
+    // FormatList formats a list of items in a format ready to be serialized by the ResponseSender
+    FormatList(ctx context.Context, headers http.Header, l *resource.ItemList, skipBody bool) (context.Context, interface{})
+    // FormatError formats a REST formated error or a simple error in a format ready to be serialized by the ResponseSender
+    FormatError(ctx context.Context, headers http.Header, err error, skipBody bool) (context.Context, interface{})
 }
 ```
 
@@ -1550,8 +1557,8 @@ You can also customize the response sender responsible for the serialization of 
 // ResponseSender defines an interface responsible for serializing and sending the response
 // to the http.ResponseWriter.
 type ResponseSender interface {
-	// Send serialize the body, sets the given headers and write everything to the provided response writer
-	Send(ctx context.Context, w http.ResponseWriter, status int, headers http.Header, body interface{})
+    // Send serialize the body, sets the given headers and write everything to the provided response writer
+    Send(ctx context.Context, w http.ResponseWriter, status int, headers http.Header, body interface{})
 }
 ```
 
@@ -1563,29 +1570,29 @@ api.ResponseFormatter = &myResponseFormatter{}
 api.ResponseSender = &myResponseSender{}
 ```
 
-You may also extend the [DefaultResponseFormatter](https://godoc.org/github.com/rs/rest-layer/rest#DefaultResponseFormatter) and/or [DefaultResponseSender](https://godoc.org/github.com/rs/rest-layer/rest#DefaultResponseSender) if you just want to wrap or slightly modify the default behavior:
+You may also extend the [DefaultResponseFormatter](https://pkg.go.dev/github.com/searis/rest-layer/rest#DefaultResponseFormatter) and/or [DefaultResponseSender](https://pkg.go.dev/github.com/searis/rest-layer/rest#DefaultResponseSender) if you just want to wrap or slightly modify the default behavior:
 
 ```go
 type myResponseFormatter struct {
-	rest.DefaultResponseFormatter
+    rest.DefaultResponseFormatter
 }
 
 // Add a wrapper around the list with pagination info
 func (r myResponseFormatter) FormatList(ctx context.Context, headers http.Header, l *resource.ItemList, skipBody bool) (context.Context, interface{}) {
-	ctx, data := r.DefaultResponseFormatter.FormatList(ctx, headers, l, skipBody)
-	return ctx, map[string]interface{}{
-		"meta": map[string]int{
-			"offset": l.Offset,
-			"total":  l.Total,
-		},
-		"list": data,
-	}
+    ctx, data := r.DefaultResponseFormatter.FormatList(ctx, headers, l, skipBody)
+    return ctx, map[string]interface{}{
+        "meta": map[string]int{
+            "offset": l.Offset,
+            "total":  l.Total,
+        },
+        "list": data,
+    }
 }
 ```
 
 ## GraphQL
 
-In parallel with the REST API handler, REST Layer is also able to handle GraphQL queries (mutation will come later). GraphQL is a query language created by Facebook which provides a common interface to fetch and manipulate data. REST Layer's GraphQL handler is able to read a [resource.Index](https://godoc.org/github.com/rs/rest-layer/resource#Index) and create a corresponding GraphQL schema.
+In parallel with the REST API handler, REST Layer is also able to handle GraphQL queries (mutation will come later). GraphQL is a query language created by Facebook which provides a common interface to fetch and manipulate data. REST Layer's GraphQL handler is able to read a [resource.Index](https://pkg.go.dev/github.com/searis/rest-layer/resource#Index) and create a corresponding GraphQL schema.
 
 GraphQL doesn't expose resources directly, but queries. REST Layer take all the resources defined at the root of the `resource.Index` and create two GraphQL queries for each one. One query is just the name of the endpoint, so `/users` would result in `users` and another is the name of the endpoint suffixed with `List`, as `usersList`. The item query takes an `id` parameter and the list queries takes `skip`, `page`, `limit`, `filter` and `sort` parameters. All sub-resources are accessible using GraphQL sub-selection syntax.
 
@@ -1599,7 +1606,7 @@ index := resource.NewIndex()
 
 h, err := graphql.NewHandler(index)
 if err != nil {
-	log.Fatal(err)
+    log.Fatal(err)
 }
 http.Handle("/graphql", h)
 http.ListenAndServe(":8080", nil)
@@ -1609,10 +1616,10 @@ GraphQL support is experimental. Only querying is supported for now, mutation wi
 
 ## Hystrix
 
-REST Layer supports Hystrix as a circuit breaker. You can enable Hystrix on a per resource basis by wrapping the storage handler using [rest-layer-hystrix](https://github.com/rs/rest-layer-hystrix):
+REST Layer supports Hystrix as a circuit breaker. You can enable Hystrix on a per resource basis by wrapping the storage handler using [rest-layer-hystrix](https://github.com/searis/rest-layer-hystrix):
 
 ```go
-import "github.com/rs/rest-layer-hystrix"
+import "github.com/searis/rest-layer-hystrix"
 
 index.Bind("posts", post, restrix.Wrap("posts", mongo.NewHandler()), resource.DefaultConf)
 ```
@@ -1628,7 +1635,7 @@ When wrapped this way, one Hystrix command is created per storage handler action
 
 Once enabled, you must configure Hystrix for each command and start the Hystrix metrics stream handler.
 
-See [Hystrix godoc](https://godoc.org/github.com/afex/hystrix-go/hystrix) for more info and [examples/hystrix](https://github.com/rs/rest-layer/blob/master/examples/hystrix/main.go) for a complete usage example with REST layer.
+See [Hystrix godoc](https://godoc.org/github.com/afex/hystrix-go/hystrix) for more info and [examples/hystrix](https://github.com/searis/rest-layer/blob/master/examples/hystrix/main.go) for a complete usage example with REST layer.
 
 ## JSONSchema
 
@@ -1637,7 +1644,7 @@ It is possible to convert a schema to [JSON Schema](http://json-schema.org/) wit
 Example usage:
 
 ```go
-import "github.com/rs/rest-layer/schema/encoding/jsonschema"
+import "github.com/searis/rest-layer/schema/encoding/jsonschema"
 
 b := new(bytes.Buffer)
 enc := jsonschema.NewEncoder(b)
@@ -1647,7 +1654,6 @@ if err := enc.Encode(aSchema); err != nil {
 fmt.Println(b.String()) // Valid JSON Document describing the schema.
 ```
 
-
 ### Custom FieldValidators
 
 For a custom `FieldValidator` to support encoding to JSON Schema, it must implement the `jsonschema.Builder` interface:
@@ -1656,10 +1662,10 @@ For a custom `FieldValidator` to support encoding to JSON Schema, it must implem
 // The Builder interface should be implemented by custom schema.FieldValidator implementations to allow JSON Schema
 // serialization.
 type Builder interface {
-	// BuildJSONSchema should return a map containing JSON Schema Draft 4 properties that can be set based on
-	// FieldValidator data. Application specific properties can be added as well, but should not conflict with any
-	// legal JSON Schema keys.
-	BuildJSONSchema() (map[string]interface{}, error)
+    // BuildJSONSchema should return a map containing JSON Schema Draft 4 properties that can be set based on
+    // FieldValidator data. Application specific properties can be added as well, but should not conflict with any
+    // legal JSON Schema keys.
+    BuildJSONSchema() (map[string]interface{}, error)
 }
 ```
 
@@ -1667,23 +1673,23 @@ To easier extend a `FieldValidator` from the `schema` package, you can call `Val
 
 ```go
 type Email struct {
-	schema.String
+    schema.String
 }
 
 func (e Email) BuildJSONSchema() (map[string]interface{}, error) {
-	parentBuilder, _ = jsonschema.ValidatorBuilder(e.String)
-	m, err := parentBuilder.BuildJSONSchema()
-	if err != nil {
-		return nil, err
-	}
-	m["format"] = "email"
-	return m, nil
+    parentBuilder, _ = jsonschema.ValidatorBuilder(e.String)
+    m, err := parentBuilder.BuildJSONSchema()
+    if err != nil {
+        return nil, err
+    }
+    m["format"] = "email"
+    return m, nil
 }
 ```
 
 ### Sub-schema Limitation
 
-Sub-schemas only get converted to JSON Schema, if you specify a sub-schema via setting a Field's `Validator` attribute to a `schema.Object` instance. Use of the Field's `Schema` field is _not_ supported. Instead we hope [#77](https://github.com/rs/rest-layer/issues/77) will be implemented.
+Sub-schemas only get converted to JSON Schema, if you specify a sub-schema via setting a Field's `Validator` attribute to a `schema.Object` instance. Use of the Field's `Schema` field is _not_ supported.
 
 ### schema.Dict Limitations
 
@@ -1705,4 +1711,4 @@ Note that JSON Schema draft 5 adds [uriref](https://tools.ietf.org/html/draft-wr
 
 ## Licenses
 
-All source code is licensed under the [MIT License](https://raw.github.com/rs/rest-layer/master/LICENSE).
+All source code is licensed under the [MIT License](https://raw.github.com/searis/rest-layer/master/LICENSE).

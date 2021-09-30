@@ -1,3 +1,4 @@
+//go:build go1.7
 // +build go1.7
 
 package main
@@ -12,14 +13,14 @@ import (
 
 	"github.com/afex/hystrix-go/hystrix"
 	"github.com/justinas/alice"
-	"github.com/rs/rest-layer-hystrix"
-	"github.com/rs/rest-layer/resource/testing/mem"
-	"github.com/rs/rest-layer/resource"
-	"github.com/rs/rest-layer/rest"
-	"github.com/rs/rest-layer/schema"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/hlog"
 	"github.com/rs/zerolog/log"
+	"github.com/searis/rest-layer-hystrix"
+	"github.com/searis/rest-layer/resource"
+	"github.com/searis/rest-layer/resource/testing/mem"
+	"github.com/searis/rest-layer/rest"
+	"github.com/searis/rest-layer/schema"
 )
 
 var (

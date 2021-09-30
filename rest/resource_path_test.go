@@ -3,9 +3,9 @@ package rest
 import (
 	"testing"
 
-	"github.com/rs/rest-layer/resource"
-	mem "github.com/rs/rest-layer/resource/testing/mem"
-	"github.com/rs/rest-layer/schema"
+	"github.com/searis/rest-layer/resource"
+	mem "github.com/searis/rest-layer/resource/testing/mem"
+	"github.com/searis/rest-layer/schema"
 	"github.com/stretchr/testify/assert"
 )
 

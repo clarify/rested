@@ -6,10 +6,10 @@ import (
 	"net/url"
 
 	"github.com/rs/cors"
-	"github.com/rs/rest-layer/resource/testing/mem"
-	"github.com/rs/rest-layer/resource"
-	"github.com/rs/rest-layer/rest"
-	"github.com/rs/rest-layer/schema"
+	"github.com/searis/rest-layer/resource"
+	"github.com/searis/rest-layer/resource/testing/mem"
+	"github.com/searis/rest-layer/rest"
+	"github.com/searis/rest-layer/schema"
 )
 
 func Example() {

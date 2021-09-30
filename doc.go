@@ -16,26 +16,25 @@ handles HTTP conditional requests, caching, integrity checking for you.
 
 A powerful and extensible validation engine make sure that data comes
 pre-validated to your custom storage handlers. Generic resource handlers for
-MongoDB (http://github.com/rs/rest-layer-mongo), ElasticSearch
-(http://github.com/rs/rest-layer-es) and other databases are also available so
-you have few to no code to write to make the whole system work.
+MongoDB (http://github.com/searis/storers/mongo) and other databases are also
+available so you have few to no code to write to make the whole system work.
 
 Moreover, REST Layer let you create a graph API by linking resources between
-them. Thanks to its advanced field selection syntax (and coming support of
-GraphQL), you can gather resources and their dependencies in a single request,
-saving you from costly network roundtrips.
+them. Thanks to its advanced field selection syntax, you can gather resources
+and their dependencies in a single request, saving you from costly network
+roundtrips.
 
 REST Layer is composed of several sub-packages:
 
  - rest: Holds the `net/http` handler responsible for the implementation of the
    RESTful API.
  - graphql: Holds a `net/http` handler to expose the API using the GraphQL
-   protocol.
+   protocol. (DEPRECATED)
  - schema: Provides a validation framework for the API resources.
  - resource: Defines resources, manages the resource graph and manages the
    interface with resource storage handler.
 
-See https://github.com/rs/rest-layer/blob/master/README.md for full REST Layer
-documentation.
+See https://github.com/searis/rest-layer/blob/master/README.md for full REST
+Layer documentation.
 */
 package restlayer

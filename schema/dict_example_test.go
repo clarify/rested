@@ -1,6 +1,6 @@
 package schema_test
 
-import "github.com/rs/rest-layer/schema"
+import "github.com/searis/rest-layer/schema"
 
 func ExampleDict() {
 	_ = schema.Schema{

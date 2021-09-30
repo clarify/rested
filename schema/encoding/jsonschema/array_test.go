@@ -1,3 +1,4 @@
+//go:build go1.7
 // +build go1.7
 
 package jsonschema_test
@@ -5,7 +6,7 @@ package jsonschema_test
 import (
 	"testing"
 
-	"github.com/rs/rest-layer/schema"
+	"github.com/searis/rest-layer/schema"
 )
 
 func TestArray(t *testing.T) {

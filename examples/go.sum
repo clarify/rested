@@ -18,8 +18,8 @@ github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZb
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/rs/cors v1.6.0 h1:G9tHG9lebljV9mfp9SNPDL36nCDxmo3zTlAf1YgvzmI=
 github.com/rs/cors v1.6.0/go.mod h1:gFx+x8UowdsKA9AchylcLynDq+nNFfI8FkUZdN/jGCU=
-github.com/rs/rest-layer-hystrix v0.0.0-20170801073253-2b89f63b98ec h1:kZpeRs9xIb78yukn4OnXQmRk0OluJcuKSHWrsV4ekRw=
-github.com/rs/rest-layer-hystrix v0.0.0-20170801073253-2b89f63b98ec/go.mod h1:OL5uSpiXaPH0ur9ni/u/CJi4MLxL3Hu1dK2h4jnF1y0=
+github.com/searis/rest-layer-hystrix v0.0.0-20170801073253-2b89f63b98ec h1:kZpeRs9xIb78yukn4OnXQmRk0OluJcuKSHWrsV4ekRw=
+github.com/searis/rest-layer-hystrix v0.0.0-20170801073253-2b89f63b98ec/go.mod h1:OL5uSpiXaPH0ur9ni/u/CJi4MLxL3Hu1dK2h4jnF1y0=
 github.com/rs/xaccess v0.0.0-20160803170743-f63036252bcc h1:8XPfocIg5yoqhb776Oo1c+on8F4FMtewE+LZzLLaCgQ=
 github.com/rs/xaccess v0.0.0-20160803170743-f63036252bcc/go.mod h1:he5kXRmw8ajCYHpcXNno5IYxodyENhcVMp7FQd+qeHM=
 github.com/rs/xhandler v0.0.0-20170707052532-1eb70cf1520d h1:8Tt7DYYdFqLlOIuyiE0RluKem4T+048AUafnIjH80wg=

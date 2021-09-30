@@ -1,3 +1,4 @@
+//go:build go1.7
 // +build go1.7
 
 package jsonschema_test
@@ -6,7 +7,7 @@ import (
 	"math"
 	"testing"
 
-	"github.com/rs/rest-layer/schema"
+	"github.com/searis/rest-layer/schema"
 )
 
 func TestFloatValidatorEncode(t *testing.T) {

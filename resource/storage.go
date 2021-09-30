@@ -3,7 +3,7 @@ package resource
 import (
 	"context"
 
-	"github.com/rs/rest-layer/schema/query"
+	"github.com/searis/rest-layer/schema/query"
 )
 
 // Storer defines the interface of an handler able to store and retrieve resources

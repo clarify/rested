@@ -8,10 +8,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rs/rest-layer/resource"
-	"github.com/rs/rest-layer/resource/testing/mem"
-	"github.com/rs/rest-layer/schema"
-	"github.com/rs/rest-layer/schema/query"
+	"github.com/searis/rest-layer/resource"
+	"github.com/searis/rest-layer/resource/testing/mem"
+	"github.com/searis/rest-layer/schema"
+	"github.com/searis/rest-layer/schema/query"
 )
 
 func checkPayload(name string, id interface{}, payload map[string]interface{}) requestCheckerFunc {

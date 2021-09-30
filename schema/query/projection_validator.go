@@ -3,7 +3,7 @@ package query
 import (
 	"fmt"
 
-	"github.com/rs/rest-layer/schema"
+	"github.com/searis/rest-layer/schema"
 )
 
 // Validate validates the projection field against the provided validator.

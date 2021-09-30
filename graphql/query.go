@@ -8,8 +8,8 @@ import (
 	"strings"
 
 	"github.com/graphql-go/graphql"
-	"github.com/rs/rest-layer/resource"
-	"github.com/rs/rest-layer/schema/query"
+	"github.com/searis/rest-layer/resource"
+	"github.com/searis/rest-layer/schema/query"
 )
 
 func newRootQuery(idx resource.Index) *graphql.Object {

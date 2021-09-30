@@ -4,9 +4,9 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/rs/rest-layer/resource"
-	"github.com/rs/rest-layer/schema"
-	"github.com/rs/rest-layer/schema/query"
+	"github.com/searis/rest-layer/resource"
+	"github.com/searis/rest-layer/schema"
+	"github.com/searis/rest-layer/schema/query"
 )
 
 // itemPut handles PUT resquests on an item URL.
