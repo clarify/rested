@@ -4,7 +4,9 @@
 
 REST APIs made easy.
 
-**This API is a _maintenance-only_ fork of [rs/rest-layer](https://github.com/searis/rest-layer). We are not planning or accepting any major features at this time, but will accept and conduct minor improvements and bugfixes as needed. Features that are not used by us may be deprecated or dropped in upcoming releases. Breaking changes might be introduced when suitable.**
+**THIS FORK IS STILL IN THE PROCESS OF BEING SET-UP: DO NOT USE**
+
+**This API is a _maintenance-only_ fork of [rs/rest-layer](https://github.com/searis/rest-layer). We are not planning or accepting any major features at this time, but will accept and conduct minor improvements and bugfixes as needed. Features that are not used by us may be deprecated or dropped in upcoming releases. Breaking changes might be introduced when suitable**
 
 Requires Go 1.17 or newer and use of go modules.
 
