@@ -165,6 +165,7 @@ func TestHandler(t *testing.T) {
 		{"POST", "/posts/ar5qrgukj5l7a6eq2ps0/followers", `{"user": "fan3"}`},
 	}
 	api, err := rest.NewHandler(index)
+	assert.NoError(t, err)
 	for _, fixture := range fixtures {
 		req, err := http.NewRequest(fixture[0], fixture[1], strings.NewReader(fixture[2]))
 		if err != nil {

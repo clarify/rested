@@ -13,23 +13,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type closeNotifyRecorder struct {
-	*httptest.ResponseRecorder
-	closed chan bool
-}
-
-func (w closeNotifyRecorder) CloseNotify() <-chan bool {
-	return w.closed
-}
-
-func (w closeNotifyRecorder) Close() {
-	w.closed <- true
-}
-
-func newRecorder() *closeNotifyRecorder {
-	return &closeNotifyRecorder{httptest.NewRecorder(), make(chan bool, 1)}
-}
-
 func TestNewHandler(t *testing.T) {
 	i := resource.NewIndex()
 	h, err := NewHandler(i)
@@ -59,7 +42,7 @@ func TestHandlerFallbackHandlerResourceNotFound(t *testing.T) {
 	fallbacked := false
 	h.FallbackHandlerFunc = func(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 		fallbacked = true
-		w.Write([]byte("ok"))
+		_, _ = w.Write([]byte("ok"))
 	}
 	r, _ := http.NewRequest("GET", "/", nil)
 	w := httptest.NewRecorder()
@@ -76,7 +59,7 @@ func TestHandlerFallbackHandlerInvalidMethod(t *testing.T) {
 	fallbacked := false
 	h.FallbackHandlerFunc = func(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 		fallbacked = true
-		w.Write([]byte("ok"))
+		_, _ = w.Write([]byte("ok"))
 	}
 	r, _ := http.NewRequest("GET", "/test", nil)
 	w := httptest.NewRecorder()

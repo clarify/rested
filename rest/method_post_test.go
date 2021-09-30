@@ -85,7 +85,7 @@ func TestHandlerPostList(t *testing.T) {
 			Init: func() *requestTestVars {
 				index := resource.NewIndex()
 				s := mem.NewHandler()
-				s.Insert(context.TODO(), []*resource.Item{
+				_ = s.Insert(context.Background(), []*resource.Item{
 					{ID: "1", Payload: map[string]interface{}{"id": "1", "foo": "bar"}},
 					{ID: "2", Payload: map[string]interface{}{"id": "2", "foo": "bar"}},
 					{ID: "3", Payload: map[string]interface{}{"id": "3", "foo": "bar"}},
@@ -247,7 +247,7 @@ func TestHandlerPostList(t *testing.T) {
 		"WithReference": {
 			Init: func() *requestTestVars {
 				s := mem.NewHandler()
-				s.Insert(context.Background(), []*resource.Item{{ID: "ref", Payload: map[string]interface{}{"id": "ref"}}})
+				_ = s.Insert(context.Background(), []*resource.Item{{ID: "ref", Payload: map[string]interface{}{"id": "ref"}}})
 				index := resource.NewIndex()
 				index.Bind("foo", schema.Schema{Fields: schema.Fields{"id": {}}}, s, resource.DefaultConf)
 				index.Bind("bar", schema.Schema{Fields: schema.Fields{
@@ -265,7 +265,7 @@ func TestHandlerPostList(t *testing.T) {
 		"WithSubSchemaReference": {
 			Init: func() *requestTestVars {
 				s := mem.NewHandler()
-				s.Insert(context.Background(), []*resource.Item{{ID: "ref", Payload: map[string]interface{}{"id": "ref"}}})
+				_ = s.Insert(context.Background(), []*resource.Item{{ID: "ref", Payload: map[string]interface{}{"id": "ref"}}})
 				index := resource.NewIndex()
 				index.Bind("foo", schema.Schema{Fields: schema.Fields{"id": {}}}, s, resource.DefaultConf)
 				index.Bind("bar", schema.Schema{Fields: schema.Fields{
@@ -285,7 +285,7 @@ func TestHandlerPostList(t *testing.T) {
 		"WithSubSchemaObjectReference": {
 			Init: func() *requestTestVars {
 				s := mem.NewHandler()
-				s.Insert(context.Background(), []*resource.Item{{ID: "ref", Payload: map[string]interface{}{"id": "ref"}}})
+				_ = s.Insert(context.Background(), []*resource.Item{{ID: "ref", Payload: map[string]interface{}{"id": "ref"}}})
 				index := resource.NewIndex()
 				index.Bind("foo", schema.Schema{Fields: schema.Fields{"id": {}}}, s, resource.DefaultConf)
 				index.Bind("bar", schema.Schema{Fields: schema.Fields{
@@ -305,7 +305,7 @@ func TestHandlerPostList(t *testing.T) {
 		"WithArraySchemaReferenceNotFound": {
 			Init: func() *requestTestVars {
 				s := mem.NewHandler()
-				s.Insert(context.Background(), []*resource.Item{
+				_ = s.Insert(context.Background(), []*resource.Item{
 					{ID: "ref1", Payload: map[string]interface{}{"id": "ref1"}},
 				})
 				index := resource.NewIndex()
@@ -331,7 +331,7 @@ func TestHandlerPostList(t *testing.T) {
 		"WithArraySchemaReference": {
 			Init: func() *requestTestVars {
 				s := mem.NewHandler()
-				s.Insert(context.Background(), []*resource.Item{
+				_ = s.Insert(context.Background(), []*resource.Item{
 					{ID: "ref1", Payload: map[string]interface{}{"id": "ref1"}},
 					{ID: "ref2", Payload: map[string]interface{}{"id": "ref2"}},
 				})

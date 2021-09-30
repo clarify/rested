@@ -135,7 +135,7 @@ func TestResourceConnection(t *testing.T) {
 func TestResourceUse(t *testing.T) {
 	i := NewIndex()
 	r := i.Bind("foo", schema.Schema{}, nil, DefaultConf)
-	r.Use(FindEventHandlerFunc(nil))
+	_ = r.Use(FindEventHandlerFunc(nil))
 	assert.Len(t, r.hooks.onFindH, 1)
 
 	err := r.Use("non handler")

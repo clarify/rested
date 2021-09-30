@@ -6,7 +6,7 @@ import (
 
 	"gopkg.in/mgo.v2/bson"
 
-	mongo "github.com/searis/rest-layer-mongo"
+	mongo "github.com/rs/rest-layer-mongo"
 )
 
 const (

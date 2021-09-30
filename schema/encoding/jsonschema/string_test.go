@@ -19,7 +19,7 @@ func TestStringValidatorNoBoundaryPanic(t *testing.T) {
 	}
 	assert.NotPanics(t, func() {
 		enc := jsonschema.NewEncoder(new(bytes.Buffer))
-		enc.Encode(&s)
+		_ = enc.Encode(&s)
 	})
 }
 

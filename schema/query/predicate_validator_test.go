@@ -18,7 +18,7 @@ func TestPrepare(t *testing.T) {
 			"baz": schema.Field{Validator: &schema.Array{MaxLen: 1, Values: schema.Field{Validator: &schema.Time{}}}, Filterable: true},
 		},
 	}
-	s.Compile(nil)
+	_ = s.Compile(nil)
 
 	now := time.Now().Format(time.RFC3339)
 	nowT, _ := time.Parse(time.RFC3339, now)

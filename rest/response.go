@@ -60,7 +60,7 @@ func (s DefaultResponseSender) Send(ctx context.Context, w http.ResponseWriter, 
 			w.WriteHeader(500)
 			logErrorf(ctx, "Can't build response: %v", err)
 			msg := fmt.Sprintf("Can't build response: %q", err.Error())
-			w.Write([]byte(fmt.Sprintf("{\"code\": 500, \"msg\": \"%s\"}", msg)))
+			_, _ = w.Write([]byte(fmt.Sprintf("{\"code\": 500, \"msg\": \"%s\"}", msg)))
 			return
 		}
 		if _, err = w.Write(j); err != nil {

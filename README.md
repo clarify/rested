@@ -1,10 +1,9 @@
 # REST Layer
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/searis/rest-layer.svg)](https://pkg.go.dev/github.com/searis/rest-layer)
+[![Go Workflow](https://github.com/searis/rest-layer/actions/workflows/go.yml/badge.svg?branch=main)](https://github.com/searis/rest-layer/actions)
 
-REST APIs made easy.
-
-**THIS FORK IS STILL IN THE PROCESS OF BEING SET-UP: DO NOT USE**
+**THIS FORK IS STILL IN THE PROCESS OF BEING SET-UP; DO NOT USE.**
 
 **This API is a _maintenance-only_ fork of [rs/rest-layer](https://github.com/searis/rest-layer). We are not planning or accepting any major features at this time, but will accept and conduct minor improvements and bugfixes as needed. Features that are not used by us may be deprecated or dropped in upcoming releases. Breaking changes might be introduced when suitable**
 
@@ -75,49 +74,12 @@ The REST Layer framework is composed of several sub-packages:
 - [Timeout and Request Cancellation](#timeout-and-request-cancellation)
 - [Logging](#logging)
 - [CORS](#cors)
-- [JSONP](#jsonp)
+- [JSONP](#jsonp) DEPRECATED
 - [Data Storage Handler](#data-storage-handler)
 - [Custom Response Formatter / Sender](#custom-response-formatter--sender)
-- [GraphQL](#graphql)
-- [Hystrix](#hystrix)
+- [GraphQL](#graphql) DEPRECATED
+- [Hystrix](#hystrix) DEPRECATED, BROKEN
 - [JSONSchema](#jsonschema)
-
-## Features
-
-- [x] Automatic handling of REST resource operations
-- [x] Plays well with other `net/http` middleware
-- [x] Pluggable resources storage
-- [x] Pluggable response sender
-- [x] GraphQL query support **DEPRECATED**
-- [ ] Swagger Documentation
-- [x] JSONSchema Output (partial)
-- [ ] Testing framework
-- [x] Sub resources
-- [ ] Cascading deletes on sub resources
-- [x] Filtering
-- [x] Sorting
-- [x] Pagination
-- [x] Aliasing
-- [x] Custom business logic
-- [x] Event hooks
-- [x] Field hooks
-- [x] Extensible data validation and transformation
-- [x] Conditional requests (Last-Modified / Etag)
-- [x] Data integrity and concurrency control (If-Match)
-- [x] Timeout and request cancellation through [context](https://godoc.org/context)
-- [x] Logging
-- [x] Multi-GET
-- [ ] Bulk inserts
-- [x] Default and nullable values
-- [ ] Per resource cache control
-- [ ] Customizable authentication / authorization
-- [x] Projections
-- [x] Embedded resource serialization
-- [x] Sub-request concurrency control
-- [x] Custom ID field
-- [ ] Data versioning
-- [x] Per resource circuit breaker using [Hystrix](https://godoc.org/github.com/afex/hystrix-go/hystrix)
-- [x] [JSON-Patch](https://tools.ietf.org/html/rfc6902) support
 
 ### Extensions
 
@@ -130,7 +92,7 @@ As REST Layer is a simple `net/http` handler. You can use standard middleware to
 - [x] [X-Forwarded-For](https://github.com/sebest/xff)
 - [x] [Rate Limiting](https://github.com/didip/tollbooth)
 - [ ] Operations Log
-- [x] [Hystrix storage handler wrapper](https://github.com/searis/rest-layer-hystrix)
+- [x] [Hystrix storage handler wrapper](https://github.com/rs/rest-layer-hystrix)
 
 ### Main Storage Handlers
 
@@ -775,13 +737,17 @@ posts.Bind("comments", "post", comment, mem.NewHandler(), resource.DefaultConf)
 
 The second argument `post` defines the field in the `comments` resource that refers to the parent. This field must be present in the resource and the backend storage must support filtering on it. As a result, we get a new hierarchical route as follow:
 
-    /posts/:post_id/comments[/:comment_id]
+```txt
+/posts/:post_id/comments[/:comment_id]
+```
 
 When performing a `GET` on `/posts/:post_id/comments`, it is like adding the filter `{"post":"<post_id>"}` to the request to comments resource.
 
 Additionally, thanks to REST Layer's [embedding](#embedding), this relationship can be embedded in the parent object as a sub-query:
 
-    /posts?fields=id,title,comments(limit=5,sort=-updated){id,user{id,name},message}
+```txt
+/posts?fields=id,title,comments(limit=5,sort=-updated){id,user{id,name},message}
+```
 
 Here we would get all post with their respective 5 last comments embedded in the `comments` field of each post object with the user commenting to post embedded in each comment's sub-document:
 
@@ -1247,21 +1213,29 @@ Skipping of resource items is defined through the `skip` query-string parameter.
 
 Skip the first 10 items of the result:
 
-    /posts?skip=10
+```txt
+/posts?skip=10
+```
 
 Return the first 2 items after skipping the first 10 of the result:
 
-    /posts?skip=10&limit=2
+```txt
+/posts?skip=10&limit=2
+```
 
 The `skip` parameter can be used in conjunction with the `page` parameter. You may want them both when for instance, you show the first N elements of a list and then allow to paginate the remaining items:
 
 Show the first 2 elements:
 
-    /posts?limit=2
+```txt
+/posts?limit=2
+```
 
 Paginate the rest of the list:
 
-    /posts?skip=2&page=1&limit=10
+```txt
+/posts?skip=2&page=1&limit=10
+```
 
 ## Authentication and Authorization
 
@@ -1502,11 +1476,11 @@ func main() {
         fn := r.URL.Query().Get("callback")
         if fn != "" {
             w.Header().Set("Content-Type", "application/javascript")
-            w.Write([]byte(";fn("))
+        _, _ = w.Write([]byte(";fn("))
         }
         api.ServeHTTP(w, r)
         if fn != "" {
-            w.Write([]byte(");"))
+            _, _ = w.Write([]byte(");"))
         }
     })
     log.Fatal(http.ListenAndServe(":8080", handler))
@@ -1618,10 +1592,10 @@ GraphQL support is experimental. Only querying is supported for now, mutation wi
 
 ## Hystrix
 
-REST Layer supports Hystrix as a circuit breaker. You can enable Hystrix on a per resource basis by wrapping the storage handler using [rest-layer-hystrix](https://github.com/searis/rest-layer-hystrix):
+REST Layer supports Hystrix as a circuit breaker. You can enable Hystrix on a per resource basis by wrapping the storage handler using [rest-layer-hystrix](https://github.com/rs/rest-layer-hystrix):
 
 ```go
-import "github.com/searis/rest-layer-hystrix"
+import "github.com/rs/rest-layer-hystrix"
 
 index.Bind("posts", post, restrix.Wrap("posts", mongo.NewHandler()), resource.DefaultConf)
 ```
@@ -1703,7 +1677,7 @@ The limitation in `KeysValidator` values arise because JSON Schema draft 4 (and 
 
 The support for `schema.Reference` is purely provisional and simply returns an empty object `{}`, meaning it does not give any hint as to which validation the server might use.
 
-With a potential later implantation of the [OpenAPI Specification](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) (a.k.a. the Swagger 2.0 Specification), the goal is to refer to the ID field of the linked resource via an object `{"$ref": "#/definitions/<unique schema title>/id"}`. This is tracked via issue [#36](https://github.com/rs/rest-layer/issues/36).
+With a potential later implantation of the [OpenAPI Specification](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) (a.k.a. the Swagger 2.0 Specification), the goal is to refer to the ID field of the linked resource via an object `{"$ref": "#/definitions/<unique schema title>/id"}`. This is tracked via issue [#36](https://github.com/searis/rest-layer/issues/36).
 
 ### schema.URL Limitations
 

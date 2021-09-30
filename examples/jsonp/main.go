@@ -22,11 +22,11 @@ func main() {
 		fn := r.URL.Query().Get("callback")
 		if fn != "" {
 			w.Header().Set("Content-Type", "application/javascript")
-			w.Write([]byte(";fn("))
+			_, _ = w.Write([]byte(";fn("))
 		}
 		api.ServeHTTP(w, r)
 		if fn != "" {
-			w.Write([]byte(");"))
+			_, _ = w.Write([]byte(");"))
 		}
 	})
 	log.Fatal(http.ListenAndServe(":8080", handler))

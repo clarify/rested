@@ -26,7 +26,7 @@ func TestURLValidator(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, "http://foo.com/bar", u)
 	u, err = URL{}.Validate(":foo")
-	assert.EqualError(t, err, "invalid URL: parse :foo: missing protocol scheme")
+	assert.EqualError(t, err, `invalid URL: parse ":foo": missing protocol scheme`)
 	assert.Nil(t, u)
 	u, err = URL{}.Validate(1)
 	assert.EqualError(t, err, "invalid type")

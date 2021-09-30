@@ -20,13 +20,13 @@ func TestPatchItem(t *testing.T) {
 
 	sharedInit := func() *requestTestVars {
 		s1 := mem.NewHandler()
-		s1.Insert(context.Background(), []*resource.Item{
+		_ = s1.Insert(context.Background(), []*resource.Item{
 			{ID: "1", ETag: "a", Updated: now, Payload: map[string]interface{}{"id": "1", "foo": "odd", "bar": "baz"}},
 			{ID: "2", ETag: "b", Updated: yesterday, Payload: map[string]interface{}{"id": "2", "foo": "even", "bar": "baz"}},
 			{ID: "3", ETag: "c", Updated: yesterday, Payload: map[string]interface{}{"id": "3", "foo": "odd", "bar": "baz"}},
 		})
 		s2 := mem.NewHandler()
-		s2.Insert(context.Background(), []*resource.Item{
+		_ = s2.Insert(context.Background(), []*resource.Item{
 			{ID: "1", ETag: "d", Updated: now, Payload: map[string]interface{}{"id": "1", "foo": "3"}},
 		})
 
@@ -274,7 +274,7 @@ func TestJSONPatchItem(t *testing.T) {
 
 	sharedInit := func() *requestTestVars {
 		s1 := mem.NewHandler()
-		s1.Insert(context.Background(), []*resource.Item{
+		_ = s1.Insert(context.Background(), []*resource.Item{
 			{ID: "1", ETag: "a", Updated: now, Payload: map[string]interface{}{"id": "1", "foo": "odd", "bar": "baz"}},
 			{ID: "2", ETag: "b", Updated: yesterday, Payload: map[string]interface{}{"id": "2", "foo": "even", "bar": "baz"}},
 			{ID: "3", ETag: "c", Updated: yesterday, Payload: map[string]interface{}{"id": "3", "foo": "odd", "bar": "baz"}},
@@ -283,7 +283,7 @@ func TestJSONPatchItem(t *testing.T) {
 			{ID: "6", ETag: "f", Updated: yesterday, Payload: map[string]interface{}{"id": "6", "foo": "odd", "aar": []string{"value-1"}}},
 		})
 		s2 := mem.NewHandler()
-		s2.Insert(context.Background(), []*resource.Item{
+		_ = s2.Insert(context.Background(), []*resource.Item{
 			{ID: "1", ETag: "d", Updated: now, Payload: map[string]interface{}{"id": "1", "foo": "3"}},
 		})
 

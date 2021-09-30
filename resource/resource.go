@@ -134,7 +134,7 @@ func (r *Resource) Compile(rc schema.ReferenceChecker) error {
 func (r *Resource) Bind(name, field string, s schema.Schema, h Storer, c Conf) *Resource {
 	assertNotBound(name, r.resources, r.aliases)
 	if f := s.GetField(field); f == nil {
-		logPanicf(nil, "Cannot bind `%s' as sub-resource: field `%s' does not exist in the sub-resource'", name, field)
+		logPanicf(context.Background(), "Cannot bind `%s' as sub-resource: field `%s' does not exist in the sub-resource'", name, field)
 	}
 	sr := newResource(name, s, h, c)
 	sr.parentField = field

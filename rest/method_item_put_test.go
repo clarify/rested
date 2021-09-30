@@ -41,13 +41,13 @@ func TestPutItem(t *testing.T) {
 
 	sharedInit := func() *requestTestVars {
 		s1 := mem.NewHandler()
-		s1.Insert(context.Background(), []*resource.Item{
+		_ = s1.Insert(context.Background(), []*resource.Item{
 			{ID: "1", ETag: "a", Updated: now, Payload: map[string]interface{}{"id": "1", "foo": "odd", "bar": "baz"}},
 			{ID: "2", ETag: "b", Updated: yesterday, Payload: map[string]interface{}{"id": "2", "foo": "even", "bar": "baz"}},
 			{ID: "3", ETag: "c", Updated: yesterday, Payload: map[string]interface{}{"id": "3", "foo": "odd", "bar": "baz"}},
 		})
 		s2 := mem.NewHandler()
-		s2.Insert(context.Background(), []*resource.Item{
+		_ = s2.Insert(context.Background(), []*resource.Item{
 			{ID: "1", ETag: "d", Updated: now, Payload: map[string]interface{}{"id": "1", "foo": "3"}},
 		})
 
@@ -104,7 +104,7 @@ func TestPutItem(t *testing.T) {
 		`ReplaceModeNotAllowed`: {
 			Init: func() *requestTestVars {
 				s := mem.NewHandler()
-				s.Insert(context.Background(), []*resource.Item{
+				_ = s.Insert(context.Background(), []*resource.Item{
 					{ID: "1", Payload: map[string]interface{}{"id": "1", "foo": "bar"}},
 				})
 				index := resource.NewIndex()
@@ -322,7 +322,7 @@ func TestPutItemDefault(t *testing.T) {
 
 	sharedInit := func() *requestTestVars {
 		s1 := mem.NewHandler()
-		s1.Insert(context.Background(), []*resource.Item{
+		_ = s1.Insert(context.Background(), []*resource.Item{
 			{ID: "1", ETag: "a", Updated: now, Payload: map[string]interface{}{"id": "1", "foo": "odd"}},
 			{ID: "2", ETag: "b", Updated: now, Payload: map[string]interface{}{"id": "2", "foo": "odd", "bar": "value"}},
 		})
@@ -404,7 +404,7 @@ func TestPutItemRequired(t *testing.T) {
 
 	sharedInit := func() *requestTestVars {
 		s1 := mem.NewHandler()
-		s1.Insert(context.Background(), []*resource.Item{
+		_ = s1.Insert(context.Background(), []*resource.Item{
 			{ID: "1", ETag: "a", Updated: now, Payload: map[string]interface{}{"id": "1", "foo": "odd"}},
 			{ID: "2", ETag: "b", Updated: now, Payload: map[string]interface{}{"id": "2", "foo": "odd", "bar": "original"}},
 		})
@@ -501,7 +501,7 @@ func TestPutItemRequiredDefault(t *testing.T) {
 
 	sharedInit := func() *requestTestVars {
 		s1 := mem.NewHandler()
-		s1.Insert(context.Background(), []*resource.Item{
+		_ = s1.Insert(context.Background(), []*resource.Item{
 			{ID: "1", ETag: "a", Updated: now, Payload: map[string]interface{}{"id": "1", "foo": "odd"}},
 			{ID: "2", ETag: "b", Updated: now, Payload: map[string]interface{}{"id": "2", "foo": "odd", "bar": "original"}},
 		})
@@ -592,7 +592,7 @@ func TestPutItemReadOnly(t *testing.T) {
 
 	sharedInit := func() *requestTestVars {
 		s1 := mem.NewHandler()
-		s1.Insert(context.Background(), []*resource.Item{
+		_ = s1.Insert(context.Background(), []*resource.Item{
 			{ID: "1", ETag: "a", Updated: yesterday, Payload: map[string]interface{}{"id": "1", "foo": "odd"}},
 			{ID: "2", ETag: "b", Updated: yesterday, Payload: map[string]interface{}{"id": "2", "foo": "odd", "zar": "old"}},
 			// Storer will persist `schema.Time{}` as `time.Time` type.

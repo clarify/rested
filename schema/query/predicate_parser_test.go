@@ -365,7 +365,7 @@ func TestParse(t *testing.T) {
 	for i := range tests {
 		tt := tests[i]
 		if *updateFuzzCorpus {
-			os.MkdirAll("testdata/fuzz-predicate/corpus", 0755)
+			_ = os.MkdirAll("testdata/fuzz-predicate/corpus", 0755)
 			corpusFile := fmt.Sprintf("testdata/fuzz-predicate/corpus/test%d", i)
 			if err := ioutil.WriteFile(corpusFile, []byte(tt.query), 0666); err != nil {
 				t.Error(err)

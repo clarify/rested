@@ -3,6 +3,7 @@ package mongo_test
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/rs/cors"
 	"github.com/searis/rest-layer/resource"
@@ -10,7 +11,7 @@ import (
 	"github.com/searis/rest-layer/schema"
 	mgo "gopkg.in/mgo.v2"
 
-	mongo "github.com/searis/rest-layer-mongo"
+	mongo "github.com/rs/rest-layer-mongo"
 )
 
 var (
@@ -69,7 +70,7 @@ var (
 )
 
 func Example() {
-	session, err := mgo.Dial("")
+	session, err := mgo.Dial(os.Getenv("GOTEST_MONGODB") + "/exampledb")
 	if err != nil {
 		log.Fatalf("Can't connect to MongoDB: %s", err)
 	}

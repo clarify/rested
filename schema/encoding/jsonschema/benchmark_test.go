@@ -67,7 +67,7 @@ func BenchmarkEncoder(b *testing.B) {
 			for i := 0; i < b.N; i++ {
 				buf.Truncate(0)
 				enc := jsonschema.NewEncoder(buf)
-				enc.Encode(&tc.Schema)
+				_ = enc.Encode(&tc.Schema)
 			}
 		})
 	}

@@ -14,7 +14,7 @@ import (
 func TestDeleteItem(t *testing.T) {
 	sharedInit := func() *requestTestVars {
 		s := mem.NewHandler()
-		s.Insert(context.Background(), []*resource.Item{
+		_ = s.Insert(context.Background(), []*resource.Item{
 			{ID: "1", ETag: "a", Payload: map[string]interface{}{"id": "1", "foo": "odd"}},
 			{ID: "2", ETag: "b", Payload: map[string]interface{}{"id": "2", "foo": "even"}},
 			{ID: "3", ETag: "c", Payload: map[string]interface{}{"id": "3", "foo": "odd"}},

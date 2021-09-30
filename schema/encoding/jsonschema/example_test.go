@@ -32,9 +32,9 @@ func ExampleEncoder() {
 	}
 	b := new(bytes.Buffer)
 	enc := jsonschema.NewEncoder(b)
-	enc.Encode(&s)
+	_ = enc.Encode(&s)
 	b2 := new(bytes.Buffer)
-	json.Indent(b2, b.Bytes(), "", "| ")
+	_ = json.Indent(b2, b.Bytes(), "", "| ")
 	fmt.Println(b2)
 	// Output: {
 	// | "additionalProperties": false,

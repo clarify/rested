@@ -10,8 +10,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/dgrijalva/jwt-go"
-	"github.com/dgrijalva/jwt-go/request"
+	"github.com/golang-jwt/jwt"
+	"github.com/golang-jwt/jwt/request"
 	"github.com/justinas/alice"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/hlog"
@@ -124,7 +124,6 @@ func (a AuthResourceHook) OnGot(ctx context.Context, item **resource.Item, err *
 	if u, found := (*item).Payload[a.UserField]; !found || u != user.ID {
 		*err = resource.ErrNotFound
 	}
-	return
 }
 
 // OnInsert implements resource.InsertEventHandler interface
@@ -266,7 +265,7 @@ func main() {
 
 	// Init the db with some users (user registration is not handled by this example)
 	secret, _ := schema.Password{}.Validate("secret")
-	users.Insert(context.Background(), []*resource.Item{
+	_ = users.Insert(context.Background(), []*resource.Item{
 		{ID: "admin", Updated: time.Now(), ETag: "abcd", Payload: map[string]interface{}{
 			"id":       "jack",
 			"name":     "Jack Sparrow",
@@ -285,8 +284,8 @@ func main() {
 	})
 
 	// Protect resources
-	users.Use(AuthResourceHook{UserField: "id"})
-	posts.Use(AuthResourceHook{UserField: "user"})
+	_ = users.Use(AuthResourceHook{UserField: "id"})
+	_ = posts.Use(AuthResourceHook{UserField: "user"})
 
 	// Create API HTTP handler for the resource graph
 	api, err := rest.NewHandler(index)

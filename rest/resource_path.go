@@ -172,7 +172,7 @@ func (p ResourcePath) Values() map[string]interface{} {
 					include = true
 				}
 			}
-			if include == true || rp.Field == "id" {
+			if include || rp.Field == "id" {
 				v[rp.Field] = rp.Value
 			}
 		}

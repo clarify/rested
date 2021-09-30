@@ -15,7 +15,7 @@ import (
 func TestGetItem(t *testing.T) {
 	sharedInit := func() *requestTestVars {
 		s := mem.NewHandler()
-		s.Insert(context.TODO(), []*resource.Item{
+		_ = s.Insert(context.Background(), []*resource.Item{
 			{ID: "1", Payload: map[string]interface{}{"id": "1", "foo": "bar"}},
 			{ID: "2", Payload: map[string]interface{}{"id": "2", "foo": "baz"}},
 			{ID: "3", Payload: map[string]interface{}{"id": "3"}},
@@ -119,7 +119,7 @@ func TestGetItemConditionally(t *testing.T) {
 
 	sharedInit := func() *requestTestVars {
 		s := mem.NewHandler()
-		s.Insert(context.TODO(), []*resource.Item{
+		_ = s.Insert(context.Background(), []*resource.Item{
 			{ID: "1", ETag: "a", Updated: now, Payload: map[string]interface{}{"id": "1", "foo": "bar"}},
 			{ID: "2", ETag: "b", Updated: yesterday, Payload: map[string]interface{}{"id": "2", "foo": "baz"}},
 		})
@@ -222,7 +222,7 @@ func TestGetItemConditionally(t *testing.T) {
 func TestGetItemFieldHandler(t *testing.T) {
 	sharedInit := func() *requestTestVars {
 		s := mem.NewHandler()
-		s.Insert(context.TODO(), []*resource.Item{
+		_ = s.Insert(context.Background(), []*resource.Item{
 			{ID: "1", Payload: map[string]interface{}{"id": "1", "foo": "bar"}},
 		})
 

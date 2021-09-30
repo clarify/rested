@@ -24,13 +24,7 @@ var LoggerLevel = LogLevelInfo
 // Logger is the function used by rest-layer to log messages. By default
 // it does nothing but you can customize it to plug any logger.
 var Logger = func(ctx context.Context, level LogLevel, msg string, fields map[string]interface{}) {
-	log.Output(2, msg)
-}
-
-func logErrorf(ctx context.Context, format string, a ...interface{}) {
-	if LoggerLevel <= LogLevelError && Logger != nil {
-		Logger(ctx, LogLevelError, fmt.Sprintf(format, a...), nil)
-	}
+	_ = log.Output(2, msg)
 }
 
 func logPanicf(ctx context.Context, format string, a ...interface{}) {

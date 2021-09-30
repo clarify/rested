@@ -29,14 +29,15 @@ func TestHookUseFind(t *testing.T) {
 	assert.Len(t, h.onDeletedH, 0)
 	assert.Len(t, h.onClearH, 0)
 	assert.Len(t, h.onClearedH, 0)
-	err = h.onFind(nil, nil)
+	err = h.onFind(context.Background(), nil)
+	assert.NoError(t, err)
 	assert.True(t, called)
 
 	err = h.use(FindEventHandlerFunc(func(ctx context.Context, q *query.Query) error {
 		return errors.New("error")
 	}))
 	assert.NoError(t, err)
-	err = h.onFind(nil, nil)
+	err = h.onFind(context.Background(), nil)
 	assert.EqualError(t, err, "error")
 }
 
@@ -59,7 +60,7 @@ func TestHookUseFound(t *testing.T) {
 	assert.Len(t, h.onDeletedH, 0)
 	assert.Len(t, h.onClearH, 0)
 	assert.Len(t, h.onClearedH, 0)
-	h.onFound(nil, nil, nil, nil)
+	h.onFound(context.Background(), nil, nil, nil)
 	assert.True(t, called)
 
 	err = h.use(FoundEventHandlerFunc(func(ctx context.Context, q *query.Query, list **ItemList, err *error) {
@@ -69,7 +70,7 @@ func TestHookUseFound(t *testing.T) {
 	assert.NoError(t, err)
 	var list *ItemList
 	err = nil
-	h.onFound(nil, nil, &list, &err)
+	h.onFound(context.Background(), nil, &list, &err)
 	assert.EqualError(t, err, "error")
 	assert.NotNil(t, list)
 }
@@ -94,14 +95,14 @@ func TestHookUseGet(t *testing.T) {
 	assert.Len(t, h.onDeletedH, 0)
 	assert.Len(t, h.onClearH, 0)
 	assert.Len(t, h.onClearedH, 0)
-	h.onGet(nil, nil)
+	_ = h.onGet(context.Background(), nil)
 	assert.True(t, called)
 
 	err = h.use(GetEventHandlerFunc(func(ctx context.Context, id interface{}) error {
 		return errors.New("error")
 	}))
 	assert.NoError(t, err)
-	err = h.onGet(nil, nil)
+	err = h.onGet(context.Background(), nil)
 	assert.EqualError(t, err, "error")
 }
 
@@ -124,7 +125,7 @@ func TestHookUseGot(t *testing.T) {
 	assert.Len(t, h.onDeletedH, 0)
 	assert.Len(t, h.onClearH, 0)
 	assert.Len(t, h.onClearedH, 0)
-	h.onGot(nil, nil, nil)
+	h.onGot(context.Background(), nil, nil)
 	assert.True(t, called)
 
 	err = h.use(GotEventHandlerFunc(func(ctx context.Context, item **Item, err *error) {
@@ -134,7 +135,7 @@ func TestHookUseGot(t *testing.T) {
 	assert.NoError(t, err)
 	var item *Item
 	err = nil
-	h.onGot(nil, &item, &err)
+	h.onGot(context.Background(), &item, &err)
 	assert.EqualError(t, err, "error")
 	assert.NotNil(t, item)
 }
@@ -159,14 +160,14 @@ func TestHookUseInsert(t *testing.T) {
 	assert.Len(t, h.onDeletedH, 0)
 	assert.Len(t, h.onClearH, 0)
 	assert.Len(t, h.onClearedH, 0)
-	h.onInsert(nil, nil)
+	_ = h.onInsert(context.Background(), nil)
 	assert.True(t, called)
 
 	err = h.use(InsertEventHandlerFunc(func(ctx context.Context, items []*Item) error {
 		return errors.New("error")
 	}))
 	assert.NoError(t, err)
-	err = h.onInsert(nil, nil)
+	err = h.onInsert(context.Background(), nil)
 	assert.EqualError(t, err, "error")
 }
 
@@ -189,7 +190,7 @@ func TestHookUseInserted(t *testing.T) {
 	assert.Len(t, h.onDeletedH, 0)
 	assert.Len(t, h.onClearH, 0)
 	assert.Len(t, h.onClearedH, 0)
-	h.onInserted(nil, nil, nil)
+	h.onInserted(context.Background(), nil, nil)
 	assert.True(t, called)
 
 	err = h.use(InsertedEventHandlerFunc(func(ctx context.Context, items []*Item, err *error) {
@@ -197,7 +198,7 @@ func TestHookUseInserted(t *testing.T) {
 	}))
 	assert.NoError(t, err)
 	err = nil
-	h.onInserted(nil, nil, &err)
+	h.onInserted(context.Background(), nil, &err)
 	assert.EqualError(t, err, "error")
 }
 
@@ -221,14 +222,14 @@ func TestHookUseUpdate(t *testing.T) {
 	assert.Len(t, h.onDeletedH, 0)
 	assert.Len(t, h.onClearH, 0)
 	assert.Len(t, h.onClearedH, 0)
-	h.onUpdate(nil, nil, nil)
+	_ = h.onUpdate(context.Background(), nil, nil)
 	assert.True(t, called)
 
 	err = h.use(UpdateEventHandlerFunc(func(ctx context.Context, item *Item, original *Item) error {
 		return errors.New("error")
 	}))
 	assert.NoError(t, err)
-	err = h.onUpdate(nil, nil, nil)
+	err = h.onUpdate(context.Background(), nil, nil)
 	assert.EqualError(t, err, "error")
 }
 
@@ -251,7 +252,7 @@ func TestHookUseUpdated(t *testing.T) {
 	assert.Len(t, h.onDeletedH, 0)
 	assert.Len(t, h.onClearH, 0)
 	assert.Len(t, h.onClearedH, 0)
-	h.onUpdated(nil, nil, nil, nil)
+	h.onUpdated(context.Background(), nil, nil, nil)
 	assert.True(t, called)
 
 	err = h.use(UpdatedEventHandlerFunc(func(ctx context.Context, item *Item, original *Item, err *error) {
@@ -259,7 +260,7 @@ func TestHookUseUpdated(t *testing.T) {
 	}))
 	assert.NoError(t, err)
 	err = nil
-	h.onUpdated(nil, nil, nil, &err)
+	h.onUpdated(context.Background(), nil, nil, &err)
 	assert.EqualError(t, err, "error")
 }
 
@@ -283,14 +284,14 @@ func TestHookUseDelete(t *testing.T) {
 	assert.Len(t, h.onDeletedH, 0)
 	assert.Len(t, h.onClearH, 0)
 	assert.Len(t, h.onClearedH, 0)
-	h.onDelete(nil, nil)
+	_ = h.onDelete(context.Background(), nil)
 	assert.True(t, called)
 
 	err = h.use(DeleteEventHandlerFunc(func(ctx context.Context, item *Item) error {
 		return errors.New("error")
 	}))
 	assert.NoError(t, err)
-	err = h.onDelete(nil, nil)
+	err = h.onDelete(context.Background(), nil)
 	assert.EqualError(t, err, "error")
 }
 
@@ -313,7 +314,7 @@ func TestHookUseDeleted(t *testing.T) {
 	assert.Len(t, h.onDeletedH, 1)
 	assert.Len(t, h.onClearH, 0)
 	assert.Len(t, h.onClearedH, 0)
-	h.onDeleted(nil, nil, nil)
+	h.onDeleted(context.Background(), nil, nil)
 	assert.True(t, called)
 
 	err = h.use(DeletedEventHandlerFunc(func(ctx context.Context, item *Item, err *error) {
@@ -321,7 +322,7 @@ func TestHookUseDeleted(t *testing.T) {
 	}))
 	assert.NoError(t, err)
 	err = nil
-	h.onDeleted(nil, nil, &err)
+	h.onDeleted(context.Background(), nil, &err)
 	assert.EqualError(t, err, "error")
 }
 
@@ -345,14 +346,14 @@ func TestHookUseClear(t *testing.T) {
 	assert.Len(t, h.onDeletedH, 0)
 	assert.Len(t, h.onClearH, 1)
 	assert.Len(t, h.onClearedH, 0)
-	h.onClear(nil, nil)
+	_ = h.onClear(context.Background(), nil)
 	assert.True(t, called)
 
 	err = h.use(ClearEventHandlerFunc(func(ctx context.Context, q *query.Query) error {
 		return errors.New("error")
 	}))
 	assert.NoError(t, err)
-	err = h.onClear(nil, nil)
+	err = h.onClear(context.Background(), nil)
 	assert.EqualError(t, err, "error")
 }
 
@@ -376,7 +377,7 @@ func TestHookUseCleared(t *testing.T) {
 	assert.Len(t, h.onClearH, 0)
 	assert.Len(t, h.onClearedH, 1)
 	deleted := 0
-	h.onCleared(nil, nil, &deleted, nil)
+	h.onCleared(context.Background(), nil, &deleted, nil)
 	assert.True(t, called)
 
 	err = h.use(ClearedEventHandlerFunc(func(ctx context.Context, q *query.Query, deleted *int, err *error) {
@@ -385,7 +386,7 @@ func TestHookUseCleared(t *testing.T) {
 	}))
 	assert.NoError(t, err)
 	err = nil
-	h.onCleared(nil, nil, &deleted, &err)
+	h.onCleared(context.Background(), nil, &deleted, &err)
 	assert.EqualError(t, err, "error")
 	assert.Equal(t, 2, deleted)
 }

@@ -13,7 +13,6 @@ type referenceResponseHandler func(payloads []map[string]interface{}, validator 
 type referenceBatchResolver struct {
 	mu       sync.Mutex
 	requests []referenceRequest
-	rsc      Resource
 }
 
 func (rbr *referenceBatchResolver) request(rsc Resource, q *Query, handler referenceResponseHandler) {

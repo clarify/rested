@@ -253,7 +253,7 @@ func TestAnyOfLesser(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 			v := &tt.validator
-			v.Compile(nil)
+			_ = v.Compile(nil)
 			lessFunc := v.LessFunc()
 
 			if lessFunc == nil && !tt.expectNilFunc {

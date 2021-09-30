@@ -84,12 +84,12 @@ func TestResourceGet(t *testing.T) {
 		return []*Item{{ID: 1}}, nil
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(GetEventHandlerFunc(func(ctx context.Context, id interface{}) error {
+	_ = r.Use(GetEventHandlerFunc(func(ctx context.Context, id interface{}) error {
 		preHook = true
 		assert.Equal(t, 1, id)
 		return nil
 	}))
-	r.Use(GotEventHandlerFunc(func(ctx context.Context, item **Item, err *error) {
+	_ = r.Use(GotEventHandlerFunc(func(ctx context.Context, item **Item, err *error) {
 		postHook = true
 		assert.Equal(t, &Item{ID: 1}, *item)
 		assert.NoError(t, *err)
@@ -109,7 +109,7 @@ func TestResourceGetPostHookOverwrite(t *testing.T) {
 		return []*Item{{ID: 1}}, nil
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(GotEventHandlerFunc(func(ctx context.Context, item **Item, err *error) {
+	_ = r.Use(GotEventHandlerFunc(func(ctx context.Context, item **Item, err *error) {
 		*item = &Item{ID: 2}
 	}))
 	ctx := context.Background()
@@ -127,12 +127,12 @@ func TestResourceGetError(t *testing.T) {
 		return nil, errors.New("storer error")
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(GetEventHandlerFunc(func(ctx context.Context, id interface{}) error {
+	_ = r.Use(GetEventHandlerFunc(func(ctx context.Context, id interface{}) error {
 		preHook = true
 		assert.Equal(t, 1, id)
 		return nil
 	}))
-	r.Use(GotEventHandlerFunc(func(ctx context.Context, item **Item, err *error) {
+	_ = r.Use(GotEventHandlerFunc(func(ctx context.Context, item **Item, err *error) {
 		postHook = true
 		assert.Nil(t, *item)
 		assert.EqualError(t, *err, "storer error")
@@ -154,11 +154,11 @@ func TestResourceGetPreHookError(t *testing.T) {
 		return nil, errors.New("storer error")
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(GetEventHandlerFunc(func(ctx context.Context, id interface{}) error {
+	_ = r.Use(GetEventHandlerFunc(func(ctx context.Context, id interface{}) error {
 		preHook = true
 		return errors.New("pre hook error")
 	}))
-	r.Use(GotEventHandlerFunc(func(ctx context.Context, item **Item, err *error) {
+	_ = r.Use(GotEventHandlerFunc(func(ctx context.Context, item **Item, err *error) {
 		postHook = true
 		assert.Nil(t, *item)
 		assert.EqualError(t, *err, "pre hook error")
@@ -180,12 +180,12 @@ func TestResourceGetPostHookError(t *testing.T) {
 		return []*Item{{ID: 1}}, nil
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(GetEventHandlerFunc(func(ctx context.Context, id interface{}) error {
+	_ = r.Use(GetEventHandlerFunc(func(ctx context.Context, id interface{}) error {
 		preHook = true
 		assert.Equal(t, 1, id)
 		return nil
 	}))
-	r.Use(GotEventHandlerFunc(func(ctx context.Context, item **Item, err *error) {
+	_ = r.Use(GotEventHandlerFunc(func(ctx context.Context, item **Item, err *error) {
 		postHook = true
 		assert.Equal(t, &Item{ID: 1}, *item)
 		assert.NoError(t, *err)
@@ -212,12 +212,12 @@ func TestResourceMultiGet(t *testing.T) {
 		return []*Item{{ID: 1}}, nil
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(GetEventHandlerFunc(func(ctx context.Context, id interface{}) error {
+	_ = r.Use(GetEventHandlerFunc(func(ctx context.Context, id interface{}) error {
 		preHook++
 		assert.Equal(t, 1, id)
 		return nil
 	}))
-	r.Use(GotEventHandlerFunc(func(ctx context.Context, item **Item, err *error) {
+	_ = r.Use(GotEventHandlerFunc(func(ctx context.Context, item **Item, err *error) {
 		postHook++
 		assert.Equal(t, &Item{ID: 1}, *item)
 		assert.NoError(t, *err)
@@ -238,7 +238,7 @@ func TestResourceMultiGetPostHookOverwrite(t *testing.T) {
 		return []*Item{{ID: 1}}, nil
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(GotEventHandlerFunc(func(ctx context.Context, item **Item, err *error) {
+	_ = r.Use(GotEventHandlerFunc(func(ctx context.Context, item **Item, err *error) {
 		*item = &Item{ID: 2}
 	}))
 	ctx := context.Background()
@@ -256,12 +256,12 @@ func TestResourceMultiGetError(t *testing.T) {
 		return nil, errors.New("storer error")
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(GetEventHandlerFunc(func(ctx context.Context, id interface{}) error {
+	_ = r.Use(GetEventHandlerFunc(func(ctx context.Context, id interface{}) error {
 		preHook++
 		assert.Equal(t, 1, id)
 		return nil
 	}))
-	r.Use(GotEventHandlerFunc(func(ctx context.Context, item **Item, err *error) {
+	_ = r.Use(GotEventHandlerFunc(func(ctx context.Context, item **Item, err *error) {
 		postHook++
 		assert.Nil(t, *item)
 		assert.EqualError(t, *err, "storer error")
@@ -284,11 +284,11 @@ func TestResourceMultiGetPreHookError(t *testing.T) {
 		return nil, errors.New("storer error")
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(GetEventHandlerFunc(func(ctx context.Context, id interface{}) error {
+	_ = r.Use(GetEventHandlerFunc(func(ctx context.Context, id interface{}) error {
 		preHook++
 		return errors.New("pre hook error")
 	}))
-	r.Use(GotEventHandlerFunc(func(ctx context.Context, item **Item, err *error) {
+	_ = r.Use(GotEventHandlerFunc(func(ctx context.Context, item **Item, err *error) {
 		postHook++
 		assert.Nil(t, *item)
 		assert.EqualError(t, *err, "pre hook error")
@@ -311,12 +311,12 @@ func TestResourceMultiGetPostHookError(t *testing.T) {
 		return []*Item{{ID: 1}}, nil
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(GetEventHandlerFunc(func(ctx context.Context, id interface{}) error {
+	_ = r.Use(GetEventHandlerFunc(func(ctx context.Context, id interface{}) error {
 		preHook++
 		assert.Equal(t, 1, id)
 		return nil
 	}))
-	r.Use(GotEventHandlerFunc(func(ctx context.Context, item **Item, err *error) {
+	_ = r.Use(GotEventHandlerFunc(func(ctx context.Context, item **Item, err *error) {
 		postHook++
 		assert.Equal(t, &Item{ID: 1}, *item)
 		assert.NoError(t, *err)
@@ -344,14 +344,14 @@ func TestResourceFind(t *testing.T) {
 		return &ItemList{Items: []*Item{{ID: 1}}}, nil
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(FindEventHandlerFunc(func(ctx context.Context, q *query.Query) error {
+	_ = r.Use(FindEventHandlerFunc(func(ctx context.Context, q *query.Query) error {
 		preHook = true
 		if assert.NotNil(t, q, "query") {
 			assert.Nil(t, q.Window, "window")
 		}
 		return nil
 	}))
-	r.Use(FoundEventHandlerFunc(func(ctx context.Context, q *query.Query, list **ItemList, err *error) {
+	_ = r.Use(FoundEventHandlerFunc(func(ctx context.Context, q *query.Query, list **ItemList, err *error) {
 		postHook = true
 		assert.NotNil(t, q)
 		assert.Equal(t, &ItemList{Items: []*Item{{ID: 1}}}, *list)
@@ -372,7 +372,7 @@ func TestResourceMultiFindPostHookOverwrite(t *testing.T) {
 		return &ItemList{Items: []*Item{{ID: 1}}}, nil
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(FoundEventHandlerFunc(func(ctx context.Context, q *query.Query, list **ItemList, err *error) {
+	_ = r.Use(FoundEventHandlerFunc(func(ctx context.Context, q *query.Query, list **ItemList, err *error) {
 		*list = &ItemList{Items: []*Item{{ID: 2}}}
 	}))
 	ctx := context.Background()
@@ -390,7 +390,7 @@ func TestResourceFindError(t *testing.T) {
 		return nil, errors.New("storer error")
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(FindEventHandlerFunc(func(ctx context.Context, q *query.Query) error {
+	_ = r.Use(FindEventHandlerFunc(func(ctx context.Context, q *query.Query) error {
 		preHook = true
 		if assert.NotNil(t, q) && assert.NotNil(t, q.Window) {
 			assert.Equal(t, 0, q.Window.Offset)
@@ -398,7 +398,7 @@ func TestResourceFindError(t *testing.T) {
 		}
 		return nil
 	}))
-	r.Use(FoundEventHandlerFunc(func(ctx context.Context, q *query.Query, list **ItemList, err *error) {
+	_ = r.Use(FoundEventHandlerFunc(func(ctx context.Context, q *query.Query, list **ItemList, err *error) {
 		postHook = true
 		assert.NotNil(t, q)
 		assert.Nil(t, *list)
@@ -421,11 +421,11 @@ func TestResourceFindPreHookError(t *testing.T) {
 		return nil, errors.New("storer error")
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(FindEventHandlerFunc(func(ctx context.Context, q *query.Query) error {
+	_ = r.Use(FindEventHandlerFunc(func(ctx context.Context, q *query.Query) error {
 		preHook = true
 		return errors.New("pre hook error")
 	}))
-	r.Use(FoundEventHandlerFunc(func(ctx context.Context, q *query.Query, list **ItemList, err *error) {
+	_ = r.Use(FoundEventHandlerFunc(func(ctx context.Context, q *query.Query, list **ItemList, err *error) {
 		postHook = true
 		assert.NotNil(t, q)
 		assert.Nil(t, *list)
@@ -448,7 +448,7 @@ func TestResourceFindPostHookError(t *testing.T) {
 		return &ItemList{Items: []*Item{{ID: 1}}}, nil
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(FindEventHandlerFunc(func(ctx context.Context, q *query.Query) error {
+	_ = r.Use(FindEventHandlerFunc(func(ctx context.Context, q *query.Query) error {
 		preHook = true
 		if assert.NotNil(t, q) && assert.NotNil(t, q.Window) {
 			assert.Equal(t, 0, q.Window.Offset)
@@ -456,7 +456,7 @@ func TestResourceFindPostHookError(t *testing.T) {
 		}
 		return nil
 	}))
-	r.Use(FoundEventHandlerFunc(func(ctx context.Context, q *query.Query, list **ItemList, err *error) {
+	_ = r.Use(FoundEventHandlerFunc(func(ctx context.Context, q *query.Query, list **ItemList, err *error) {
 		postHook = true
 		assert.NotNil(t, q)
 		assert.Equal(t, &ItemList{Items: []*Item{{ID: 1}}}, *list)
@@ -484,12 +484,12 @@ func TestResourceInsert(t *testing.T) {
 		return nil
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(InsertEventHandlerFunc(func(ctx context.Context, items []*Item) error {
+	_ = r.Use(InsertEventHandlerFunc(func(ctx context.Context, items []*Item) error {
 		preHook = true
 		assert.Equal(t, []*Item{{ID: 1}}, items)
 		return nil
 	}))
-	r.Use(InsertedEventHandlerFunc(func(ctx context.Context, items []*Item, err *error) {
+	_ = r.Use(InsertedEventHandlerFunc(func(ctx context.Context, items []*Item, err *error) {
 		postHook = true
 		assert.Equal(t, []*Item{{ID: 1, ETag: "37a6259cc0c1dae299a7866489dff0bd"}}, items)
 		assert.NoError(t, *err)
@@ -511,12 +511,12 @@ func TestResourceInsertError(t *testing.T) {
 		return errors.New("storer error")
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(InsertEventHandlerFunc(func(ctx context.Context, items []*Item) error {
+	_ = r.Use(InsertEventHandlerFunc(func(ctx context.Context, items []*Item) error {
 		preHook = true
 		assert.Equal(t, []*Item{{ID: 1}}, items)
 		return nil
 	}))
-	r.Use(InsertedEventHandlerFunc(func(ctx context.Context, items []*Item, err *error) {
+	_ = r.Use(InsertedEventHandlerFunc(func(ctx context.Context, items []*Item, err *error) {
 		postHook = true
 		assert.Equal(t, []*Item{{ID: 1, ETag: "37a6259cc0c1dae299a7866489dff0bd"}}, items)
 		assert.EqualError(t, *err, "storer error")
@@ -538,11 +538,11 @@ func TestResourceInsertPreHookError(t *testing.T) {
 		return errors.New("storer error")
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(InsertEventHandlerFunc(func(ctx context.Context, items []*Item) error {
+	_ = r.Use(InsertEventHandlerFunc(func(ctx context.Context, items []*Item) error {
 		preHook = true
 		return errors.New("pre hook error")
 	}))
-	r.Use(InsertedEventHandlerFunc(func(ctx context.Context, items []*Item, err *error) {
+	_ = r.Use(InsertedEventHandlerFunc(func(ctx context.Context, items []*Item, err *error) {
 		postHook = true
 		assert.Equal(t, []*Item{{ID: 1}}, items)
 		assert.EqualError(t, *err, "pre hook error")
@@ -564,12 +564,12 @@ func TestResourceInsertPostHookError(t *testing.T) {
 		return nil
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(InsertEventHandlerFunc(func(ctx context.Context, items []*Item) error {
+	_ = r.Use(InsertEventHandlerFunc(func(ctx context.Context, items []*Item) error {
 		preHook = true
 		assert.Equal(t, []*Item{{ID: 1}}, items)
 		return nil
 	}))
-	r.Use(InsertedEventHandlerFunc(func(ctx context.Context, items []*Item, err *error) {
+	_ = r.Use(InsertedEventHandlerFunc(func(ctx context.Context, items []*Item, err *error) {
 		postHook = true
 		assert.Equal(t, []*Item{{ID: 1, ETag: "37a6259cc0c1dae299a7866489dff0bd"}}, items)
 		assert.NoError(t, *err)
@@ -596,13 +596,13 @@ func TestResourceUpdate(t *testing.T) {
 		return nil
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(UpdateEventHandlerFunc(func(ctx context.Context, item *Item, origin *Item) error {
+	_ = r.Use(UpdateEventHandlerFunc(func(ctx context.Context, item *Item, origin *Item) error {
 		preHook = true
 		assert.Equal(t, &Item{ID: 1}, item)
 		assert.Equal(t, &Item{ID: 1}, origin)
 		return nil
 	}))
-	r.Use(UpdatedEventHandlerFunc(func(ctx context.Context, item *Item, origin *Item, err *error) {
+	_ = r.Use(UpdatedEventHandlerFunc(func(ctx context.Context, item *Item, origin *Item, err *error) {
 		postHook = true
 		assert.Equal(t, &Item{ID: 1, ETag: "37a6259cc0c1dae299a7866489dff0bd"}, item)
 		assert.Equal(t, &Item{ID: 1}, origin)
@@ -625,13 +625,13 @@ func TestResourceUpdateError(t *testing.T) {
 		return errors.New("storer error")
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(UpdateEventHandlerFunc(func(ctx context.Context, item *Item, origin *Item) error {
+	_ = r.Use(UpdateEventHandlerFunc(func(ctx context.Context, item *Item, origin *Item) error {
 		preHook = true
 		assert.Equal(t, &Item{ID: 1}, item)
 		assert.Equal(t, &Item{ID: 1}, origin)
 		return nil
 	}))
-	r.Use(UpdatedEventHandlerFunc(func(ctx context.Context, item *Item, origin *Item, err *error) {
+	_ = r.Use(UpdatedEventHandlerFunc(func(ctx context.Context, item *Item, origin *Item, err *error) {
 		postHook = true
 		assert.Equal(t, &Item{ID: 1, ETag: "37a6259cc0c1dae299a7866489dff0bd"}, item)
 		assert.Equal(t, &Item{ID: 1}, origin)
@@ -654,13 +654,13 @@ func TestResourceUpdatePreHookError(t *testing.T) {
 		return errors.New("storer error")
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(UpdateEventHandlerFunc(func(ctx context.Context, item *Item, origin *Item) error {
+	_ = r.Use(UpdateEventHandlerFunc(func(ctx context.Context, item *Item, origin *Item) error {
 		preHook = true
 		assert.Equal(t, &Item{ID: 1}, item)
 		assert.Equal(t, &Item{ID: 1}, origin)
 		return errors.New("pre hook error")
 	}))
-	r.Use(UpdatedEventHandlerFunc(func(ctx context.Context, item *Item, origin *Item, err *error) {
+	_ = r.Use(UpdatedEventHandlerFunc(func(ctx context.Context, item *Item, origin *Item, err *error) {
 		postHook = true
 		assert.Equal(t, &Item{ID: 1}, item)
 		assert.Equal(t, &Item{ID: 1}, origin)
@@ -683,13 +683,13 @@ func TestResourceUpdatePostHookError(t *testing.T) {
 		return nil
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(UpdateEventHandlerFunc(func(ctx context.Context, item *Item, origin *Item) error {
+	_ = r.Use(UpdateEventHandlerFunc(func(ctx context.Context, item *Item, origin *Item) error {
 		preHook = true
 		assert.Equal(t, &Item{ID: 1}, item)
 		assert.Equal(t, &Item{ID: 1}, origin)
 		return nil
 	}))
-	r.Use(UpdatedEventHandlerFunc(func(ctx context.Context, item *Item, origin *Item, err *error) {
+	_ = r.Use(UpdatedEventHandlerFunc(func(ctx context.Context, item *Item, origin *Item, err *error) {
 		postHook = true
 		assert.Equal(t, &Item{ID: 1, ETag: "37a6259cc0c1dae299a7866489dff0bd"}, item)
 		assert.Equal(t, &Item{ID: 1}, origin)
@@ -717,12 +717,12 @@ func TestResourceDelete(t *testing.T) {
 		return nil
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(DeleteEventHandlerFunc(func(ctx context.Context, item *Item) error {
+	_ = r.Use(DeleteEventHandlerFunc(func(ctx context.Context, item *Item) error {
 		preHook = true
 		assert.Equal(t, &Item{ID: 1}, item)
 		return nil
 	}))
-	r.Use(DeletedEventHandlerFunc(func(ctx context.Context, item *Item, err *error) {
+	_ = r.Use(DeletedEventHandlerFunc(func(ctx context.Context, item *Item, err *error) {
 		postHook = true
 		assert.Equal(t, &Item{ID: 1}, item)
 		assert.NoError(t, *err)
@@ -744,12 +744,12 @@ func TestResourceDeleteError(t *testing.T) {
 		return errors.New("storer error")
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(DeleteEventHandlerFunc(func(ctx context.Context, item *Item) error {
+	_ = r.Use(DeleteEventHandlerFunc(func(ctx context.Context, item *Item) error {
 		preHook = true
 		assert.Equal(t, &Item{ID: 1}, item)
 		return nil
 	}))
-	r.Use(DeletedEventHandlerFunc(func(ctx context.Context, item *Item, err *error) {
+	_ = r.Use(DeletedEventHandlerFunc(func(ctx context.Context, item *Item, err *error) {
 		postHook = true
 		assert.Equal(t, &Item{ID: 1}, item)
 		assert.EqualError(t, *err, "storer error")
@@ -771,12 +771,12 @@ func TestResourceDeletePreHookError(t *testing.T) {
 		return errors.New("storer error")
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(DeleteEventHandlerFunc(func(ctx context.Context, item *Item) error {
+	_ = r.Use(DeleteEventHandlerFunc(func(ctx context.Context, item *Item) error {
 		preHook = true
 		assert.Equal(t, &Item{ID: 1}, item)
 		return errors.New("pre hook error")
 	}))
-	r.Use(DeletedEventHandlerFunc(func(ctx context.Context, item *Item, err *error) {
+	_ = r.Use(DeletedEventHandlerFunc(func(ctx context.Context, item *Item, err *error) {
 		postHook = true
 		assert.Equal(t, &Item{ID: 1}, item)
 		assert.EqualError(t, *err, "pre hook error")
@@ -798,12 +798,12 @@ func TestResourceDeletePostHookError(t *testing.T) {
 		return nil
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(DeleteEventHandlerFunc(func(ctx context.Context, item *Item) error {
+	_ = r.Use(DeleteEventHandlerFunc(func(ctx context.Context, item *Item) error {
 		preHook = true
 		assert.Equal(t, &Item{ID: 1}, item)
 		return nil
 	}))
-	r.Use(DeletedEventHandlerFunc(func(ctx context.Context, item *Item, err *error) {
+	_ = r.Use(DeletedEventHandlerFunc(func(ctx context.Context, item *Item, err *error) {
 		postHook = true
 		assert.Equal(t, &Item{ID: 1}, item)
 		assert.NoError(t, *err)
@@ -830,12 +830,12 @@ func TestResourceClear(t *testing.T) {
 		return 0, nil
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(ClearEventHandlerFunc(func(ctx context.Context, q *query.Query) error {
+	_ = r.Use(ClearEventHandlerFunc(func(ctx context.Context, q *query.Query) error {
 		preHook = true
 		assert.NotNil(t, q)
 		return nil
 	}))
-	r.Use(ClearedEventHandlerFunc(func(ctx context.Context, q *query.Query, deleted *int, err *error) {
+	_ = r.Use(ClearedEventHandlerFunc(func(ctx context.Context, q *query.Query, deleted *int, err *error) {
 		postHook = true
 		assert.NotNil(t, q)
 		assert.NoError(t, *err)
@@ -857,12 +857,12 @@ func TestResourceClearError(t *testing.T) {
 		return 0, errors.New("storer error")
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(ClearEventHandlerFunc(func(ctx context.Context, q *query.Query) error {
+	_ = r.Use(ClearEventHandlerFunc(func(ctx context.Context, q *query.Query) error {
 		preHook = true
 		assert.NotNil(t, q)
 		return nil
 	}))
-	r.Use(ClearedEventHandlerFunc(func(ctx context.Context, q *query.Query, deleted *int, err *error) {
+	_ = r.Use(ClearedEventHandlerFunc(func(ctx context.Context, q *query.Query, deleted *int, err *error) {
 		postHook = true
 		assert.NotNil(t, q)
 		assert.EqualError(t, *err, "storer error")
@@ -884,12 +884,12 @@ func TestResourceClearPreHookError(t *testing.T) {
 		return 0, errors.New("storer error")
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(ClearEventHandlerFunc(func(ctx context.Context, q *query.Query) error {
+	_ = r.Use(ClearEventHandlerFunc(func(ctx context.Context, q *query.Query) error {
 		preHook = true
 		assert.NotNil(t, q)
 		return errors.New("pre hook error")
 	}))
-	r.Use(ClearedEventHandlerFunc(func(ctx context.Context, q *query.Query, deleted *int, err *error) {
+	_ = r.Use(ClearedEventHandlerFunc(func(ctx context.Context, q *query.Query, deleted *int, err *error) {
 		postHook = true
 		assert.NotNil(t, q)
 		assert.EqualError(t, *err, "pre hook error")
@@ -911,12 +911,12 @@ func TestResourceClearPostHookError(t *testing.T) {
 		return 0, nil
 	}
 	r := i.Bind("foo", schema.Schema{}, s, DefaultConf)
-	r.Use(ClearEventHandlerFunc(func(ctx context.Context, q *query.Query) error {
+	_ = r.Use(ClearEventHandlerFunc(func(ctx context.Context, q *query.Query) error {
 		preHook = true
 		assert.NotNil(t, q)
 		return nil
 	}))
-	r.Use(ClearedEventHandlerFunc(func(ctx context.Context, q *query.Query, deleted *int, err *error) {
+	_ = r.Use(ClearedEventHandlerFunc(func(ctx context.Context, q *query.Query, deleted *int, err *error) {
 		postHook = true
 		assert.NotNil(t, q)
 		assert.NoError(t, *err)

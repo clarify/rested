@@ -148,7 +148,7 @@ func TestGetListInvalidQuery(t *testing.T) {
 func TestGetListPagination(t *testing.T) {
 	sharedInit := func() *requestTestVars {
 		s := mem.NewHandler()
-		s.Insert(context.TODO(), []*resource.Item{
+		_ = s.Insert(context.TODO(), []*resource.Item{
 			{ID: "1", Payload: map[string]interface{}{"id": "1"}},
 			{ID: "2", Payload: map[string]interface{}{"id": "2"}},
 			{ID: "3", Payload: map[string]interface{}{"id": "3"}},
@@ -211,7 +211,7 @@ func TestGetListPagination(t *testing.T) {
 func TestGetListFieldHandler(t *testing.T) {
 	sharedInit := func() *requestTestVars {
 		s := mem.NewHandler()
-		s.Insert(context.TODO(), []*resource.Item{
+		_ = s.Insert(context.TODO(), []*resource.Item{
 			{ID: "1", Payload: map[string]interface{}{"id": 1, "foo": "bar"}},
 		})
 
@@ -290,7 +290,7 @@ func TestGetListFieldHandler(t *testing.T) {
 func TestGetListFilter(t *testing.T) {
 	sharedInit := func() *requestTestVars {
 		s := mem.NewHandler()
-		s.Insert(context.TODO(), []*resource.Item{
+		_ = s.Insert(context.TODO(), []*resource.Item{
 			{ID: "1", Payload: map[string]interface{}{"id": 1, "foo": "bar"}},
 			{ID: "2", Payload: map[string]interface{}{"id": 2, "foo": nil}},
 			{ID: "3", Payload: map[string]interface{}{"id": 3, "foo2": "bar2"}},
@@ -347,7 +347,7 @@ func TestGetListFilter(t *testing.T) {
 func TestGetListArray(t *testing.T) {
 	sharedInit := func() *requestTestVars {
 		s := mem.NewHandler()
-		s.Insert(context.TODO(), []*resource.Item{
+		_ = s.Insert(context.TODO(), []*resource.Item{
 			{ID: "1", Payload: map[string]interface{}{"id": 1,
 				"foo": []interface{}{"bar", "baz"}},
 			},
@@ -414,7 +414,7 @@ func TestGetListArray(t *testing.T) {
 func TestGetListArrayOfObjects(t *testing.T) {
 	sharedInit := func() *requestTestVars {
 		s := mem.NewHandler()
-		s.Insert(context.TODO(), []*resource.Item{
+		_ = s.Insert(context.TODO(), []*resource.Item{
 			{ID: "1", Payload: map[string]interface{}{"id": 1,
 				"foo": []interface{}{
 					map[string]interface{}{

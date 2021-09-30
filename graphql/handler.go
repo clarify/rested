@@ -74,5 +74,7 @@ func (h *Handler) ServeHTTPC(ctx context.Context, w http.ResponseWriter, r *http
 		}
 	}
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(result)
+	if err := json.NewEncoder(w).Encode(result); err != nil {
+		panic(err)
+	}
 }

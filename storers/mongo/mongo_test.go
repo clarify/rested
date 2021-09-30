@@ -3,11 +3,12 @@ package mongo_test
 import (
 	"context"
 	"math/rand"
+	"os"
 	"reflect"
 	"testing"
 	"time"
 
-	mongo "github.com/searis/rest-layer-mongo"
+	mongo "github.com/rs/rest-layer-mongo"
 	"github.com/searis/rest-layer/resource"
 	"github.com/searis/rest-layer/schema/query"
 	mgo "gopkg.in/mgo.v2"
@@ -30,26 +31,26 @@ func randomName(n int) string {
 	return string(b)
 }
 
-func setupDBTest(t *testing.T) (*mgo.Session, func()) {
+func setupDBTest(t *testing.T) *mgo.Session {
+	dbAddr := os.Getenv("GOTEST_MONGODB")
+	if dbAddr == "" {
+		t.Log("Skipping test because GOTEST_MONGODB is unset.")
+		t.Skip()
+	}
 	dbName := randomName(16)
 	if testing.Short() {
 		t.Skip("skipping DB test in short mode.")
 	}
-	s, err := mgo.Dial("mongodb:///" + dbName)
+	s, err := mgo.Dial(dbAddr + "/" + dbName)
 	if err != nil {
 		t.Fatal("Unexpected error for mgo.Dial:", err)
 	}
-	return s, cleanup(s, dbName)
-}
+	_ = s.DB(dbName).DropDatabase()
 
-// cleanup deletes a database immediately and on defer when call as:
-//
-//   defer cleanup(c, "database")()
-func cleanup(s *mgo.Session, db string) func() {
-	s.DB(db).DropDatabase()
-	return func() {
-		s.DB(db).DropDatabase()
-	}
+	t.Cleanup(func() {
+		_ = s.DB(dbName).DropDatabase()
+	})
+	return s
 }
 
 // asserts that the items in a collection matches the provided list of IDs.
@@ -66,8 +67,7 @@ func assertCollectionIDs(t testing.TB, c *mgo.Collection, expect []string) {
 }
 
 func TestInsert(t *testing.T) {
-	s, cleanup := setupDBTest(t)
-	defer cleanup()
+	s := setupDBTest(t)
 	h := mongo.NewHandler(s, "", "test")
 	items := []*resource.Item{
 		{
@@ -131,8 +131,7 @@ func TestUpdate(t *testing.T) {
 			},
 		}
 
-		s, cleanup := setupDBTest(t)
-		defer cleanup()
+		s := setupDBTest(t)
 		h := mongo.NewHandler(s, "", "test")
 
 		err := h.Update(context.Background(), newItem, oldItem)
@@ -155,8 +154,7 @@ func TestUpdate(t *testing.T) {
 			},
 		}
 
-		s, cleanup := setupDBTest(t)
-		defer cleanup()
+		s := setupDBTest(t)
 		h := mongo.NewHandler(s, "", "test")
 
 		if err := h.Insert(context.Background(), []*resource.Item{oldItem}); err != nil {
@@ -201,8 +199,7 @@ func TestUpdate(t *testing.T) {
 			},
 		}
 
-		s, cleanup := setupDBTest(t)
-		defer cleanup()
+		s := setupDBTest(t)
 		h := mongo.NewHandler(s, "", "test")
 
 		// Inserting directly to the database without setting the _etag field.
@@ -239,8 +236,7 @@ func TestUpdate(t *testing.T) {
 }
 
 func TestDelete(t *testing.T) {
-	s, cleanup := setupDBTest(t)
-	defer cleanup()
+	s := setupDBTest(t)
 	h := mongo.NewHandler(s, "", "test")
 	item := &resource.Item{
 		ID:      "1234",
@@ -280,8 +276,8 @@ func TestDelete(t *testing.T) {
 
 	c := s.DB("").C("testEtag")
 	// Add an item without _etag field
-	c.Insert(map[string]interface{}{"foo": "bar", "_id": "1234", "_updated": now})
-	c.Insert(map[string]interface{}{"foo": "bar", "_id": "12345", "_etag": "etag", "_updated": now})
+	_ = c.Insert(map[string]interface{}{"foo": "bar", "_id": "1234", "_updated": now})
+	_ = c.Insert(map[string]interface{}{"foo": "bar", "_id": "12345", "_etag": "etag", "_updated": now})
 	h2 := mongo.NewHandler(s, "", "testEtag")
 	// A item without _etag field, is extracted with ETag in "p-[id]" format
 	originalItem := &resource.Item{
@@ -313,8 +309,7 @@ func TestClear(t *testing.T) {
 		cName = "test"
 	)
 
-	s, cleanup := setupDBTest(t)
-	defer cleanup()
+	s := setupDBTest(t)
 	h := mongo.NewHandler(s, "", cName)
 	items := []*resource.Item{
 		{ID: "1", Payload: map[string]interface{}{"id": "1", "name": "a"}},
@@ -358,8 +353,7 @@ func TestClearLimit(t *testing.T) {
 		cName  = "test"
 	)
 
-	s, cleanup := setupDBTest(t)
-	defer cleanup()
+	s := setupDBTest(t)
 
 	h := mongo.NewHandler(s, "", cName)
 	items := []*resource.Item{
@@ -391,8 +385,7 @@ func TestClearOffset(t *testing.T) {
 		cName = "test"
 	)
 
-	s, cleanup := setupDBTest(t)
-	defer cleanup()
+	s := setupDBTest(t)
 	h := mongo.NewHandler(s, "", cName)
 	items := []*resource.Item{
 		{ID: "1", Payload: map[string]interface{}{"id": "1", "name": "a"}},
@@ -471,8 +464,7 @@ func TestFind(t *testing.T) {
 		}
 	}
 
-	s, cleanup := setupDBTest(t)
-	defer cleanup()
+	s := setupDBTest(t)
 	h := mongo.NewHandler(s, "", "test")
 
 	if err := h.Insert(context.Background(), allItems); err != nil {

@@ -105,7 +105,7 @@ func (s Schema) Prepare(ctx context.Context, payload map[string]interface{}, ori
 	for field, def := range s.Fields {
 		value, found := payload[field]
 		if original == nil {
-			if replace == true {
+			if replace {
 				log.Panic("Cannot use replace=true without original")
 			}
 			// Handle prepare on a new document (no original).
@@ -171,9 +171,8 @@ func (s Schema) Prepare(ctx context.Context, payload map[string]interface{}, ori
 					c, b := def.Schema.Prepare(ctx, subPayload, subOriginal, replace)
 					changes[field] = c
 					base[field] = b
-				} else {
-					// Invalid payload, it will be caught by Validate().
 				}
+				// Invalid payload, it will be caught by Validate().
 			} else {
 				// If the payload doesn't contain a sub-document, perform validation
 				// on an empty one so we don't miss default values.
