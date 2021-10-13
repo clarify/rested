@@ -9,7 +9,7 @@ import (
 
 	"github.com/searis/rested/resource"
 	"github.com/searis/rested/schema/query"
-	"gopkg.in/mgo.v2"
+	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
 
