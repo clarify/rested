@@ -97,9 +97,15 @@ func (v AnyOf) LessFunc() LessFunc {
 // first matching field only.
 func (v AnyOf) GetField(name string) *Field {
 	for _, obj := range v {
-		if fg, ok := obj.(FieldGetter); ok {
-			return fg.GetField(name)
+		fg, ok := obj.(FieldGetter)
+		if !ok {
+			continue
 		}
+		r := fg.GetField(name)
+		if r == nil {
+			continue
+		}
+		return r
 	}
 	return nil
 }
