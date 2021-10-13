@@ -9,8 +9,8 @@ import (
 	"time"
 
 	mongo "github.com/rs/rest-layer-mongo"
-	"github.com/searis/rest-layer/resource"
-	"github.com/searis/rest-layer/schema/query"
+	"github.com/searis/rested/resource"
+	"github.com/searis/rested/schema/query"
 	mgo "gopkg.in/mgo.v2"
 )
 

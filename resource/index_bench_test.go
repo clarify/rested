@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/searis/rest-layer/schema"
+	"github.com/searis/rested/schema"
 )
 
 func BenchmarkGetResource(b *testing.B) {

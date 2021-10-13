@@ -1,6 +1,6 @@
 package jsonschema
 
-import "github.com/searis/rest-layer/schema"
+import "github.com/searis/rested/schema"
 
 type urlBuilder schema.URL
 

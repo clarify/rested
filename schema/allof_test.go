@@ -3,7 +3,7 @@ package schema_test
 import (
 	"testing"
 
-	"github.com/searis/rest-layer/schema"
+	"github.com/searis/rested/schema"
 )
 
 func TestAllOfValidatorCompile(t *testing.T) {

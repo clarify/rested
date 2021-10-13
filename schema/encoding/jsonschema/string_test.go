@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/searis/rest-layer/schema"
-	"github.com/searis/rest-layer/schema/encoding/jsonschema"
+	"github.com/searis/rested/schema"
+	"github.com/searis/rested/schema/encoding/jsonschema"
 	"github.com/stretchr/testify/assert"
 )
 

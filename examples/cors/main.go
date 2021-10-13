@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/rs/cors"
-	"github.com/searis/rest-layer/resource"
-	"github.com/searis/rest-layer/rest"
+	"github.com/searis/rested/resource"
+	"github.com/searis/rested/rest"
 )
 
 func main() {

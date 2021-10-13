@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/searis/rest-layer/schema"
+	"github.com/searis/rested/schema"
 )
 
 // Resource represents type that can be queried by Projection.Eval.

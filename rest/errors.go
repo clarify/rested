@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/searis/rest-layer/resource"
+	"github.com/searis/rested/resource"
 )
 
 var (

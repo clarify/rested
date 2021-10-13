@@ -5,8 +5,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/searis/rest-layer/schema"
-	"github.com/searis/rest-layer/schema/query"
+	"github.com/searis/rested/schema"
+	"github.com/searis/rested/schema/query"
 	"github.com/stretchr/testify/assert"
 )
 

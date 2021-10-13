@@ -3,7 +3,7 @@ package jsonschema_test
 import (
 	"testing"
 
-	"github.com/searis/rest-layer/schema"
+	"github.com/searis/rested/schema"
 )
 
 func TestAnyOfValidatorEncode(t *testing.T) {

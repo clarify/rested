@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"io"
 
-	"github.com/searis/rest-layer/schema"
+	"github.com/searis/rested/schema"
 )
 
 // Encoder writes the JSON Schema representation of a schema.Schema to an output

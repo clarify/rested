@@ -4,7 +4,7 @@ import (
 	"errors"
 	"sort"
 
-	"github.com/searis/rest-layer/schema"
+	"github.com/searis/rested/schema"
 )
 
 var (

@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/searis/rest-layer/resource"
+	"github.com/searis/rested/resource"
 )
 
 // listGet handles GET resquests on a resource URL.

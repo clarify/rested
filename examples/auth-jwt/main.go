@@ -16,11 +16,11 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/hlog"
 	"github.com/rs/zerolog/log"
-	"github.com/searis/rest-layer/resource"
-	"github.com/searis/rest-layer/resource/testing/mem"
-	"github.com/searis/rest-layer/rest"
-	"github.com/searis/rest-layer/schema"
-	"github.com/searis/rest-layer/schema/query"
+	"github.com/searis/rested/resource"
+	"github.com/searis/rested/resource/testing/mem"
+	"github.com/searis/rested/rest"
+	"github.com/searis/rested/schema"
+	"github.com/searis/rested/schema/query"
 )
 
 // NOTE: this example show how to integrate REST Layer with JWT. No authentication is performed

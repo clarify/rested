@@ -6,7 +6,7 @@ package jsonschema_test
 import (
 	"testing"
 
-	"github.com/searis/rest-layer/schema"
+	"github.com/searis/rested/schema"
 )
 
 func TestTimeValidatorEncode(t *testing.T) {
