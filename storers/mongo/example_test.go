@@ -11,7 +11,7 @@ import (
 	"github.com/searis/rested/schema"
 	mgo "gopkg.in/mgo.v2"
 
-	mongo "github.com/rs/rest-layer-mongo"
+	"github.com/searis/rested/storers/mongo"
 )
 
 var (
