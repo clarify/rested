@@ -3,8 +3,8 @@ package mem
 import (
 	"time"
 
-	"github.com/searis/rest-layer/resource"
-	"github.com/searis/rest-layer/schema/query"
+	"github.com/searis/rested/resource"
+	"github.com/searis/rested/schema/query"
 )
 
 // sortableItems is an item slice implementing sort.Interface

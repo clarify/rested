@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/searis/rest-layer/schema"
+	"github.com/searis/rested/schema"
 )
 
 func TestProjectionValidate(t *testing.T) {

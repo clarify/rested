@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/searis/rest-layer/schema"
+	"github.com/searis/rested/schema"
 )
 
 type dictBuilder schema.Dict

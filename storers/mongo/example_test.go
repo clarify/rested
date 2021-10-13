@@ -6,9 +6,9 @@ import (
 	"os"
 
 	"github.com/rs/cors"
-	"github.com/searis/rest-layer/resource"
-	"github.com/searis/rest-layer/rest"
-	"github.com/searis/rest-layer/schema"
+	"github.com/searis/rested/resource"
+	"github.com/searis/rested/rest"
+	"github.com/searis/rested/schema"
 	mgo "gopkg.in/mgo.v2"
 
 	mongo "github.com/rs/rest-layer-mongo"

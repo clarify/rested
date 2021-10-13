@@ -1,42 +1,35 @@
-# REST Layer
+# Rested
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/searis/rest-layer.svg)](https://pkg.go.dev/github.com/searis/rest-layer)
-[![Go Workflow](https://github.com/searis/rest-layer/actions/workflows/go.yml/badge.svg?branch=main)](https://github.com/searis/rest-layer/actions)
+[![Go Reference](https://pkg.go.dev/badge/github.com/searis/rested.svg)](https://pkg.go.dev/github.com/searis/rested)
+[![Go Workflow](https://github.com/searis/rested/actions/workflows/go.yml/badge.svg?branch=main)](https://github.com/searis/rested/actions)
 
 **THIS FORK IS STILL IN THE PROCESS OF BEING SET-UP; DO NOT USE.**
 
-**This API is a _maintenance-only_ fork of [rs/rest-layer](https://github.com/searis/rest-layer). We are not planning or accepting any major features at this time, but will accept and conduct minor improvements and bugfixes as needed. Features that are not used by us may be deprecated or dropped in upcoming releases. Breaking changes might be introduced when suitable**
+**This API is a _maintenance_ fork of [rs/rest-layer](https://github.com/rs/rest-layer). We are not planning or accepting any major features at this time, but will accept and conduct minor improvements and bugfixes as needed. Features that are not used by us may be deprecated or dropped in upcoming releases. Breaking changes might be introduced when suitable**
 
 Requires Go 1.17 or newer and use of go modules.
 
-REST Layer is an API framework heavily inspired by the excellent [Python Eve](http://python-eve.org). It helps you create a comprehensive, customizable, and secure REST (graph) API on top of pluggable [backend storages](#main-storage-handlers) with no boiler plate code so you can focus on your business logic.
+The goals of this fork is:
 
-Implemented as a `net/http` handler, it plays well with standard middleware like [CORS](http://github.com/rs/cors). It is also [context](https://godoc.org/context) aware. This allows deadline management to be supported down to the storage and permit an easy extensibility by passing custom data between layers of the framework.
+- Better maintenance of features used by the team behind [Clarify](https://clarify.io).
+- Deprecation of unmaintained and uncompleted features to reduce the maintenance surface.
+- Gradual introduction of (potentially breaking) changes that can increase stability or reduce the chance programming errors.
+- Support for models (structs) one way or anther.
+- Eventually compatibility with a production-ready PostgreSQL storage backend of some sort.
 
-REST Layer is an opinionated framework. Unlike many API frameworks, you don't directly control the routing and you don't have to write handlers. You just define resources and sub-resources with a [schema](#resource-configuration), the framework automatically figures out what routes need to be generated behind the scene. You don't have to take care of the HTTP headers and response, JSON encoding, etc. either. REST layer handles HTTP [conditional requests](#conditional-requests), caching, [integrity checking](#data-integrity-and-concurrency-control) for you.
-
-A powerful and extensible [validation engine](#resource-configuration) make sure that data comes pre-validated to your [custom storage handlers](#data-storage-handler). Generic resource handlers for [MongoDB](http://github.com/searis/rest-layer/storers/mongo) is the only currently maintained service.
-
-Moreover, REST Layer let you create a graph API by linking resources between them. Thanks to its advanced [field selection](#field-selection) syntax or [GraphQL](#graphql) support, you can gather resources and their dependencies in a single request, saving you from costly network round-trips.
-
-The REST Layer framework is composed of several sub-packages:
-
-![package layout](doc/schema.png)
-
-| Package                                                              | Description                                                                                            |
-| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| [rest](https://pkg.go.dev/github.com/searis/rest-layer/rest)         | A `net/http` handler to expose a REST-ful API.                                                         |
-| [graphql](https://pkg.go.dev/github.com/searis/rest-layer/graphql)   | A `net/http` handler to expose your API using the GraphQL protocol.                                    |
-| [schema](https://pkg.go.dev/github.com/searis/rest-layer/schema)     | A validation framework for the API resources.                                                          |
-| [resource](https://pkg.go.dev/github.com/searis/rest-layer/resource) | Defines resources, manages the resource graph and manages the interface with resource storage handler. |
+| Package                                                                    | Description                                                                                            |
+| -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| [rest](https://pkg.go.dev/github.com/searis/rested/rest)                   | A `net/http` handler to expose a REST-ful API.                                                         |
+| [graphql](https://pkg.go.dev/github.com/searis/rested/graphql)             | A `net/http` handler to expose your API using the GraphQL protocol. DEPRECATED                         |
+| [schema](https://pkg.go.dev/github.com/searis/rested/schema)               | A validation framework for the API resources.                                                          |
+| [resource](https://pkg.go.dev/github.com/searis/rested/resource)           | Defines resources, manages the resource graph and manages the interface with resource storage handler. |
+| [storers/mongo](https://pkg.go.dev/github.com/searis/rested/storers/mongo) | Implementation of `resource.Storers` interface.                                                        |
 
 ## Documentation
 
 - [Breaking Changes](#breaking-changes)
-- [Features](#features)
-  - [Extensions](#extensions)
-  - [Main Storage Handlers](#main-storage-handlers)
-  - [Alternate Storage Handlers](#alternate-storage-handlers)
+- [Extensions](#extensions)
+- [Storage Handlers](#storage-handlers)
 - [Usage](#usage)
 - [Resource Configuration](#resource-configuration)
   - [Schema](#schema)
@@ -77,34 +70,18 @@ The REST Layer framework is composed of several sub-packages:
 - [JSONP](#jsonp) DEPRECATED
 - [Data Storage Handler](#data-storage-handler)
 - [Custom Response Formatter / Sender](#custom-response-formatter--sender)
-- [GraphQL](#graphql) DEPRECATED
-- [Hystrix](#hystrix) DEPRECATED, BROKEN
 - [JSONSchema](#jsonschema)
 
-### Extensions
+## Extensions
 
-As REST Layer is a simple `net/http` handler. You can use standard middleware to extend its functionalities:
+As REST Layer is a simple `net/http` handler. You can use standard middleware to extend its functionalities. E.g.:
 
-- [x] [CORS](http://github.com/rs/cors)
-- [ ] Method Override
-- [ ] Gzip, Deflate
-- [ ] JSONP
-- [x] [X-Forwarded-For](https://github.com/sebest/xff)
-- [x] [Rate Limiting](https://github.com/didip/tollbooth)
-- [ ] Operations Log
-- [x] [Hystrix storage handler wrapper](https://github.com/rs/rest-layer-hystrix)
+- [CORS](http://github.com/rs/cors)
 
-### Main Storage Handlers
+## Storage Handlers
 
-- [x] [Memory](http://github.com/searis/rest-layer/tree/master/resource/testing/mem) (test only)
-- [x] [MongoDB](http://github.com/searis/rest-layer/storers/mongo)
-
-### Alternate Storage Handlers
-
-- [ElasticSearch](http://github.com/rs/rest-layer-es) (no longer actively tested)
-- [SQL](https://github.com/apuigsech/rest-layer-sql) (third party)
-- [Google Datastore](https://github.com/ajcrowe/rest-layer-datastore) (third party)
-- [Kubernetes ConfigMap](https://github.com/Segence/rest-layer-kubernetes-configmap) (third party)
+- [Memory](http://github.com/searis/rested/tree/master/resource/testing/mem) (test only)
+- [MongoDB](http://github.com/searis/rested/storers/mongo)
 
 ## Usage
 
@@ -115,11 +92,11 @@ import (
     "log"
     "net/http"
 
-    "github.com/searis/rest-layer/resource/testing/mem"
-    "github.com/searis/rest-layer/resource"
-    "github.com/searis/rest-layer/rest"
-    "github.com/searis/rest-layer/schema/query"
-    "github.com/searis/rest-layer/schema"
+    "github.com/searis/rested/resource/testing/mem"
+    "github.com/searis/rested/resource"
+    "github.com/searis/rested/rest"
+    "github.com/searis/rested/schema/query"
+    "github.com/searis/rested/schema"
 )
 
 var (
@@ -254,7 +231,7 @@ func main() {
 }
 ```
 
-Just run this code (or use the provided [examples/demo](https://github.com/searis/rest-layer/blob/master/examples/demo/main.go)):
+Just run this code (or use the provided [examples/demo](https://github.com/searis/rested/blob/master/examples/demo/main.go)):
 
 ```sh
 $ go run examples/demo/main.go
@@ -476,7 +453,7 @@ For REST Layer to be able to expose resources, you have to first define what fie
 
 ### Schema
 
-Resource field configuration is performed through the [schema](https://pkg.go.dev/github.com/searis/rest-layer/schema) package. A schema is a struct describing a resource. A schema is composed of metadata about the resource and a description of the allowed fields through a map of field name pointing to field definition.
+Resource field configuration is performed through the [schema](https://pkg.go.dev/github.com/searis/rested/schema) package. A schema is a struct describing a resource. A schema is composed of metadata about the resource and a description of the allowed fields through a map of field name pointing to field definition.
 
 Sample resource schema:
 
@@ -541,20 +518,20 @@ REST Layer comes with a set of validators. You can add your own by implementing 
 | [schema.AnyOf][any]     | Ensures that at least one sub-validator is valid                      |
 | [schema.AllOf][all]     | Ensures that at least all sub-validators are valid                    |
 
-[str]: https://pkg.go.dev/github.com/searis/rest-layer/schema#String
-[int]: https://pkg.go.dev/github.com/searis/rest-layer/schema#Integer
-[float]: https://pkg.go.dev/github.com/searis/rest-layer/schema#Float
-[bool]: https://pkg.go.dev/github.com/searis/rest-layer/schema#Bool
-[array]: https://pkg.go.dev/github.com/searis/rest-layer/schema#Array
-[dict]: https://pkg.go.dev/github.com/searis/rest-layer/schema#Dict
-[object]: https://pkg.go.dev/github.com/searis/rest-layer/schema#Object
-[time]: https://pkg.go.dev/github.com/searis/rest-layer/schema#Time
-[url]: https://pkg.go.dev/github.com/searis/rest-layer/schema#URL
-[ip]: https://pkg.go.dev/github.com/searis/rest-layer/schema#IP
-[pswd]: https://pkg.go.dev/github.com/searis/rest-layer/schema#Password
-[ref]: https://pkg.go.dev/github.com/searis/rest-layer/schema#Reference
-[any]: https://pkg.go.dev/github.com/searis/rest-layer/schema#AnyOf
-[all]: https://pkg.go.dev/github.com/searis/rest-layer/schema#AllOf
+[str]: https://pkg.go.dev/github.com/searis/rested/schema#String
+[int]: https://pkg.go.dev/github.com/searis/rested/schema#Integer
+[float]: https://pkg.go.dev/github.com/searis/rested/schema#Float
+[bool]: https://pkg.go.dev/github.com/searis/rested/schema#Bool
+[array]: https://pkg.go.dev/github.com/searis/rested/schema#Array
+[dict]: https://pkg.go.dev/github.com/searis/rested/schema#Dict
+[object]: https://pkg.go.dev/github.com/searis/rested/schema#Object
+[time]: https://pkg.go.dev/github.com/searis/rested/schema#Time
+[url]: https://pkg.go.dev/github.com/searis/rested/schema#URL
+[ip]: https://pkg.go.dev/github.com/searis/rested/schema#IP
+[pswd]: https://pkg.go.dev/github.com/searis/rested/schema#Password
+[ref]: https://pkg.go.dev/github.com/searis/rested/schema#Reference
+[any]: https://pkg.go.dev/github.com/searis/rested/schema#AnyOf
+[all]: https://pkg.go.dev/github.com/searis/rested/schema#AllOf
 
 Some common hook handler to be used with `OnInit` and `OnUpdate` are also provided:
 
@@ -616,7 +593,7 @@ post = schema.Schema{
 
 ### Binding
 
-Now you just need to bind this schema at a specific endpoint on the [resource.Index](https://pkg.go.dev/github.com/searis/rest-layer/resource#Index) object:
+Now you just need to bind this schema at a specific endpoint on the [resource.Index](https://pkg.go.dev/github.com/searis/rested/resource#Index) object:
 
 ```go
 index := resource.NewIndex()
@@ -625,7 +602,7 @@ posts := index.Bind("posts", post, mem.NewHandler(), resource.DefaultConf)
 
 This tells the `resource.Index` to bind the `post` schema at the `posts` endpoint. The resource collection URL is then `/posts` and item URLs are `/posts/<post_id>`.
 
-The [resource.DefaultConf](https://pkg.go.dev/github.com/searis/rest-layer/resource#pkg-variables) variable is a pre-defined [resource.Conf](https://pkg.go.dev/github.com/searis/rest-layer/resource#Conf) type with sensible defaults. You can customize the resource behavior using a custom configuration.
+The [resource.DefaultConf](https://pkg.go.dev/github.com/searis/rested/resource#pkg-variables) variable is a pre-defined [resource.Conf](https://pkg.go.dev/github.com/searis/rested/resource#Conf) type with sensible defaults. You can customize the resource behavior using a custom configuration.
 
 The `resource.Conf` type has the following customizable properties:
 
@@ -662,11 +639,9 @@ The following table shows how REST layer maps CRUDL operations to HTTP methods a
 | `Delete`  | DELETE      | Item       | Delete the item by its ID.                                                                                                           |
 | `Clear`   | DELETE      | Collection | Delete all items from the collection matching the context and/or filters.                                                            |
 
-Note on GraphQL support and modes: current implementation of GraphQL doesn't support mutation. Thus only resources with `Read` and `List` modes will be exposed with GraphQL. Support for other modes will be added in the future.
-
 ### Hooks
 
-Hooks are piece of code you can attach before or after an operation is performed on a resource. A hook is a Go type implementing one of the event handler interface below, and attached to a resource via the [Resource.Use](https://pkg.go.dev/github.com/searis/rest-layer/resource#Resource.Use) method.
+Hooks are piece of code you can attach before or after an operation is performed on a resource. A hook is a Go type implementing one of the event handler interface below, and attached to a resource via the [Resource.Use](https://pkg.go.dev/github.com/searis/rested/resource#Resource.Use) method.
 
 | Hook Interface         | Description                                                                                                                                                                      |
 | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -683,22 +658,22 @@ Hooks are piece of code you can attach before or after an operation is performed
 | [ClearEventHandler]    | Defines a function called before a resource is cleared.                                                                                                                          |
 | [ClearedEventHandler]  | Defines a function called after a resource has been cleared.                                                                                                                     |
 
-[findeventhandler]: https://pkg.go.dev/github.com/searis/rest-layer/resource#FindEventHandler
-[foundeventhandler]: https://pkg.go.dev/github.com/searis/rest-layer/resource#FoundEventHandler
-[geteventhandler]: https://pkg.go.dev/github.com/searis/rest-layer/resource#GetEventHandler
-[goteventhandler]: https://pkg.go.dev/github.com/searis/rest-layer/resource#GotEventHandler
-[inserteventhandler]: https://pkg.go.dev/github.com/searis/rest-layer/resource#InsertEventHandler
-[insertedeventhandler]: https://pkg.go.dev/github.com/searis/rest-layer/resource#InsertedEventHandler
-[updateeventhandler]: https://pkg.go.dev/github.com/searis/rest-layer/resource#UpdateEventHandler
-[updatedeventhandler]: https://pkg.go.dev/github.com/searis/rest-layer/resource#UpdatedEventHandler
-[deleteeventhandler]: https://pkg.go.dev/github.com/searis/rest-layer/resource#DeleteEventHandler
-[deletedeventhandler]: https://pkg.go.dev/github.com/searis/rest-layer/resource#DeletedEventHandler
-[cleareventhandler]: https://pkg.go.dev/github.com/searis/rest-layer/resource#ClearEventHandler
-[clearedeventhandler]: https://pkg.go.dev/github.com/searis/rest-layer/resource#ClearedEventHandler
+[findeventhandler]: https://pkg.go.dev/github.com/searis/rested/resource#FindEventHandler
+[foundeventhandler]: https://pkg.go.dev/github.com/searis/rested/resource#FoundEventHandler
+[geteventhandler]: https://pkg.go.dev/github.com/searis/rested/resource#GetEventHandler
+[goteventhandler]: https://pkg.go.dev/github.com/searis/rested/resource#GotEventHandler
+[inserteventhandler]: https://pkg.go.dev/github.com/searis/rested/resource#InsertEventHandler
+[insertedeventhandler]: https://pkg.go.dev/github.com/searis/rested/resource#InsertedEventHandler
+[updateeventhandler]: https://pkg.go.dev/github.com/searis/rested/resource#UpdateEventHandler
+[updatedeventhandler]: https://pkg.go.dev/github.com/searis/rested/resource#UpdatedEventHandler
+[deleteeventhandler]: https://pkg.go.dev/github.com/searis/rested/resource#DeleteEventHandler
+[deletedeventhandler]: https://pkg.go.dev/github.com/searis/rested/resource#DeletedEventHandler
+[cleareventhandler]: https://pkg.go.dev/github.com/searis/rested/resource#ClearEventHandler
+[clearedeventhandler]: https://pkg.go.dev/github.com/searis/rested/resource#ClearedEventHandler
 
-Note that these are resource level hooks, and do not correspond one-to-one to `rest` or `graphql` operation. For the `rest` package in particular, note that a HTTP request to `GET` an item by ID, will result in a `Find` and not a `Get` call which will triggering the `OnFind` and `OnFound` hooks to be called, not `OnGet` and `OnGot`. Similarly, a `PATCH` or `PUT` request will call `Find` before it calls `Update`, which will trigger the same hooks. If your hooks logic require knowing which rest-level operation is performed see [rest.RouteFromContext](https://pkg.go.dev/github.com/searis/rest-layer/rest#RouteFromContext)
+Note that these are resource level hooks, and do not correspond one-to-one to `rest` or `graphql` operation. For the `rest` package in particular, note that a HTTP request to `GET` an item by ID, will result in a `Find` and not a `Get` call which will triggering the `OnFind` and `OnFound` hooks to be called, not `OnGet` and `OnGot`. Similarly, a `PATCH` or `PUT` request will call `Find` before it calls `Update`, which will trigger the same hooks. If your hooks logic require knowing which rest-level operation is performed see [rest.RouteFromContext](https://pkg.go.dev/github.com/searis/rested/rest#RouteFromContext)
 
-All hooks functions get a `context.Context` as first argument. If a network call must be performed from the hook, the context's deadline must be respected. If a hook returns an error, the whole request is aborted with that error. You can also use the context to pass data to your hooks from a middleware executed before REST Layer. This can be used to manage authentication for instance. See [examples/auth](https://github.com/searis/rest-layer/blob/master/examples/auth/main.go) to see an example.
+All hooks functions get a `context.Context` as first argument. If a network call must be performed from the hook, the context's deadline must be respected. If a hook returns an error, the whole request is aborted with that error. You can also use the context to pass data to your hooks from a middleware executed before REST Layer. This can be used to manage authentication for instance. See [examples/auth](https://github.com/searis/rested/blob/master/examples/auth/main.go) to see an example.
 
 Hooks that get passed both an an error and/or an item, such as [GotEventHandler], [UpdatedEventHandler], [DeletedEventHandler] should insert guards to handle the error being set and/or the item not being set; both can be true in some cases. It's also allowed to set items or errors to nil, which is why double pointers are often used.
 
@@ -773,7 +748,7 @@ See [embedding](#embedding) for more information.
 
 ### Dependency
 
-Fields can depend on other fields in order to be changed. To configure a dependency, set a filter on the `Dependency` property of the field using the [query.MustParsePredicate()](https://pkg.go.dev/github.com/searis/rest-layer/schema/queru#MustParsePredicate) method.
+Fields can depend on other fields in order to be changed. To configure a dependency, set a filter on the `Dependency` property of the field using the [query.MustParsePredicate()](https://pkg.go.dev/github.com/searis/rested/schema/queru#MustParsePredicate) method.
 
 In this example, the `body` field can't be changed if the `published` field is not set to `true`:
 
@@ -1243,7 +1218,7 @@ REST Layer doesn't provide any kind of support for authentication. Identifying t
 
 In this schema, the authentication service identifies the user and stores data relevant to the user's identification in a JWT token. This token is sent to the API client as a [bearer token](https://tools.ietf.org/html/rfc6750), through the `access-token` query-string parameter or the `Authorization` HTTP header. A http middleware then decodes and verifies this token, extracts user's info from it and stores it into the context. In REST layer, user info is now accessible from your [resource hooks](#hooks) so you can change the query lookup or ensure mutated objects are owned by the user in order to handle the authorization part.
 
-See the [JWT auth example](https://github.com/searis/rest-layer/blob/master/examples/auth-jwt/main.go) for more info.
+See the [JWT auth example](https://github.com/searis/rested/blob/master/examples/auth-jwt/main.go) for more info.
 
 ## Conditional Requests
 
@@ -1319,7 +1294,7 @@ In the example above, the document did not validate so the request was rejected 
 
 ### Nullable Values
 
-To allow `null` value in addition the field type, you can use [schema.AnyOf](https://pkg.go.dev/github.com/searis/rest-layer/schema#AnyOf) validator:
+To allow `null` value in addition the field type, you can use [schema.AnyOf](https://pkg.go.dev/github.com/searis/rested/schema#AnyOf) validator:
 
 ```go
 "nullable_field": {
@@ -1332,7 +1307,7 @@ To allow `null` value in addition the field type, you can use [schema.AnyOf](htt
 
 ### Extensible Data Validation
 
-It is very easy to add new validators. You just need to implement the [schema.FieldValidator](https://pkg.go.dev/github.com/searis/rest-layer/schema#FieldValidator):
+It is very easy to add new validators. You just need to implement the [schema.FieldValidator](https://pkg.go.dev/github.com/searis/rested/schema#FieldValidator):
 
 ```go
 type FieldValidator interface {
@@ -1342,7 +1317,7 @@ type FieldValidator interface {
 
 The `Validate` method takes the value as argument and must either return the value back with some eventual transformation or an `error` if the validation failed.
 
-Your validator may also implement the optional [schema.Compiler](https://pkg.go.dev/github.com/searis/rest-layer/schema#Compiler) interface:
+Your validator may also implement the optional [schema.Compiler](https://pkg.go.dev/github.com/searis/rested/schema#Compiler) interface:
 
 ```go
 type Compiler interface {
@@ -1352,7 +1327,7 @@ type Compiler interface {
 
 When a field validator implements this interface, the `Compile` method is called at the server initialization. It's a good place to pre-compute some data (i.e.: compile regexp) and verify validator configuration. If validator configuration contains issues, the `Compile` method must return an error, so the initialization of the resource will generate a fatal error.
 
-A validator may implement some advanced serialization or transformation of the data to optimize its storage. In order to read this data back and put it in a format suitable for JSON representation, a validator can implement the [schema.FieldSerializer](https://pkg.go.dev/github.com/searis/rest-layer/schema#FieldSerializer) interface:
+A validator may implement some advanced serialization or transformation of the data to optimize its storage. In order to read this data back and put it in a format suitable for JSON representation, a validator can implement the [schema.FieldSerializer](https://pkg.go.dev/github.com/searis/rested/schema#FieldSerializer) interface:
 
 ```go
 type FieldSerializer interface {
@@ -1362,11 +1337,11 @@ type FieldSerializer interface {
 
 When a validator implements this interface, the method is called with the field's value just before JSON marshaling. You should return an error if the format stored in the db is invalid and can't be converted back into a suitable representation.
 
-See [schema.IP](https://pkg.go.dev/github.com/searis/rest-layer/schema#IP) validator for an implementation example.
+See [schema.IP](https://pkg.go.dev/github.com/searis/rested/schema#IP) validator for an implementation example.
 
 ## Timeout and Request Cancellation
 
-REST Layer respects [context](https://godoc.org/context) deadline from end to end. Timeout and request cancellation are thus handled through `context`. Since Go 1.8, context is cancelled automatically if the user closes the connection.
+REST Layer respects [context](https://pkg.go.dev/context) deadline from end to end. Timeout and request cancellation are thus handled through `context`. Since Go 1.8, context is cancelled automatically if the user closes the connection.
 
 When a request is stopped because the client closed the connection (context cancelled), the response HTTP status is set to `499 Client Closed Request` (for logging purpose). When a timeout is set and the request has reached this timeout, the response HTTP status is set to `509 Gateway Timeout`.
 
@@ -1423,8 +1398,8 @@ import (
     "net/http"
 
     "github.com/rs/cors"
-    "github.com/searis/rest-layer/resource"
-    "github.com/searis/rest-layer/rest"
+    "github.com/searis/rested/resource"
+    "github.com/searis/rested/rest"
 )
 
 func main() {
@@ -1458,8 +1433,8 @@ import (
     "log"
     "net/http"
 
-    "github.com/searis/rest-layer/resource"
-    "github.com/searis/rest-layer/rest"
+    "github.com/searis/rested/resource"
+    "github.com/searis/rested/rest"
 )
 
 func main() {
@@ -1489,9 +1464,9 @@ func main() {
 
 ## Data Storage Handler
 
-REST Layer doesn't handle storage of resources directly. A [mem.MemoryHandler](https://pkg.go.dev/github.com/searis/rest-layer/resource/testing/mem#MemoryHandler) is provided as an example but should be used for testing only.
+REST Layer doesn't handle storage of resources directly. A [mem.MemoryHandler](https://pkg.go.dev/github.com/searis/rested/resource/testing/mem#MemoryHandler) is provided as an example but should be used for testing only.
 
-A resource storage handler is easy to write though. Some handlers for [popular databases are available](#main-storage-handlers), but you may want to write your own to put an API in front of anything you want. It is very easy to write a data storage handler, you just need to implement the [resource.Storer](https://pkg.go.dev/github.com/searis/rest-layer/resource#Storer) interface:
+A resource storage handler is easy to write though. Some handlers for [popular databases are available](#main-storage-handlers), but you may want to write your own to put an API in front of anything you want. It is very easy to write a data storage handler, you just need to implement the [resource.Storer](https://pkg.go.dev/github.com/searis/rested/resource#Storer) interface:
 
 ```go
 type Storer interface {
@@ -1503,17 +1478,17 @@ type Storer interface {
 }
 ```
 
-Mutation methods like `Update` and `Delete` must ensure they are atomically mutating the same item as specified in argument by checking their `ETag` (the stored `ETag` must match the `ETag` of the provided item). In case the handler can't guarantee that, the storage must be left untouched and a [resource.ErrConflict](https://pkg.go.dev/github.com/searis/rest-layer/resource#pkg-variables) must be returned.
+Mutation methods like `Update` and `Delete` must ensure they are atomically mutating the same item as specified in argument by checking their `ETag` (the stored `ETag` must match the `ETag` of the provided item). In case the handler can't guarantee that, the storage must be left untouched and a [resource.ErrConflict](https://pkg.go.dev/github.com/searis/rested/resource#pkg-variables) must be returned.
 
-If the operation is not immediate, the method must listen for cancellation on the passed `ctx`. If the operation is stopped due to context cancellation, the function must return the result of the [ctx.Err()](https://godoc.org/golang.org/x/net/context#Context) method. See [this blog post](https://blog.golang.org/context) for more information about how `context` works.
+If the operation is not immediate, the method must listen for cancellation on the passed `ctx`. If the operation is stopped due to context cancellation, the function must return the result of the [ctx.Err()](https://pkg.go.dev/golang.org/x/net/context#Context) method. See [this blog post](https://blog.golang.org/context) for more information about how `context` works.
 
-If the backend storage is able to efficiently fetch multiple document by their id, it can implement the optional [resource.MultiGetter](https://pkg.go.dev/github.com/searis/rest-layer/resource#MultiGetter) interface. REST Layer will automatically use it whenever possible.
+If the backend storage is able to efficiently fetch multiple document by their id, it can implement the optional [resource.MultiGetter](https://pkg.go.dev/github.com/searis/rested/resource#MultiGetter) interface. REST Layer will automatically use it whenever possible.
 
-See [resource.Storer](https://pkg.go.dev/github.com/searis/rest-layer/resource#Storer) documentation for more information on resource storage handler implementation details.
+See [resource.Storer](https://pkg.go.dev/github.com/searis/rested/resource#Storer) documentation for more information on resource storage handler implementation details.
 
 ## Custom Response Formatter / Sender
 
-REST Layer lets you extend or replace the default response formatter and sender. To write a new response format, you need to implement the [rest.ResponseFormatter](https://pkg.go.dev/github.com/searis/rest-layer/rest#ResponseFormatter) interface:
+REST Layer lets you extend or replace the default response formatter and sender. To write a new response format, you need to implement the [rest.ResponseFormatter](https://pkg.go.dev/github.com/searis/rested/rest#ResponseFormatter) interface:
 
 ```go
 // ResponseFormatter defines an interface responsible for formatting a the different types of response objects
@@ -1546,7 +1521,7 @@ api.ResponseFormatter = &myResponseFormatter{}
 api.ResponseSender = &myResponseSender{}
 ```
 
-You may also extend the [DefaultResponseFormatter](https://pkg.go.dev/github.com/searis/rest-layer/rest#DefaultResponseFormatter) and/or [DefaultResponseSender](https://pkg.go.dev/github.com/searis/rest-layer/rest#DefaultResponseSender) if you just want to wrap or slightly modify the default behavior:
+You may also extend the [DefaultResponseFormatter](https://pkg.go.dev/github.com/searis/rested/rest#DefaultResponseFormatter) and/or [DefaultResponseSender](https://pkg.go.dev/github.com/searis/rested/rest#DefaultResponseSender) if you just want to wrap or slightly modify the default behavior:
 
 ```go
 type myResponseFormatter struct {
@@ -1566,53 +1541,6 @@ func (r myResponseFormatter) FormatList(ctx context.Context, headers http.Header
 }
 ```
 
-## GraphQL
-
-In parallel with the REST API handler, REST Layer is also able to handle GraphQL queries (mutation will come later). GraphQL is a query language created by Facebook which provides a common interface to fetch and manipulate data. REST Layer's GraphQL handler is able to read a [resource.Index](https://pkg.go.dev/github.com/searis/rest-layer/resource#Index) and create a corresponding GraphQL schema.
-
-GraphQL doesn't expose resources directly, but queries. REST Layer take all the resources defined at the root of the `resource.Index` and create two GraphQL queries for each one. One query is just the name of the endpoint, so `/users` would result in `users` and another is the name of the endpoint suffixed with `List`, as `usersList`. The item query takes an `id` parameter and the list queries takes `skip`, `page`, `limit`, `filter` and `sort` parameters. All sub-resources are accessible using GraphQL sub-selection syntax.
-
-If your resource defines aliases, some additional GraphQL queries are exposed with their name constructed as the name of the resource suffixed with the name of the alias with a capital. So for `users` with an alias `admin`, the query would be `usersAdmin`.
-
-You can bind the GraphQL endpoint wherever you want as follow:
-
-```go
-index := resource.NewIndex()
-// Bind some resources
-
-h, err := graphql.NewHandler(index)
-if err != nil {
-    log.Fatal(err)
-}
-http.Handle("/graphql", h)
-http.ListenAndServe(":8080", nil)
-```
-
-GraphQL support is experimental. Only querying is supported for now, mutation will come later. Sub-queries are executed sequentially and may generate quite a lot of query on the storage backend on complex queries. You may prefer the REST endpoint with [field selection](#field-selection) which benefits from a lot of optimization for now.
-
-## Hystrix
-
-REST Layer supports Hystrix as a circuit breaker. You can enable Hystrix on a per resource basis by wrapping the storage handler using [rest-layer-hystrix](https://github.com/rs/rest-layer-hystrix):
-
-```go
-import "github.com/rs/rest-layer-hystrix"
-
-index.Bind("posts", post, restrix.Wrap("posts", mongo.NewHandler()), resource.DefaultConf)
-```
-
-When wrapped this way, one Hystrix command is created per storage handler action, with the name formatted as `<name>.<Action>`. Possible actions are:
-
-- `Find`: when a collection of items is requested.
-- `Insert`: when items are created.
-- `Update`: when items are modified.
-- `Delete`: when a single item is deleted by its id.
-- `Clear`: when a collection of items matching a filter are deleted.
-- `MultiGet`: when several items are retrieved by their ids (on storage handler supporting `MultiGetter` interface.
-
-Once enabled, you must configure Hystrix for each command and start the Hystrix metrics stream handler.
-
-See [Hystrix godoc](https://godoc.org/github.com/afex/hystrix-go/hystrix) for more info and [examples/hystrix](https://github.com/searis/rest-layer/blob/master/examples/hystrix/main.go) for a complete usage example with REST layer.
-
 ## JSONSchema
 
 It is possible to convert a schema to [JSON Schema](http://json-schema.org/) with some limitations for certain schema fields. Currently, we implement JSON Schema Draft 4 [core](https://tools.ietf.org/html/draft-zyp-json-schema-04) and [validation](https://tools.ietf.org/html/draft-fge-json-schema-validation-00) specifications. In addition, we have implemented "readOnly" from the less commonly used [hyper-schema](https://tools.ietf.org/html/draft-luff-json-hyper-schema-00#section-4.4) specification.
@@ -1620,7 +1548,7 @@ It is possible to convert a schema to [JSON Schema](http://json-schema.org/) wit
 Example usage:
 
 ```go
-import "github.com/searis/rest-layer/schema/encoding/jsonschema"
+import "github.com/searis/rested/schema/encoding/jsonschema"
 
 b := new(bytes.Buffer)
 enc := jsonschema.NewEncoder(b)
@@ -1677,7 +1605,7 @@ The limitation in `KeysValidator` values arise because JSON Schema draft 4 (and 
 
 The support for `schema.Reference` is purely provisional and simply returns an empty object `{}`, meaning it does not give any hint as to which validation the server might use.
 
-With a potential later implantation of the [OpenAPI Specification](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) (a.k.a. the Swagger 2.0 Specification), the goal is to refer to the ID field of the linked resource via an object `{"$ref": "#/definitions/<unique schema title>/id"}`. This is tracked via issue [#36](https://github.com/searis/rest-layer/issues/36).
+With a potential later implantation of the [OpenAPI Specification](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) (a.k.a. the Swagger 2.0 Specification), the goal is to refer to the ID field of the linked resource via an object `{"$ref": "#/definitions/<unique schema title>/id"}`. This is tracked via issue [#36](https://github.com/searis/rested/issues/36).
 
 ### schema.URL Limitations
 
@@ -1687,4 +1615,4 @@ Note that JSON Schema draft 5 adds [uriref](https://tools.ietf.org/html/draft-wr
 
 ## Licenses
 
-All source code is licensed under the [MIT License](https://raw.github.com/searis/rest-layer/master/LICENSE).
+All source code is licensed under the [MIT License](https://raw.github.com/searis/rested/master/LICENSE).

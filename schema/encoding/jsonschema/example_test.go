@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/searis/rest-layer/schema"
-	"github.com/searis/rest-layer/schema/encoding/jsonschema"
+	"github.com/searis/rested/schema"
+	"github.com/searis/rested/schema/encoding/jsonschema"
 )
 
 func ExampleEncoder() {

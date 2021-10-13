@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/searis/rest-layer/resource"
-	"github.com/searis/rest-layer/schema"
+	"github.com/searis/rested/resource"
+	"github.com/searis/rested/schema"
 )
 
 func BenchmarkFindRoute(b *testing.B) {

@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/searis/rest-layer/schema"
+	"github.com/searis/rested/schema"
 	"gopkg.in/mgo.v2/bson"
 )
 

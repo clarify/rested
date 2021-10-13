@@ -5,7 +5,7 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/searis/rest-layer/schema"
+	"github.com/searis/rested/schema"
 )
 
 type referenceResponseHandler func(payloads []map[string]interface{}, validator schema.Validator, rsc Resource) error

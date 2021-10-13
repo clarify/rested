@@ -7,8 +7,8 @@ import (
 	"sort"
 	"time"
 
-	"github.com/searis/rest-layer/schema"
-	"github.com/searis/rest-layer/schema/query"
+	"github.com/searis/rested/schema"
+	"github.com/searis/rested/schema/query"
 )
 
 // Resource holds information about a class of items exposed on the API.

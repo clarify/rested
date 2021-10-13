@@ -3,7 +3,7 @@ package jsonschema
 import (
 	"math"
 
-	"github.com/searis/rest-layer/schema"
+	"github.com/searis/rested/schema"
 )
 
 type floatBuilder schema.Float

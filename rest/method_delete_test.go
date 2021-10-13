@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/searis/rest-layer/resource"
-	"github.com/searis/rest-layer/resource/testing/mem"
-	"github.com/searis/rest-layer/schema"
-	"github.com/searis/rest-layer/schema/query"
+	"github.com/searis/rested/resource"
+	"github.com/searis/rested/resource/testing/mem"
+	"github.com/searis/rested/schema"
+	"github.com/searis/rested/schema/query"
 )
 
 func TestDeleteList(t *testing.T) {

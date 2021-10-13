@@ -3,7 +3,7 @@ package jsonschema
 import (
 	"errors"
 
-	"github.com/searis/rest-layer/schema"
+	"github.com/searis/rested/schema"
 )
 
 type objectBuilder schema.Object

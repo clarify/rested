@@ -34,7 +34,7 @@ REST Layer is composed of several sub-packages:
  - resource: Defines resources, manages the resource graph and manages the
    interface with resource storage handler.
 
-See https://github.com/searis/rest-layer/blob/master/README.md for full REST
+See https://github.com/searis/rested/blob/master/README.md for full REST
 Layer documentation.
 */
 package restlayer

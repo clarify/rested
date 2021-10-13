@@ -9,8 +9,8 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/searis/rest-layer/internal/testutil"
-	"github.com/searis/rest-layer/schema"
+	"github.com/searis/rested/internal/testutil"
+	"github.com/searis/rested/schema"
 )
 
 type resource struct {
