@@ -3,9 +3,7 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/searis/rested.svg)](https://pkg.go.dev/github.com/searis/rested)
 [![Go Workflow](https://github.com/searis/rested/actions/workflows/go.yml/badge.svg?branch=main)](https://github.com/searis/rested/actions)
 
-**THIS FORK IS STILL IN THE PROCESS OF BEING SET-UP; DO NOT USE.**
-
-**This API is a _maintenance_ fork of [rs/rest-layer](https://github.com/rs/rest-layer). We are not planning or accepting any major features at this time, but will accept and conduct minor improvements and bugfixes as needed. Features that are not used by us may be deprecated or dropped in upcoming releases. Breaking changes might be introduced when suitable**
+**This is a fork of [rs/rest-layer](https://github.com/rs/rest-layer) aimed mainly at providing _maintenance_. We are not planning or accepting any major features at this time. We will however accept bug fixes. Features that are not used by us may be deprecated or dropped in upcoming releases. Breaking changes might be introduced when suitable**
 
 Requires Go 1.17 or newer and use of go modules.
 
