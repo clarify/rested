@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/searis/rested/resource"
-	"github.com/searis/rested/rest"
+	"github.com/clarify/rested/resource"
+	"github.com/clarify/rested/rest"
 )
 
 func main() {

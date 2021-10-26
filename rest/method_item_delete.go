@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/searis/rested/schema/query"
+	"github.com/clarify/rested/schema/query"
 )
 
 // itemDelete handles DELETE resquests on an item URL.

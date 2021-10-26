@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/searis/rested/schema"
+	"github.com/clarify/rested/schema"
 	"github.com/stretchr/testify/assert"
 )
 

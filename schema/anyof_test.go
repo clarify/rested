@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/searis/rested/schema"
+	"github.com/clarify/rested/schema"
 )
 
 // hexByteArray implements the FieldSerializer interface.

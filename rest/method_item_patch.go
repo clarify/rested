@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/clarify/rested/resource"
+	"github.com/clarify/rested/schema/query"
 	jsonpatch "github.com/evanphx/json-patch"
-	"github.com/searis/rested/resource"
-	"github.com/searis/rested/schema/query"
 )
 
 func isJSONPatch(r *http.Request) bool {

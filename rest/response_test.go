@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/searis/rested/resource"
+	"github.com/clarify/rested/resource"
 	"github.com/stretchr/testify/assert"
 )
 

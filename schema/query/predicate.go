@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/searis/rested/schema"
+	"github.com/clarify/rested/schema"
 )
 
 const (

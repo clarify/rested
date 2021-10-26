@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/searis/rested/resource"
-	"github.com/searis/rested/resource/testing/mem"
-	"github.com/searis/rested/schema"
+	"github.com/clarify/rested/resource"
+	"github.com/clarify/rested/resource/testing/mem"
+	"github.com/clarify/rested/schema"
 )
 
 func TestGetListInvalidQuery(t *testing.T) {

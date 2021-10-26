@@ -4,9 +4,9 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/searis/rested/resource"
-	"github.com/searis/rested/schema"
-	"github.com/searis/rested/schema/query"
+	"github.com/clarify/rested/resource"
+	"github.com/clarify/rested/schema"
+	"github.com/clarify/rested/schema/query"
 )
 
 // itemPut handles PUT resquests on an item URL.

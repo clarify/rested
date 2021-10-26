@@ -4,7 +4,7 @@ import (
 	"errors"
 	"sort"
 
-	"github.com/searis/rested/schema"
+	"github.com/clarify/rested/schema"
 )
 
 var (

@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/searis/rested/schema/query"
+	"github.com/clarify/rested/schema/query"
 	"github.com/stretchr/testify/assert"
 )
 

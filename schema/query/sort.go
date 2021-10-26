@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/searis/rested/schema"
+	"github.com/clarify/rested/schema"
 )
 
 // Sort TODO

@@ -1,4 +1,4 @@
-module github.com/searis/rested
+module github.com/clarify/rested
 
 require (
 	github.com/evanphx/json-patch v4.1.0+incompatible

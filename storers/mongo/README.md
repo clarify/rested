@@ -1,13 +1,13 @@
 # Rested MongoDB Backend
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/searis/rested/storers/mongo.svg)](https://pkg.go.dev/github.com/searis/rested/storers/mongo)
+[![Go Reference](https://pkg.go.dev/badge/github.com/clarify/rested/storers/mongo.svg)](https://pkg.go.dev/github.com/clarify/rested/storers/mongo)
 
 This storage backend currently stores data in a MongoDB cluster using the now deprecated [mgo](https://pkg.go.dev/labix.org/v2/mgo) driver.
 
 ## Usage
 
 ```go
-import "github.com/searis/rested/storers/mongo"
+import "github.com/clarify/rested/storers/mongo"
 ```
 
 Create a mgo master session:
@@ -32,8 +32,8 @@ You may want to create a many mongo handlers as you have resources as long as yo
 
 ### Object ID
 
-This package also provides a REST Layer [schema.Validator](https://pkg.go.dev/github.com/searis/rested/schema#Validator) for MongoDB ObjectIDs. This validator ensures proper binary serialization of the Object ID in the database for space efficiency.
+This package also provides a REST Layer [schema.Validator](https://pkg.go.dev/github.com/clarify/rested/schema#Validator) for MongoDB ObjectIDs. This validator ensures proper binary serialization of the Object ID in the database for space efficiency.
 
-You may reference this validator using [mongo.ObjectID](https://pkg.go.dev/github.com/searis/rested/storers/mongo#ObjectID) as [schema.Field](https://pkg.go.dev/github.com/searis/rested/schema#Field).
+You may reference this validator using [mongo.ObjectID](https://pkg.go.dev/github.com/clarify/rested/storers/mongo#ObjectID) as [schema.Field](https://pkg.go.dev/github.com/clarify/rested/schema#Field).
 
 A `mongo.NewObjectID` field hook and `mongo.ObjectIDField` helper are also provided.

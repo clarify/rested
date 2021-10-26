@@ -3,7 +3,7 @@ package resource
 import (
 	"context"
 
-	"github.com/searis/rested/schema/query"
+	"github.com/clarify/rested/schema/query"
 )
 
 // Storer defines the interface of an handler able to store and retrieve resources

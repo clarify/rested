@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/searis/rested/resource"
+	"github.com/clarify/rested/resource"
 )
 
 // ResponseFormatter defines an interface responsible for formatting a the

@@ -5,13 +5,13 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/clarify/rested/resource"
+	"github.com/clarify/rested/rest"
+	"github.com/clarify/rested/schema"
 	"github.com/rs/cors"
-	"github.com/searis/rested/resource"
-	"github.com/searis/rested/rest"
-	"github.com/searis/rested/schema"
 	mgo "gopkg.in/mgo.v2"
 
-	"github.com/searis/rested/storers/mongo"
+	"github.com/clarify/rested/storers/mongo"
 )
 
 var (

@@ -23,7 +23,7 @@ full REST Layer documentation.
 */
 package query
 
-import "github.com/searis/rested/schema"
+import "github.com/clarify/rested/schema"
 
 // Query defines the criteria of a query to be applied on a resource validated
 // by a schema.Schema.

@@ -3,7 +3,7 @@ package jsonschema
 import (
 	"errors"
 
-	"github.com/searis/rested/schema"
+	"github.com/clarify/rested/schema"
 )
 
 type allOfBuilder schema.AllOf
