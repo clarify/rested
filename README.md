@@ -18,7 +18,6 @@ The goals of this fork is:
 | Package                                                                     | Description                                                                                            |
 | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | [rest](https://pkg.go.dev/github.com/clarify/rested/rest)                   | A `net/http` handler to expose a REST-ful API.                                                         |
-| [graphql](https://pkg.go.dev/github.com/clarify/rested/graphql)             | A `net/http` handler to expose your API using the GraphQL protocol. DEPRECATED                         |
 | [schema](https://pkg.go.dev/github.com/clarify/rested/schema)               | A validation framework for the API resources.                                                          |
 | [resource](https://pkg.go.dev/github.com/clarify/rested/resource)           | Defines resources, manages the resource graph and manages the interface with resource storage handler. |
 | [storers/mongo](https://pkg.go.dev/github.com/clarify/rested/storers/mongo) | Implementation of `resource.Storers` interface.                                                        |
@@ -669,7 +668,7 @@ Hooks are piece of code you can attach before or after an operation is performed
 [cleareventhandler]: https://pkg.go.dev/github.com/clarify/rested/resource#ClearEventHandler
 [clearedeventhandler]: https://pkg.go.dev/github.com/clarify/rested/resource#ClearedEventHandler
 
-Note that these are resource level hooks, and do not correspond one-to-one to `rest` or `graphql` operation. For the `rest` package in particular, note that a HTTP request to `GET` an item by ID, will result in a `Find` and not a `Get` call which will triggering the `OnFind` and `OnFound` hooks to be called, not `OnGet` and `OnGot`. Similarly, a `PATCH` or `PUT` request will call `Find` before it calls `Update`, which will trigger the same hooks. If your hooks logic require knowing which rest-level operation is performed see [rest.RouteFromContext](https://pkg.go.dev/github.com/clarify/rested/rest#RouteFromContext)
+Note that these are resource level hooks, and do not correspond one-to-one to `rest` operations. Note that a HTTP request to `GET` an item by ID, will result in a `Find` and not a `Get` call which will triggering the `OnFind` and `OnFound` hooks to be called, not `OnGet` and `OnGot`. Similarly, a `PATCH` or `PUT` request will call `Find` before it calls `Update`, which will trigger the same hooks. If your hooks logic require knowing which rest-level operation is performed see [rest.RouteFromContext](https://pkg.go.dev/github.com/clarify/rested/rest#RouteFromContext)
 
 All hooks functions get a `context.Context` as first argument. If a network call must be performed from the hook, the context's deadline must be respected. If a hook returns an error, the whole request is aborted with that error. You can also use the context to pass data to your hooks from a middleware executed before REST Layer. This can be used to manage authentication for instance. See [examples/auth](https://github.com/clarify/rested/blob/master/examples/auth/main.go) to see an example.
 
