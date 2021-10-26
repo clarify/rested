@@ -4,9 +4,9 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/clarify/rested/resource"
+	"github.com/clarify/rested/rest"
 	"github.com/rs/cors"
-	"github.com/searis/rested/resource"
-	"github.com/searis/rested/rest"
 )
 
 func main() {

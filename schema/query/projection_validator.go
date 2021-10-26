@@ -3,7 +3,7 @@ package query
 import (
 	"fmt"
 
-	"github.com/searis/rested/schema"
+	"github.com/clarify/rested/schema"
 )
 
 // Validate validates the projection field against the provided validator.

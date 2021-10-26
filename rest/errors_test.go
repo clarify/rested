@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/searis/rested/resource"
+	"github.com/clarify/rested/resource"
 	"github.com/stretchr/testify/assert"
 )
 

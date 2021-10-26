@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/searis/rested/schema"
+	"github.com/clarify/rested/schema"
 	"gopkg.in/mgo.v2/bson"
 )
 

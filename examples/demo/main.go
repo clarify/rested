@@ -10,16 +10,16 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/clarify/rested/resource"
+	"github.com/clarify/rested/resource/testing/mem"
+	"github.com/clarify/rested/rest"
+	"github.com/clarify/rested/schema"
+	"github.com/clarify/rested/schema/query"
 	"github.com/justinas/alice"
 	"github.com/rs/cors"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/hlog"
 	"github.com/rs/zerolog/log"
-	"github.com/searis/rested/resource"
-	"github.com/searis/rested/resource/testing/mem"
-	"github.com/searis/rested/rest"
-	"github.com/searis/rested/schema"
-	"github.com/searis/rested/schema/query"
 )
 
 var (

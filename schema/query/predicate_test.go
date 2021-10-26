@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/searis/rested/schema"
+	"github.com/clarify/rested/schema"
 )
 
 func TestMatch(t *testing.T) {

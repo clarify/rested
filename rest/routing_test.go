@@ -8,9 +8,9 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/searis/rested/resource"
-	"github.com/searis/rested/schema"
-	"github.com/searis/rested/schema/query"
+	"github.com/clarify/rested/resource"
+	"github.com/clarify/rested/schema"
+	"github.com/clarify/rested/schema/query"
 	"github.com/stretchr/testify/assert"
 )
 

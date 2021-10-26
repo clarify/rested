@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/searis/rested/schema"
+	"github.com/clarify/rested/schema"
 )
 
 // Projection defines the list of fields that should be included into the

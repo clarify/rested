@@ -1,8 +1,8 @@
 package mongo
 
 import (
-	"github.com/searis/rested/resource"
-	"github.com/searis/rested/schema/query"
+	"github.com/clarify/rested/resource"
+	"github.com/clarify/rested/schema/query"
 	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )

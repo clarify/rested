@@ -1,6 +1,6 @@
 package schema_test
 
-import "github.com/searis/rested/schema"
+import "github.com/clarify/rested/schema"
 
 func ExampleDict() {
 	_ = schema.Schema{

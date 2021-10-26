@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/searis/rested/schema/query"
+	"github.com/clarify/rested/schema/query"
 )
 
 // FindEventHandler is an interface to be implemented by an event handler that

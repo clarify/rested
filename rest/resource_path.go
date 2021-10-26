@@ -5,9 +5,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/searis/rested/resource"
-	"github.com/searis/rested/schema"
-	"github.com/searis/rested/schema/query"
+	"github.com/clarify/rested/resource"
+	"github.com/clarify/rested/schema"
+	"github.com/clarify/rested/schema/query"
 )
 
 // ResourcePath is the list of ResourcePathComponent leading to the requested resource

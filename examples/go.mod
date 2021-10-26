@@ -1,11 +1,11 @@
-module github.com/searis/rested/examples
+module github.com/clarify/rested/examples
 
 require (
+	github.com/clarify/rested v0.1.0-rc
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/justinas/alice v1.2.0
 	github.com/rs/cors v1.8.0
 	github.com/rs/zerolog v1.25.0
-	github.com/searis/rested v0.1.0-rc
 )
 
 require (
@@ -15,6 +15,6 @@ require (
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
 )
 
-replace github.com/searis/rested => ./../
+replace github.com/clarify/rested => ./../
 
 go 1.17

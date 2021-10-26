@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/searis/rested/resource"
-	"github.com/searis/rested/schema"
+	"github.com/clarify/rested/resource"
+	"github.com/clarify/rested/schema"
 )
 
 // listPost handles POST resquests on a resource URL.

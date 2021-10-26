@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/searis/rested/schema/query"
+	"github.com/clarify/rested/schema/query"
 )
 
 // itemGet handles GET and HEAD resquests on an item URL.

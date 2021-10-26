@@ -7,8 +7,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/searis/rested/resource"
-	"github.com/searis/rested/schema/query"
+	"github.com/clarify/rested/resource"
+	"github.com/clarify/rested/schema/query"
 )
 
 // RouteMatch represent a REST request's matched resource with the method to

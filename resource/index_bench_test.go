@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/searis/rested/schema"
+	"github.com/clarify/rested/schema"
 )
 
 func BenchmarkGetResource(b *testing.B) {

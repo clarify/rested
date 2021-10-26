@@ -16,7 +16,7 @@ handles HTTP conditional requests, caching, integrity checking for you.
 
 A powerful and extensible validation engine make sure that data comes
 pre-validated to your custom storage handlers. Generic resource handlers for
-MongoDB (http://github.com/searis/storers/mongo) and other databases are also
+MongoDB (http://github.com/clarify/rested/storers/mongo) and other databases are also
 available so you have few to no code to write to make the whole system work.
 
 Moreover, REST Layer let you create a graph API by linking resources between
@@ -34,7 +34,7 @@ REST Layer is composed of several sub-packages:
  - resource: Defines resources, manages the resource graph and manages the
    interface with resource storage handler.
 
-See https://github.com/searis/rested/blob/master/README.md for full REST
+See https://github.com/clarify/rested/blob/master/README.md for full REST
 Layer documentation.
 */
 package restlayer

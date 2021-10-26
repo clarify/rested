@@ -1,6 +1,6 @@
 package jsonschema
 
-import "github.com/searis/rested/schema"
+import "github.com/clarify/rested/schema"
 
 type timeBuilder schema.Time
 

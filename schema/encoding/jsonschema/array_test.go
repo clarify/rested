@@ -6,7 +6,7 @@ package jsonschema_test
 import (
 	"testing"
 
-	"github.com/searis/rested/schema"
+	"github.com/clarify/rested/schema"
 )
 
 func TestArray(t *testing.T) {

@@ -7,8 +7,8 @@ import (
 	"sort"
 	"time"
 
-	"github.com/searis/rested/schema"
-	"github.com/searis/rested/schema/query"
+	"github.com/clarify/rested/schema"
+	"github.com/clarify/rested/schema/query"
 )
 
 // Resource holds information about a class of items exposed on the API.

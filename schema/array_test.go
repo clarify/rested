@@ -6,7 +6,7 @@ package schema_test
 import (
 	"testing"
 
-	"github.com/searis/rested/schema"
+	"github.com/clarify/rested/schema"
 )
 
 func TestArrayValidatorCompile(t *testing.T) {
