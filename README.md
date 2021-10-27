@@ -3,7 +3,7 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/clarify/rested.svg)](https://pkg.go.dev/github.com/clarify/rested)
 [![Go Workflow](https://github.com/clarify/rested/actions/workflows/go.yml/badge.svg?branch=main)](https://github.com/clarify/rested/actions)
 
-**This API is a _maintenance_ fork of [rs/rest-layer](https://github.com/rs/rest-layer). We are not planning or accepting any major features at this time, but will accept and conduct minor improvements and bugfixes as needed. Features that are not used by us may be deprecated or dropped in upcoming releases. Breaking changes might be introduced when suitable**
+**This repository contain a _maintenance_ fork of [rs/rest-layer](https://github.com/rs/rest-layer). We are not planning or accepting any major features at this time, but will accept and conduct minor improvements and bugfixes as needed. Features that are not used by us may be deprecated or dropped in upcoming releases. Breaking changes might be introduced when suitable**
 
 Requires Go 1.17 or newer and use of go modules.
 
