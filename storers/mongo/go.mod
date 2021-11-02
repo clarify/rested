@@ -3,7 +3,7 @@ module github.com/clarify/rested/storers/mongo
 go 1.17
 
 require (
-	github.com/clarify/rested v0.1.0-rc
+	github.com/clarify/rested v0.1.1
 	github.com/rs/cors v1.6.0
 	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22
 )
