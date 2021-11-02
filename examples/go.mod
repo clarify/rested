@@ -1,7 +1,7 @@
 module github.com/clarify/rested/examples
 
 require (
-	github.com/clarify/rested v0.1.0-rc
+	github.com/clarify/rested v0.1.1
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/justinas/alice v1.2.0
 	github.com/rs/cors v1.8.0
