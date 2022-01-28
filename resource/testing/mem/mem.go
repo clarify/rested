@@ -29,6 +29,7 @@ func init() {
 	gob.Register([]interface{}{})
 	gob.Register(map[string]interface{}{})
 	gob.Register(time.Time{})
+	gob.Register(time.Duration(0))
 }
 
 // NewHandler creates an empty memory handler.
