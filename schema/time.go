@@ -20,6 +20,7 @@ var (
 		ReadOnly:    true,
 		OnInit:      Now,
 		Sortable:    true,
+		Filterable:  true,
 		Validator:   &Time{},
 	}
 
@@ -32,6 +33,7 @@ var (
 		OnInit:      Now,
 		OnUpdate:    Now,
 		Sortable:    true,
+		Filterable:  true,
 		Validator:   &Time{},
 	}
 
