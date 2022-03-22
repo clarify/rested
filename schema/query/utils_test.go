@@ -54,3 +54,13 @@ func TestGetField(t *testing.T) {
 		})
 	}
 }
+
+func equalErrorText(got, want error) bool {
+	if got == nil {
+		return want == nil
+	}
+	if want == nil {
+		return got == nil
+	}
+	return got.Error() == want.Error()
+}

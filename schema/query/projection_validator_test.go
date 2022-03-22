@@ -2,7 +2,6 @@ package query
 
 import (
 	"errors"
-	"reflect"
 	"testing"
 
 	"github.com/clarify/rested/schema"
@@ -94,7 +93,7 @@ func TestProjectionValidate(t *testing.T) {
 			if err != nil {
 				t.Errorf("ParseProjection unexpected error: %v", err)
 			}
-			if err = pr.Validate(s); !reflect.DeepEqual(err, tc.err) {
+			if err = pr.Validate(s); !equalErrorText(err, tc.err) {
 				t.Errorf("Projection.Validate error = %v, wanted: %v", err, tc.err)
 			}
 		})

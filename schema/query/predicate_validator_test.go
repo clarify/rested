@@ -76,7 +76,7 @@ func TestPrepare(t *testing.T) {
 			t.Errorf("Unexpected parse error for `%v`: %v", tt.query, err)
 			continue
 		}
-		if err = q.Prepare(s); !reflect.DeepEqual(err, tt.err) {
+		if err = q.Prepare(s); !equalErrorText(err, tt.err) {
 			t.Errorf("Unexpected error for `%v`:\ngot:  %v\nwant: %v", tt.query, err, tt.err)
 		}
 		if !reflect.DeepEqual(q, tt.want) {
@@ -175,7 +175,7 @@ func TestPrepareErrors(t *testing.T) {
 			t.Errorf("Unexpected parse error for `%v`: %v", tt.query, err)
 			continue
 		}
-		if err = q.Prepare(s); !reflect.DeepEqual(err, tt.want) {
+		if err = q.Prepare(s); !equalErrorText(err, tt.want) {
 			t.Errorf("Unexpected error for `%v`:\ngot:  %v\nwant: %v", tt.query, err, tt.want)
 		}
 	}
