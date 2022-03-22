@@ -88,6 +88,16 @@ func TestParse(t *testing.T) {
 			nil,
 		},
 		{
+			`{"baz": {"$gt": 1, "$lt": 2}}`,
+			Predicate{
+				&And{
+					&GreaterThan{Field: "baz", Value: float64(1)},
+					&LowerThan{Field: "baz", Value: float64(2)},
+				},
+			},
+			nil,
+		},
+		{
 			`{"$or": [{"foo": "bar"}, {"foo": "baz"}]}`,
 			Predicate{&Or{&Equal{Field: "foo", Value: "bar"}, &Equal{Field: "foo", Value: "baz"}}},
 			nil,
@@ -182,27 +192,27 @@ func TestParse(t *testing.T) {
 		{
 			`{"foo": {"$exists": true`,
 			Predicate{},
-			errors.New("char 24: foo: $exists: expected '}' got '\\x00'"),
+			errors.New("char 24: foo: $exists: expected '}' or ',' got '\\x00'"),
 		},
 		{
 			`{"foo": {"$in": []`,
 			Predicate{},
-			errors.New("char 18: foo: $in: expected '}' got '\\x00'"),
+			errors.New("char 18: foo: $in: expected '}' or ',' got '\\x00'"),
 		},
 		{
 			`{"foo": {"$ne": "bar"`,
 			Predicate{},
-			errors.New("char 21: foo: $ne: expected '}' got '\\x00'"),
+			errors.New("char 21: foo: $ne: expected '}' or ',' got '\\x00'"),
 		},
 		{
 			`{"foo": {"$regex": "."`,
 			Predicate{},
-			errors.New("char 22: foo: $regex: expected '}' got '\\x00'"),
+			errors.New("char 22: foo: $regex: expected '}' or ',' got '\\x00'"),
 		},
 		{
 			`{"foo": {"$gt": 1`,
 			Predicate{},
-			errors.New("char 17: foo: $gt: expected '}' got '\\x00'"),
+			errors.New("char 17: foo: $gt: expected '}' or ',' got '\\x00'"),
 		},
 		{
 			`{"foo": {"$exists`,
@@ -269,6 +279,16 @@ func TestParse(t *testing.T) {
 			`{"bar": {"$in": "bar"}}`,
 			Predicate{},
 			errors.New("char 16: bar: $in: expected '[' got '\"'"),
+		},
+		{
+			`{"baz": {"$gt": 1, "foo": "bar", "bar": "baz"}}`,
+			nil,
+			errors.New("char 46: baz: invalid operators: [foo bar]"),
+		},
+		{
+			`{"baz": {"foo": "bar", "bar": "baz", "$gt": 1}}`,
+			nil,
+			errors.New("char 46: baz: invalid operators: [foo bar]"),
 		},
 		{
 			`{"$or": "foo"}`,
