@@ -167,72 +167,76 @@ func (p *predicateParser) parseSubExpressions() ([]Expression, error) {
 //   {$in: ["foo", "bar"]}
 func (p *predicateParser) parseCommand(field string) (Expression, error) {
 	oldPos := p.pos
-	if p.expect('{') {
-		p.eatWhitespaces()
-		if p.expect('}') {
-			// Empty dict must be parsed as a value
-			goto VALUE
-		}
+	and := make(And, 0, 1)
+	var nonOps []string
+
+	if !p.expect('{') {
+		// Non-object is treated as value.
+		goto VALUE
+	}
+	p.eatWhitespaces()
+
+	if p.expect('}') {
+		// Empty object is treated as value.
+		goto VALUE
+	}
+
+	// Parse content of non-empty object to look for known operators. If there
+	// are no known operators, we will treat it as a value. If all operators are
+	// known, we will treat it as a set of operator comparisons to be joined by
+	// logical AND. If there is a mix of operator and non-operator fields, we
+	// will respond with an error.
+	for {
 		label, err := p.parseLabel()
 		if err != nil {
 			return nil, err
 		}
 		p.eatWhitespaces()
+
+		var next Expression
 		switch label {
 		case opExists:
 			v, err := p.parseBool()
 			if err != nil {
 				return nil, fmt.Errorf("%s: %v", label, err)
 			}
-			p.eatWhitespaces()
-			if !p.expect('}') {
-				return nil, fmt.Errorf("%s: expected '}' got %q", label, p.peek())
-			}
 			if v {
-				return &Exist{Field: field}, nil
+				next = &Exist{Field: field}
+			} else {
+				next = &NotExist{Field: field}
 			}
-			return &NotExist{Field: field}, nil
-		case opIn, opNotIn:
+		case opIn:
 			values, err := p.parseValues()
 			if err != nil {
 				return nil, fmt.Errorf("%s: %v", label, err)
 			}
-			p.eatWhitespaces()
-			if !p.expect('}') {
-				return nil, fmt.Errorf("%s: expected '}' got %q", label, p.peek())
+			next = &In{Field: field, Values: values}
+		case opNotIn:
+			values, err := p.parseValues()
+			if err != nil {
+				return nil, fmt.Errorf("%s: %v", label, err)
 			}
-			if label == opIn {
-				return &In{Field: field, Values: values}, nil
-			}
-			return &NotIn{Field: field, Values: values}, nil
+			next = &NotIn{Field: field, Values: values}
 		case opNotEqual:
 			value, err := p.parseValue()
 			if err != nil {
 				return nil, fmt.Errorf("%s: %v", label, err)
 			}
-			p.eatWhitespaces()
-			if !p.expect('}') {
-				return nil, fmt.Errorf("%s: expected '}' got %q", label, p.peek())
-			}
-			return &NotEqual{Field: field, Value: value}, nil
+			next = &NotEqual{Field: field, Value: value}
 		case opLowerThan, opLowerOrEqual, opGreaterThan, opGreaterOrEqual:
 			value, err := p.parseValue()
 			if err != nil {
 				return nil, fmt.Errorf("%s: %v", label, err)
 			}
-			p.eatWhitespaces()
-			if !p.expect('}') {
-				return nil, fmt.Errorf("%s: expected '}' got %q", label, p.peek())
-			}
 			switch label {
 			case opLowerThan:
-				return &LowerThan{Field: field, Value: value}, nil
+				next = &LowerThan{Field: field, Value: value}
 			case opLowerOrEqual:
-				return &LowerOrEqual{Field: field, Value: value}, nil
+				next = &LowerOrEqual{Field: field, Value: value}
 			case opGreaterThan:
-				return &GreaterThan{Field: field, Value: value}, nil
+				next = &GreaterThan{Field: field, Value: value}
 			case opGreaterOrEqual:
-				return &GreaterOrEqual{Field: field, Value: value}, nil
+				next = &GreaterOrEqual{Field: field, Value: value}
 			}
 		case opRegex:
 			str, err := p.parseString()
@@ -243,22 +247,47 @@ func (p *predicateParser) parseCommand(field string) (Expression, error) {
 			if err != nil {
 				return nil, fmt.Errorf("%s: invalid regex: %v", label, err)
 			}
-			p.eatWhitespaces()
-			if !p.expect('}') {
-				return nil, fmt.Errorf("%s: expected '}' got %q", label, p.peek())
-			}
-			return &Regex{Field: field, Value: re}, nil
+			next = &Regex{Field: field, Value: re}
 		case opElemMatch:
 			exps, err := p.parseExpressions()
 			if err != nil {
 				return nil, fmt.Errorf("%s: %v", label, err)
 			}
-			p.eatWhitespaces()
-			if !p.expect('}') {
-				return nil, fmt.Errorf("%s: expected '}' got %q", label, p.peek())
+			next = &ElemMatch{Field: field, Exps: exps}
+		default:
+			// Track unknown operator; if all operators are unknown, we will
+			// fallback to a value comparison.
+			_, err := p.parseValue()
+			if err != nil {
+				return nil, fmt.Errorf("%s: %v", label, err)
 			}
-			return &ElemMatch{Field: field, Exps: exps}, nil
+			nonOps = append(nonOps, label)
 		}
+		if next != nil {
+			and = append(and, next)
+		}
+		p.eatWhitespaces()
+		switch {
+		case p.expect('}'):
+			p.eatWhitespaces()
+			switch {
+			case len(and) == 0:
+				// Object is either empty or without any recognized operators.
+				goto VALUE
+			case len(nonOps) > 0:
+				// Combination of recognized and non-recognized operators.
+				return nil, fmt.Errorf("invalid operators: %v", nonOps)
+			case len(and) == 1:
+				// Single operator.
+				return and[0], nil
+			default:
+				// Multiple operators.
+				return &and, nil
+			}
+		case !p.expect(','):
+			return nil, fmt.Errorf("%s: expected '}' or ',' got %q", label, p.peek())
+		}
+		p.eatWhitespaces()
 	}
 VALUE:
 	// If the current position is not a dictionary ({}) or is a dictionary with
