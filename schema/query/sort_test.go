@@ -40,7 +40,7 @@ func TestParseSort(t *testing.T) {
 		}
 		t.Run(tt.sort, func(t *testing.T) {
 			got, err := ParseSort(tt.sort)
-			if !reflect.DeepEqual(err, tt.err) {
+			if !equalErrorText(err, tt.err) {
 				t.Errorf("unexpected error:\ngot:  %v\nwant: %v", err, tt.err)
 			}
 			if err == nil && !reflect.DeepEqual(got, tt.want) {
@@ -70,7 +70,7 @@ func TestSortValidate(t *testing.T) {
 			if err != nil {
 				t.Errorf("unexpected parse error: %v", err)
 			}
-			if err := sort.Validate(s); !reflect.DeepEqual(err, tt.err) {
+			if err := sort.Validate(s); !equalErrorText(err, tt.err) {
 				t.Errorf("unexpected validate error:\ngot:  %#v\nwant: %#v", err, tt.err)
 			}
 		})

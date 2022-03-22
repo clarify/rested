@@ -253,7 +253,7 @@ func TestParseProjection(t *testing.T) {
 		}
 		t.Run(tc.projection, func(t *testing.T) {
 			pr, err := ParseProjection(tc.projection)
-			if !reflect.DeepEqual(err, tc.err) {
+			if !equalErrorText(err, tc.err) {
 				t.Errorf("ParseProjection error:\ngot:  %v\nwant: %v", err, tc.err)
 			}
 			if err != nil {

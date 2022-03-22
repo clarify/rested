@@ -375,7 +375,7 @@ func TestParse(t *testing.T) {
 		t.Run(strings.Replace(tt.query, " ", "", -1), func(t *testing.T) {
 			t.Parallel()
 			got, err := ParsePredicate(tt.query)
-			if !reflect.DeepEqual(err, tt.err) {
+			if !equalErrorText(err, tt.err) {
 				t.Errorf("unexpected error for `%v`\ngot:  %v\nwant: %v", tt.query, err, tt.err)
 			}
 			if err == nil && !reflect.DeepEqual(got, tt.want) {

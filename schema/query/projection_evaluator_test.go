@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"reflect"
 	"sort"
 	"testing"
 
@@ -163,16 +162,16 @@ func TestProjectionEval(t *testing.T) {
 			},
 		}},
 		subResources: map[string]resource{
-			"cnx": resource{
+			"cnx": {
 				validator: cnxShema,
 				payloads: map[string]map[string]interface{}{
-					"1": map[string]interface{}{"id": "1", "name": "first"},
-					"2": map[string]interface{}{"id": "2", "name": "second", "ref": "a"},
-					"3": map[string]interface{}{"id": "3", "name": "third", "ref": "b"},
-					"4": map[string]interface{}{"id": "4", "name": "forth", "ref": "a"},
+					"1": {"id": "1", "name": "first"},
+					"2": {"id": "2", "name": "second", "ref": "a"},
+					"3": {"id": "3", "name": "third", "ref": "b"},
+					"4": {"id": "4", "name": "forth", "ref": "a"},
 				},
 			},
-			"cnx2": resource{
+			"cnx2": {
 				validator: schema.Schema{Fields: schema.Fields{
 					"id":   {},
 					"name": {},
@@ -186,21 +185,21 @@ func TestProjectionEval(t *testing.T) {
 					},
 				}},
 				subResources: map[string]resource{
-					"cnx3": resource{
+					"cnx3": {
 						validator: cnxShema,
 						payloads: map[string]map[string]interface{}{
-							"6": map[string]interface{}{"id": "6", "name": "first"},
-							"7": map[string]interface{}{"id": "7", "name": "second", "ref": "a"},
-							"8": map[string]interface{}{"id": "8", "name": "third", "ref": "b"},
-							"9": map[string]interface{}{"id": "9", "name": "forth", "ref": "c"},
+							"6": {"id": "6", "name": "first"},
+							"7": {"id": "7", "name": "second", "ref": "a"},
+							"8": {"id": "8", "name": "third", "ref": "b"},
+							"9": {"id": "9", "name": "forth", "ref": "c"},
 						},
 					},
 				},
 				payloads: map[string]map[string]interface{}{
-					"a": map[string]interface{}{"id": "a", "name": "first"},
-					"b": map[string]interface{}{"id": "b", "name": "second", "ref": "2"},
-					"c": map[string]interface{}{"id": "c", "name": "third", "ref": "3"},
-					"d": map[string]interface{}{"id": "d", "name": "forth", "ref": "4"},
+					"a": {"id": "a", "name": "first"},
+					"b": {"id": "b", "name": "second", "ref": "2"},
+					"c": {"id": "c", "name": "third", "ref": "3"},
+					"d": {"id": "d", "name": "forth", "ref": "4"},
 				},
 			},
 		},
@@ -553,7 +552,7 @@ func TestProjectionEval(t *testing.T) {
 				t.Errorf("Invalid JSON payload: %v", err)
 			}
 			payload, err = pr.Eval(ctx, payload, r)
-			if !reflect.DeepEqual(err, tc.err) {
+			if !equalErrorText(err, tc.err) {
 				t.Errorf("Eval return error: %v, wanted: %v", err, tc.err)
 			}
 			if err != nil {
