@@ -12,7 +12,7 @@ require (
 	github.com/evanphx/json-patch v4.11.0+incompatible // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rs/xid v1.3.0 // indirect
-	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
+	golang.org/x/crypto v0.1.0 // indirect
 )
 
 replace github.com/clarify/rested => ./../
