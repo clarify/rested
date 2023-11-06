@@ -11,9 +11,7 @@ The goals of this fork is:
 
 - Better maintenance of features used by the team behind [Clarify](https://clarify.io).
 - Deprecation of unmaintained and uncompleted features to reduce the maintenance surface.
-- Gradual introduction of (potentially breaking) changes that can increase stability or reduce the chance programming errors.
-- Support for models (structs) one way or anther.
-- Eventually compatibility with a production-ready PostgreSQL storage backend of some sort.
+
 
 | Package                                                                     | Description                                                                                            |
 | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
